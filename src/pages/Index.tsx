@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   ArrowRight, 
@@ -26,6 +27,7 @@ import { usePlatform } from "@/contexts/PlatformContext";
 import { Input } from "@/components/ui/input";
 
 const Index = () => {
+  const { user, isLojista, isAdmin, isSuperAdmin } = useAuth();
   const userLoc = useLocation();
   const navigate = useNavigate();
   const { config } = usePlatform();
@@ -261,9 +263,9 @@ const Index = () => {
                 Junte-se a centenas de lojistas que já estão atraindo milhares de clientes locais todos os meses.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                <Link to="/auth">
+                <Link to={user ? (isLojista || isAdmin || isSuperAdmin ? "/dashboard" : "/perfil") : "/auth"}>
                   <Button size="lg" className="h-16 px-10 rounded-2xl bg-white text-primary font-black text-lg hover:bg-slate-50 transition-all shadow-xl shadow-black/10">
-                    Cadastrar Empresa
+                    {user ? "Acessar Painel" : "Cadastrar Empresa"}
                   </Button>
                 </Link>
                 <div className="flex items-center gap-2 text-white/60 px-4">

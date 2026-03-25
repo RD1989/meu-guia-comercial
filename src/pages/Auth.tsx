@@ -17,11 +17,14 @@ const Auth = () => {
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if already logged in
-  if (user) {
-    navigate("/", { replace: true });
-    return null;
-  }
+  // Redirect if already logged in - must use useEffect to avoid blank page during render state
+  useEffect(() => {
+    if (user) {
+      navigate("/", { replace: true });
+    }
+  }, [user, navigate]);
+
+  if (user) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
