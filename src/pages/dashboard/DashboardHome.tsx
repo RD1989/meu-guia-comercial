@@ -56,44 +56,44 @@ const DashboardHome = () => {
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
               Performance PRO-RANK
             </h2>
-            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-none text-white overflow-hidden relative group h-full shadow-2xl shadow-primary/10">
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <Award className="h-24 w-24" />
+            <Card className="bg-white border border-slate-200 overflow-hidden relative group h-full shadow-sm hover:border-primary/20 transition-all">
+              <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Award className="h-24 w-24 text-primary" />
               </div>
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-center">
-                  <Badge className="bg-primary/20 text-primary border-primary/30 font-black text-[9px] uppercase tracking-tighter">Ranking Ativo</Badge>
-                  <TrendingUp className="h-4 w-4 text-emerald-400 animate-pulse" />
+                  <Badge className="bg-primary/10 text-primary border-primary/20 font-bold text-[9px] uppercase tracking-wider">Ranking Ativo</Badge>
+                  <TrendingUp className="h-4 w-4 text-emerald-500 animate-pulse" />
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-end gap-2">
-                  <span className="text-5xl font-black text-white leading-none tracking-tighter">
+                  <span className="text-5xl font-black text-slate-800 leading-none tracking-tighter">
                     {Math.round((business as any).performance_score || 0)}
                   </span>
-                  <span className="text-primary font-black text-[10px] uppercase mb-1">PONTOS</span>
+                  <span className="text-slate-500 font-bold text-[10px] uppercase mb-1">PONTOS</span>
                 </div>
                 
                 <div className="space-y-2">
-                  <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-slate-400">
                     <span>Nível de Elite</span>
-                    <span className="text-white">
+                    <span className="text-primary font-bold">
                       {(business as any).performance_score >= 85 ? "Ouro 🥇" : 
                        (business as any).performance_score >= 65 ? "Prata 🥈" : 
                        (business as any).performance_score >= 40 ? "Bronze 🥉" : "Iniciante 🚀"}
                     </span>
                   </div>
-                  <Progress value={(business as any).performance_score || 5} className="h-2 bg-white/10" />
+                  <Progress value={(business as any).performance_score || 5} className="h-2 bg-slate-100" />
                 </div>
 
-                <div className="pt-2 flex flex-col gap-2">
-                   <div className="flex items-center gap-2 text-xs font-bold text-slate-300">
-                      <Star className="h-4 w-4 text-amber-400 fill-amber-400" />
+                <div className="pt-2 flex flex-col gap-2 relative z-10">
+                   <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                      <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
                       <span>{((business as any).rating_average || 0).toFixed(1)} Avaliação Média</span>
                    </div>
-                   <div className="p-3 bg-white/5 rounded-2xl border border-white/10 mt-2">
-                      <p className="text-[10px] text-slate-400 leading-tight">
-                         💡 <span className="font-bold text-slate-200">DICA PRO:</span> {(business as any).performance_score < 70 ? "Peça mais avaliações para subir no ranking." : "Mantenha seus produtos atualizados para não cair."}
+                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 mt-2">
+                      <p className="text-[10px] text-slate-500 leading-tight">
+                         💡 <span className="font-bold text-slate-700">DICA PRO:</span> {(business as any).performance_score < 70 ? "Peça mais avaliações para subir no ranking." : "Mantenha seus produtos atualizados para não cair."}
                       </p>
                    </div>
                 </div>

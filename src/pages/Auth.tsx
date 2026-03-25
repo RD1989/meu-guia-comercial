@@ -1,23 +1,26 @@
-import { useState } from "react";
-import { MapPin, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { usePlatform } from "@/contexts/PlatformContext";
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [searchParams] = useSearchParams();
+  const initialMode = searchParams.get("mode");
+  const [isLogin, setIsLogin] = useState(initialMode !== "register");
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn, signUp, user } = useAuth();
+  const { config } = usePlatform();
   const navigate = useNavigate();
 
-  // Redirect if already logged in - must use useEffect to avoid blank page during render state
   useEffect(() => {
     if (user) {
       navigate("/", { replace: true });
@@ -62,89 +65,103 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
-        <Link to="/" className="flex items-center justify-center gap-2 mb-8">
-          <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center">
-            <MapPin className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <span className="font-bold text-foreground text-xl tracking-tight">Meu Guia</span>
-        </Link>
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full">
+        {/* Logo container matching reference */}
+        <div className="text-center mb-8">
+          <Link to="/" className="inline-flex items-center gap-2">
+            {config.platform_logo_url ? (
+              <img src={config.platform_logo_url} alt="Logo" className="h-10 object-contain" />
+            ) : (
+              <span className="font-extrabold text-slate-800 text-2xl tracking-tight">
+                <span className="text-primary mr-1">📍</span>
+                {config.platform_name}
+              </span>
+            )}
+          </Link>
+        </div>
 
-        <Card className="p-6">
-          <h2 className="text-lg font-bold text-foreground text-center mb-1">
-            {isLogin ? "Entrar na conta" : "Criar conta"}
+        {/* Clean White Card */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 sm:p-10">
+          <h2 className="text-2xl font-bold text-slate-900 text-center mb-2">
+            {isLogin ? "Acessar o Painel" : "Cadastre sua Empresa"}
           </h2>
-          <p className="text-xs text-muted-foreground text-center mb-6">
+          <p className="text-sm text-slate-500 text-center mb-8">
             {isLogin
-              ? "Acesse sua conta para gerenciar seu negócio"
-              : "Crie sua conta para começar"}
+              ? "Entre com seus dados para gerenciar seus negócios"
+              : "Preencha os dados abaixo para começar a anunciar"}
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
               <div>
-                <Label htmlFor="name" className="text-xs">Nome completo</Label>
+                <Label htmlFor="name" className="text-sm font-medium text-slate-700">Nome da Empresa / Responsável *</Label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Seu nome"
-                  className="mt-1.5 h-11 rounded-xl"
+                  placeholder="Sua Empresa"
+                  className="mt-1 h-12 rounded-lg border-slate-300 bg-white"
                   required={!isLogin}
                   disabled={loading}
                 />
               </div>
             )}
             <div>
-              <Label htmlFor="email" className="text-xs">E-mail</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-slate-700">Email *</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
-                className="mt-1.5 h-11 rounded-xl"
+                className="mt-1 h-12 rounded-lg border-slate-300 bg-white"
                 required
                 disabled={loading}
               />
             </div>
             <div>
-              <Label htmlFor="password" className="text-xs">Senha</Label>
+              <Label htmlFor="password" className="text-sm font-medium text-slate-700">Senha *</Label>
               <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="mt-1.5 h-11 rounded-xl"
+                placeholder="Mínimo 6 caracteres"
+                className="mt-1 h-12 rounded-lg border-slate-300 bg-white"
                 required
                 minLength={6}
                 disabled={loading}
               />
             </div>
-            <Button type="submit" className="w-full h-11 rounded-xl font-semibold" disabled={loading}>
-              {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : isLogin ? (
-                "Entrar"
-              ) : (
-                "Criar conta"
-              )}
-            </Button>
+            
+            <div className="pt-2">
+               <Button type="submit" className="w-full h-12 rounded-lg font-bold text-base bg-primary hover:bg-primary/90 text-white shadow-none transition-colors" disabled={loading}>
+                 {loading ? (
+                   <Loader2 className="h-5 w-5 animate-spin" />
+                 ) : isLogin ? (
+                   "Entrar na conta"
+                 ) : (
+                   "Cadastrar Empresa"
+                 )}
+               </Button>
+            </div>
           </form>
 
-          <p className="text-xs text-muted-foreground text-center mt-4">
-            {isLogin ? "Não tem conta?" : "Já tem conta?"}{" "}
+          <div className="mt-8 text-center text-sm">
+            <span className="text-slate-500">
+              {isLogin ? "Ainda não tem cadastro?" : "Já tem uma conta?"}
+            </span>{" "}
             <button
+              type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="text-primary font-medium hover:underline"
+              className="font-bold text-primary hover:text-primary/80 transition-colors"
               disabled={loading}
             >
-              {isLogin ? "Criar conta" : "Fazer login"}
+              {isLogin ? "Cadastre-se" : "Fazer login"}
             </button>
-          </p>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

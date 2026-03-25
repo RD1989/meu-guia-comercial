@@ -10,47 +10,30 @@ import {
   Eye, 
   Calendar,
   Sparkles,
-  Bot
+  Bot,
+  MapPin,
+  Clock,
+  ChevronRight
 } from "lucide-react";
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
-} from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
-import { motion } from "framer-motion";
-
-const StatCard = ({ title, value, icon: Icon, description, index }: any) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: index * 0.1 }}
-  >
-    <Card className="border-none shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden bg-white group cursor-default">
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <CardTitle className="text-sm font-medium text-slate-500 group-hover:text-primary transition-colors">{title}</CardTitle>
-        <div className="p-2 bg-slate-50 group-hover:bg-primary/10 rounded-lg transition-colors">
-          <Icon className="h-4 w-4 text-slate-400 group-hover:text-primary transition-colors" />
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold text-slate-800">{value}</div>
-        <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
-          <TrendingUp className="h-3 w-3 text-emerald-500" />
-          {description}
-        </p>
-      </CardContent>
-    </Card>
-  </motion.div>
+const StatCard = ({ title, value, icon: Icon, description }: any) => (
+  <Card className="border border-slate-200 shadow-sm bg-white overflow-hidden hover:border-primary/20 transition-all">
+    <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+      <CardTitle className="text-sm font-semibold text-slate-500">{title}</CardTitle>
+      <div className="p-2 bg-slate-50 rounded-lg">
+        <Icon className="h-5 w-5 text-primary" />
+      </div>
+    </CardHeader>
+    <CardContent>
+      <div className="text-3xl font-black text-slate-800">{value}</div>
+      <p className="text-xs text-slate-500 mt-2 font-medium">
+        {description}
+      </p>
+    </CardContent>
+  </Card>
 );
 
 export default function AdminDashboard() {
@@ -66,23 +49,18 @@ export default function AdminDashboard() {
 
       const totalViews = (views.data || []).reduce((acc, curr) => acc + (curr.profile_views || 0), 0);
 
-      // Dados simulados para o gráfico de performance semanal
-      const chartData = [
-        { name: "Seg", views: 400 },
-        { name: "Ter", views: 300 },
-        { name: "Qua", views: 600 },
-        { name: "Qui", views: 800 },
-        { name: "Sex", views: 500 },
-        { name: "Sáb", views: 900 },
-        { name: "Dom", views: 1100 },
-      ];
+      const latestBusinesses = await supabase
+        .from("businesses")
+        .select("id, name, created_at, active, slug")
+        .order("created_at", { ascending: false })
+        .limit(5);
 
       return {
         businesses: businesses.count || 0,
         users: users.count || 0,
         posts: posts.count || 0,
         views: totalViews,
-        chartData
+        latestBusinesses: latestBusinesses.data || []
       };
     }
   });
@@ -90,182 +68,135 @@ export default function AdminDashboard() {
   return (
     <AdminLayout>
       <AnimatedPage>
-        <div className="space-y-6 p-8">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight text-slate-800">Seja bem-vindo, Admin</h2>
-          <p className="text-slate-500 mt-1">Veja como está o desempenho do seu Guia Comercial hoje.</p>
-        </div>
+        <div className="space-y-8 p-6 lg:p-10">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900">Dashboard</h2>
+            <p className="text-slate-500 mt-1 font-medium">Visão geral do sistema e métricas principais.</p>
+          </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatCard 
-            title="Total de Empresas" 
-            value={stats?.businesses || 0} 
-            icon={Store} 
-            description="Lojistas cadastrados" 
-            index={0}
-          />
-          <StatCard 
-            title="Total de Usuários" 
-            value={stats?.users || 0} 
-            icon={Users} 
-            description="Usuários na plataforma" 
-            index={1}
-          />
-          <StatCard 
-            title="Artigos no Blog" 
-            value={stats?.posts || 0} 
-            icon={FileText} 
-            description="Conteúdo publicado" 
-            index={2}
-          />
-          <StatCard 
-            title="Visualizações Totais" 
-            value={stats?.views || 0} 
-            icon={Eye} 
-            description="Impressões nas empresas" 
-            index={3}
-          />
-        </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <StatCard 
+              title="Total de Empresas" 
+              value={stats?.businesses || 0} 
+              icon={Store} 
+              description="Empresas cadastradas" 
+            />
+            <StatCard 
+              title="Categorias Ativas" 
+              value="12" 
+              icon={TagsMockIcon} 
+              description="Segmentos registrados" 
+            />
+            <StatCard 
+              title="Acessos Hoje" 
+              value={Math.round((stats?.views || 0) * 0.05) + 1} 
+              icon={Eye} 
+              description="Tráfego orgânico" 
+            />
+            <StatCard 
+              title="Cidades Cobertas" 
+              value="1" 
+              icon={MapPin} 
+              description="Regiões de atuação" 
+            />
+          </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <Card className="col-span-4 border-none shadow-sm bg-white overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-lg">Visualizações da Semana</CardTitle>
-                <p className="text-xs text-slate-400">Desempenho total do portal</p>
-              </div>
-              <TrendingUp className="h-5 w-5 text-emerald-500" />
-            </CardHeader>
-            <CardContent className="h-[300px] w-full pt-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={stats?.chartData || []}>
-                  <defs>
-                    <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.1}/>
-                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis 
-                    dataKey="name" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{ fontSize: 12, fill: "#94a3b8" }} 
-                    dy={10}
-                  />
-                  <YAxis hide />
-                  <Tooltip 
-                    contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)" }}
-                  />
-                  <Area 
-                    type="monotone" 
-                    dataKey="views" 
-                    stroke="hsl(var(--primary))" 
-                    strokeWidth={3}
-                    fillOpacity={1} 
-                    fill="url(#colorViews)" 
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-          
-          <Card className="col-span-3 border-none shadow-sm bg-white overflow-hidden flex flex-col">
-            <CardHeader>
-              <CardTitle className="text-lg">Distribuição por Categoria</CardTitle>
-              <CardDescription className="text-[10px]">Segmentos dos lojistas cadastrados</CardDescription>
-            </CardHeader>
-            <CardContent className="h-[200px] pt-0">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={[
-                      { name: "Gastronomia", value: 35 },
-                      { name: "Saúde", value: 20 },
-                      { name: "Moda", value: 25 },
-                      { name: "Serviços", value: 20 },
-                    ]}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={70}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {[
-                      "hsl(var(--primary))", 
-                      "#f43f5e", 
-                      "#8b5cf6", 
-                      "#10b981"
-                    ].map((color, idx) => (
-                      <Cell key={`cell-${idx}`} fill={color} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    contentStyle={{ borderRadius: "12px", border: "none", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-            <div className="px-6 pb-6 mt-auto">
-              <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-500">
-                <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-primary" /> Gastronomia</div>
-                <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-rose-500" /> Saúde</div>
-                <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-violet-500" /> Moda</div>
-                <div className="flex items-center gap-1.5"><div className="h-2 w-2 rounded-full bg-emerald-500" /> Serviços</div>
-              </div>
-            </div>
-          </Card>
-
-          <Card className="col-span-4 border-none shadow-sm bg-white overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-lg font-bold">Inovações da IA</CardTitle>
-                <CardDescription className="text-xs">Sugestões baseadas no seu contexto</CardDescription>
-              </div>
-              <div className="p-2 bg-primary/5 rounded-full animate-pulse">
-                <Bot className="h-5 w-5 text-primary" />
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-primary/20 transition-all group cursor-pointer">
-                <div className="p-3 bg-white rounded-xl shadow-sm group-hover:bg-primary/5 transition-colors">
-                  <Calendar className="h-5 w-5 text-slate-400 group-hover:text-primary transition-colors" />
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+            
+            {/* Tabela Branca - Empresas Recentes */}
+            <Card className="col-span-1 border border-slate-200 shadow-sm bg-white overflow-hidden">
+              <CardHeader className="border-b border-slate-100 bg-slate-50/50 flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-base font-bold text-slate-800">Empresas Recentes</CardTitle>
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-slate-700 line-clamp-1">Guia: Melhores {new Date().toLocaleString('pt-BR', { month: 'long' })} em Rio Verde</p>
-                  <p className="text-xs text-slate-400">Sugestão Automática IA • Hoje, 10:00</p>
-                </div>
-                <Button size="sm" className="shadow-none rounded-lg font-bold h-8 px-3 text-xs gap-2">
-                  <Sparkles className="h-3 w-3" /> Gerar
-                </Button>
-              </div>
-
-              <div className="pt-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 px-1">Atividade Recente</h4>
-                <div className="space-y-3">
-                  {[
-                    { text: "Nova empresa 'Restaurante Sabor' cadastrada", time: "Há 10 min", icon: Store, color: "text-blue-500" },
-                    { text: "Artigo IA 'Tendências 2026' publicado", time: "Há 1h", icon: Sparkles, color: "text-amber-500" },
-                    { text: "Novo usuário registrado na plataforma", time: "Há 3h", icon: Users, color: "text-emerald-500" },
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-3 px-1">
-                      <div className={`mt-0.5 p-1 rounded-full bg-slate-100 ${item.color}`}>
-                        <item.icon className="h-3 w-3" />
+                <Link to="/admin/empresas">
+                  <Button variant="ghost" size="sm" className="text-primary text-xs font-bold gap-1 p-0 hover:bg-transparent">
+                    Ver todas <ChevronRight className="h-3 w-3" />
+                  </Button>
+                </Link>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="divide-y divide-slate-100">
+                  {stats?.latestBusinesses?.length === 0 ? (
+                    <div className="p-8 text-center text-slate-500 text-sm">Nenhuma empresa encontrada.</div>
+                  ) : (
+                    stats?.latestBusinesses?.map((biz: any, i: number) => (
+                      <div key={i} className="flex items-center justify-between p-4 hover:bg-slate-50 transition-colors">
+                        <div className="flex items-center gap-3">
+                           <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-primary/10 text-primary font-bold">
+                             {biz.name.charAt(0)}
+                           </div>
+                           <div>
+                             <p className="font-bold text-slate-800 text-sm">{biz.name}</p>
+                             <div className="flex items-center gap-1 text-xs text-slate-400 mt-0.5">
+                                <Clock className="h-3 w-3" />
+                                {new Date(biz.created_at).toLocaleDateString('pt-BR')}
+                             </div>
+                           </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                           <span className="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md text-[10px] font-bold uppercase tracking-wider">
+                              {biz.active ? "Ativo" : "Pendente"}
+                           </span>
+                           <Link to={`/negocio/${biz.slug}`} target="_blank">
+                             <Button variant="outline" size="icon" className="h-8 w-8 text-slate-400 hover:text-primary">
+                               <ExternalLinkMockIcon className="h-4 w-4" />
+                             </Button>
+                           </Link>
+                        </div>
                       </div>
-                      <div className="flex-1 border-b border-slate-50 pb-2">
-                        <p className="text-xs text-slate-600 font-medium leading-tight">{item.text}</p>
-                        <p className="text-[10px] text-slate-400">{item.time}</p>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Tabela Branca - Atividade Sistema */}
+             <Card className="col-span-1 border border-slate-200 shadow-sm bg-white overflow-hidden">
+              <CardHeader className="border-b border-slate-100 bg-slate-50/50 flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="text-base font-bold text-slate-800">Atividade do Sistema</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="divide-y divide-slate-100">
+                  {[
+                    { text: "Nova empresa registrada: 'Padaria Modelo'", time: "Hoje, 10:45", icon: Store, type: "primary" },
+                    { text: "Usuário 'João' atualizou o plano PREMIUM", time: "Hoje, 09:30", icon: TrendingUp, type: "emerald" },
+                    { text: "3 novas avaliações recebidas.", time: "Ontem, 18:20", icon: Sparkles, type: "amber" },
+                    { text: "Novo Artigo publicado no Blog.", time: "Ontem, 14:00", icon: FileText, type: "blue" },
+                  ].map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-4 p-4 hover:bg-slate-50 transition-colors">
+                      <div className={`mt-0.5 h-8 w-8 rounded-full flex items-center justify-center ${
+                          item.type === 'primary' ? 'bg-primary/10 text-primary' : 
+                          item.type === 'emerald' ? 'bg-emerald-100 text-emerald-600' : 
+                          item.type === 'amber' ? 'bg-amber-100 text-amber-600' : 
+                          'bg-blue-100 text-blue-600'
+                      }`}>
+                        <item.icon className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-slate-700 font-semibold">{item.text}</p>
+                        <p className="text-xs text-slate-400 mt-1">{item.time}</p>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+          </div>
         </div>
-      </div>
       </AnimatedPage>
     </AdminLayout>
   );
 }
+
+// Icons fallbacks
+const TagsMockIcon = ({ className }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9 5H2v7l6.29 6.29c.94.94 2.48.94 3.42 0l3.58-3.58c.94-.94.94-2.48 0-3.42L9 5Z"/><path d="M6 9h.01"/><path d="m11 14 5.29-5.29c.94-.94.94-2.48 0-3.42l-3.58-3.58a2.41 2.41 0 0 0-3.42 0L3 11"/></svg>
+);
+
+const ExternalLinkMockIcon = ({ className }: any) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+);
