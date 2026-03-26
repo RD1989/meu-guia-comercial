@@ -282,20 +282,24 @@ const Index = () => {
           <h2 className="text-xl md:text-3xl font-black text-slate-950 tracking-tighter">Empresas Certificadas</h2>
         </div>
         
-        <div className="relative flex overflow-x-hidden">
+        <div className="relative flex overflow-x-hidden pt-4 pb-12">
           <motion.div 
             animate={{ x: "-100%" }}
-            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-            className="flex whitespace-nowrap gap-12 items-center py-4 px-12"
+            transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+            className="flex whitespace-nowrap gap-8 items-center px-4"
           >
             {[...DUMMY_BUSINESSES, ...DUMMY_BUSINESSES].map((biz, i) => (
-              <div key={`${biz.id}-${i}`} className="flex items-center gap-4 bg-white px-8 py-5 rounded-[2rem] border border-slate-200 shadow-sm hover:border-primary transition-all group shrink-0">
-                <div className="h-10 w-10 rounded-xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20">
-                   <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div key={`${biz.id}-${i}`} className="flex items-center gap-6 bg-white px-10 py-8 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/20 hover:border-primary transition-all group shrink-0 min-w-[300px]">
+                <div className="h-20 w-20 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20 shadow-inner">
+                   <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
                 </div>
-                <div>
-                   <div className="text-sm font-black text-slate-800 group-hover:text-primary transition-colors">{biz.name}</div>
-                   <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{biz.address}</div>
+                <div className="flex flex-col gap-1">
+                   <div className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors leading-tight">{biz.name}</div>
+                   <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{biz.address}</div>
+                   <div className="flex items-center gap-1 mt-1">
+                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                      <span className="text-[10px] font-black text-slate-600">{biz.average_rating} Professional</span>
+                   </div>
                 </div>
               </div>
             ))}
@@ -303,17 +307,21 @@ const Index = () => {
 
           <motion.div 
             animate={{ x: "-100%" }}
-            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-            className="flex whitespace-nowrap gap-12 items-center py-4 px-12 absolute top-0 left-full h-full"
+            transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+            className="flex whitespace-nowrap gap-8 items-center px-4 absolute top-4 left-full h-full"
           >
             {[...DUMMY_BUSINESSES, ...DUMMY_BUSINESSES].map((biz, i) => (
-              <div key={`${biz.id}-dup-${i}`} className="flex items-center gap-4 bg-white px-8 py-5 rounded-[2rem] border border-slate-200 shadow-sm hover:border-primary transition-all group shrink-0">
-                <div className="h-10 w-10 rounded-xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20">
-                   <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+              <div key={`${biz.id}-dup-${i}`} className="flex items-center gap-6 bg-white px-10 py-8 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/20 hover:border-primary transition-all group shrink-0 min-w-[300px]">
+                <div className="h-20 w-20 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20 shadow-inner">
+                   <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
                 </div>
-                <div>
-                   <div className="text-sm font-black text-slate-800 group-hover:text-primary transition-colors">{biz.name}</div>
-                   <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{biz.address}</div>
+                <div className="flex flex-col gap-1">
+                   <div className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors leading-tight">{biz.name}</div>
+                   <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{biz.address}</div>
+                   <div className="flex items-center gap-1 mt-1">
+                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                      <span className="text-[10px] font-black text-slate-600">{biz.average_rating} Professional</span>
+                   </div>
                 </div>
               </div>
             ))}

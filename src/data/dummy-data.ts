@@ -43,7 +43,7 @@ export const DUMMY_BUSINESSES = [
     address: 'Rua das Patas, 50',
     phone: '(11) 98765-4321',
     whatsapp: '5511987654321',
-    image_url: 'https://images.unsplash.com/photo-1541781752044-84d4367ef882?q=80&w=800',
+    image_url: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=800',
     active: true,
     featured: true,
     average_rating: 4.9,
