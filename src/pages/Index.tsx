@@ -285,11 +285,15 @@ const Index = () => {
         <div className="relative flex overflow-x-hidden pt-4 pb-12">
           <motion.div 
             animate={{ x: "-100%" }}
-            transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
             className="flex whitespace-nowrap gap-8 items-center px-4"
           >
             {[...DUMMY_BUSINESSES, ...DUMMY_BUSINESSES].map((biz, i) => (
-              <div key={`${biz.id}-${i}`} className="flex items-center gap-6 bg-white px-10 py-8 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/20 hover:border-primary transition-all group shrink-0 min-w-[300px]">
+              <Link 
+                key={`${biz.id}-${i}`} 
+                to={`/negocio/${biz.slug}`}
+                className="flex items-center gap-6 bg-white px-10 py-8 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/20 hover:border-primary transition-all group shrink-0 min-w-[300px]"
+              >
                 <div className="h-20 w-20 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20 shadow-inner">
                    <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
                 </div>
@@ -301,17 +305,21 @@ const Index = () => {
                       <span className="text-[10px] font-black text-slate-600">{biz.average_rating} Professional</span>
                    </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </motion.div>
 
           <motion.div 
             animate={{ x: "-100%" }}
-            transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
             className="flex whitespace-nowrap gap-8 items-center px-4 absolute top-4 left-full h-full"
           >
             {[...DUMMY_BUSINESSES, ...DUMMY_BUSINESSES].map((biz, i) => (
-              <div key={`${biz.id}-dup-${i}`} className="flex items-center gap-6 bg-white px-10 py-8 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/20 hover:border-primary transition-all group shrink-0 min-w-[300px]">
+              <Link 
+                key={`${biz.id}-dup-${i}`} 
+                to={`/negocio/${biz.slug}`}
+                className="flex items-center gap-6 bg-white px-10 py-8 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/20 hover:border-primary transition-all group shrink-0 min-w-[300px]"
+              >
                 <div className="h-20 w-20 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20 shadow-inner">
                    <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
                 </div>
@@ -323,7 +331,7 @@ const Index = () => {
                       <span className="text-[10px] font-black text-slate-600">{biz.average_rating} Professional</span>
                    </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </motion.div>
         </div>

@@ -147,6 +147,25 @@ export const DUMMY_BUSINESSES = [
     has_menu: false,
     has_booking: true,
     created_at: new Date().toISOString()
+  },
+  {
+    id: 'biz-acc-1',
+    name: 'Alpha Business Solutions',
+    slug: 'alpha-business',
+    description: 'Assessoria contábil e consultoria empresarial de alto nível. Planejamento tributário e gestão eficiente.',
+    category_id: 'cat-10',
+    address: 'Empresarial Faria Lima, 10º Andar',
+    phone: '(11) 3300-4400',
+    whatsapp: '551133004400',
+    image_url: 'https://images.unsplash.com/photo-1454165833267-033f23b730d9?q=80&w=800',
+    active: true,
+    featured: true,
+    average_rating: 4.9,
+    total_reviews: 42,
+    plan_tier: 'MAX',
+    has_menu: false,
+    has_booking: true,
+    created_at: new Date().toISOString()
   }
 ];
 
