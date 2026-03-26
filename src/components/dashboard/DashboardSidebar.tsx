@@ -39,11 +39,11 @@ export function DashboardSidebar() {
   };
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-slate-200 bg-white">
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar">
       <SidebarContent>
         <SidebarGroup>
           <div className="flex items-center px-4 py-4 mb-2">
-            {!collapsed && <span className="text-lg font-black text-slate-800 tracking-tight">Painel<span className="text-primary">Lojista</span></span>}
+            {!collapsed && <span className="text-lg font-black text-white tracking-tight">Painel<span className="text-primary">Lojista</span></span>}
             {collapsed && <span className="text-lg font-black text-primary mx-auto">PL</span>}
           </div>
 
@@ -58,8 +58,8 @@ export function DashboardSidebar() {
                     <NavLink
                       to={item.url}
                       end={item.url === "/dashboard"}
-                      className="text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors mx-2 rounded-lg"
-                      activeClassName="bg-primary/10 text-primary font-bold"
+                      className="text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors mx-2 rounded-xl"
+                      activeClassName="bg-primary text-white font-black shadow-lg shadow-primary/20"
                     >
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}
@@ -72,24 +72,24 @@ export function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 bg-white border-t border-slate-100">
+      <SidebarFooter className="p-4 bg-sidebar border-t border-sidebar-border">
         {!collapsed && (
           <div className="mb-4">
             <Link to="/" target="_blank">
-              <Button variant="outline" className="w-full justify-center text-slate-600 border-slate-200 hover:bg-slate-50 gap-2 mb-4 h-9">
+              <Button variant="outline" className="w-full justify-center text-white border-white/20 hover:bg-white/10 gap-2 mb-4 h-9 rounded-xl">
                 <ExternalLink className="h-4 w-4" />
                 Ver site
               </Button>
             </Link>
             <div className="flex items-center gap-3 px-2">
-              <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+              <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center text-white font-black text-xs">
                 {user?.user_metadata?.name?.[0]?.toUpperCase() || "L"}
               </div>
               <div className="flex flex-col overflow-hidden">
-                <p className="text-sm font-bold text-slate-800 truncate">
+                <p className="text-sm font-bold text-white truncate">
                   {user?.user_metadata?.name || "Lojista"}
                 </p>
-                <p className="text-[10px] text-slate-500 truncate">{user?.email}</p>
+                <p className="text-[10px] text-sidebar-foreground/50 truncate">{user?.email}</p>
               </div>
             </div>
           </div>
@@ -98,7 +98,7 @@ export function DashboardSidebar() {
           variant="ghost"
           size="sm"
           onClick={handleSignOut}
-          className={`w-full text-slate-500 hover:text-red-600 hover:bg-red-50 gap-2 ${collapsed ? "justify-center" : "justify-start px-2"}`}
+          className={`w-full text-sidebar-foreground/60 hover:text-white hover:bg-red-500/20 gap-2 rounded-xl ${collapsed ? "justify-center" : "justify-start px-2"}`}
         >
           <LogOut className="h-4 w-4" />
           {!collapsed && "Sair"}

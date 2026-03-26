@@ -161,85 +161,108 @@ const BusinessDetail = () => {
   const displayServices = services && services.length > 0 ? services : DUMMY_SERVICES.filter(s => s.business_id === business?.id).slice(0, 6);
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-20 md:pb-0">
+    <div className="min-h-screen bg-white pb-20 md:pb-0">
       <Header />
 
-      {/* GMB Style Hero Banner */}
-      <div className="relative h-64 md:h-80 lg:h-96 group overflow-hidden">
+      {/* Modern High-Fidelity Hero Banner */}
+      <div className="relative h-72 md:h-96 lg:h-[450px] group overflow-hidden">
         {business.image_url ? (
-          <img src={business.image_url} alt={business.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+          <img src={business.image_url} alt={business.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110" />
         ) : (
-          <div className="w-full h-full bg-slate-900 flex items-center justify-center">
-             <span className="text-8xl font-black text-white/5 uppercase">{business.name[0]}</span>
+          <div className="w-full h-full bg-slate-950 flex items-center justify-center">
+             <span className="text-9xl font-black text-white/5 uppercase tracking-tighter">{business.name[0]}</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
         
-        <button onClick={() => navigate(-1)} className="absolute top-6 left-6 h-10 w-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center z-20 hover:bg-white/20 transition-all">
-          <ArrowLeft className="h-5 w-5 text-white" />
+        {/* Cinematic Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-transparent to-transparent" />
+        
+        <button 
+          onClick={() => navigate(-1)} 
+          className="absolute top-8 left-8 h-12 w-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center z-20 hover:bg-primary hover:border-primary transition-all duration-500 group/back"
+        >
+          <ArrowLeft className="h-5 w-5 text-white transition-transform group-hover/back:-translate-x-1" />
         </button>
 
-        {/* Business Hero Info */}
-        <div className="absolute bottom-10 left-0 w-full px-6 z-20">
-          <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-4">
+        {/* Business Premium Header Info */}
+        <div className="absolute bottom-16 left-0 w-full px-8 z-20">
+          <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div className="space-y-6">
               <div className="flex flex-wrap gap-2">
-                <Badge className="bg-primary text-white border-0 text-[10px] px-3 py-1 font-black uppercase tracking-widest leading-none">
+                <Badge className="bg-primary text-white border-0 text-[10px] px-4 py-1.5 rounded-full font-black uppercase tracking-widest leading-none shadow-lg shadow-primary/20">
                   {(business.categories as any)?.name || "Comercial"}
                 </Badge>
                 {(business as any).plan_tier === 'MAX' && (
-                  <Badge className="bg-amber-400 text-amber-950 border-0 text-[10px] px-3 py-1 font-black uppercase tracking-widest flex gap-1 items-center leading-none">
-                    <Sparkles className="h-3 w-3" /> Elite
+                  <Badge className="bg-white/10 backdrop-blur-md text-white border border-white/20 text-[10px] px-4 py-1.5 rounded-full font-black uppercase tracking-widest flex gap-2 items-center leading-none">
+                    <Sparkles className="h-3.5 w-3.5 text-primary" /> Membro Elite
                   </Badge>
                 )}
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tighter drop-shadow-2xl">
-                {business.name}
-              </h1>
-              <div className="flex items-center gap-4 text-white/90">
-                <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-sm font-bold">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  {avgRating.toFixed(1)}
-                  <span className="text-white/60 font-medium ml-1">({reviews.length || "0"})</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-sm font-medium">
-                  <MapPin className="h-4 w-4 text-primary" />
-                  {business.address?.split(',')[0]}
+              
+              <div className="space-y-2">
+                <motion.h1 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-5xl md:text-7xl font-[900] text-white tracking-tighter drop-shadow-2xl leading-[0.85]"
+                >
+                  {business.name}
+                </motion.h1>
+                <div className="flex items-center gap-6 text-white/80">
+                  <div className="flex items-center gap-2 bg-white/5 backdrop-blur-md px-4 py-2 rounded-2xl border border-white/10 text-sm font-bold">
+                    <Star className="h-4 w-4 fill-primary text-primary" />
+                    <span className="text-white">{avgRating.toFixed(1)}</span>
+                    <span className="text-white/40 font-medium ml-1">({reviews.length || "0"} avaliações)</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm font-bold tracking-tight">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    <span className="opacity-90">{business.address?.split(',')[0]}</span>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Quick GMB Actions Bar */}
-            <div className="flex flex-wrap gap-3 bg-white/10 backdrop-blur-xl p-2 rounded-[2rem] border border-white/20 shadow-2xl">
-              <Button onClick={handleWhatsAppClick} className="rounded-full h-12 px-6 gap-2 bg-emerald-500 hover:bg-emerald-600 text-white border-0 font-black uppercase text-[10px] tracking-widest shadow-lg shadow-emerald-500/20 transition-all active:scale-95">
-                <MessageCircle className="h-4 w-4" /> WhatsApp
+            {/* Premium CTA Actions */}
+            <div className="flex flex-wrap gap-3 bg-white/5 backdrop-blur-2xl p-3 rounded-[2.5rem] border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+              <Button 
+                onClick={handleWhatsAppClick} 
+                className="rounded-2xl h-14 px-8 gap-3 bg-primary hover:bg-primary/90 text-white border-0 font-black uppercase text-xs tracking-widest shadow-xl shadow-primary/30 transition-all active:scale-95 group/wa"
+              >
+                <MessageCircle className="h-5 w-5 transition-transform group-hover/wa:scale-110" /> 
+                WhatsApp Direto
               </Button>
-              <Button asChild variant="outline" className="rounded-full h-12 w-12 p-0 bg-white/10 text-white border-white/20 hover:bg-white/20">
-                <a href={`tel:${business.phone}`} title="Ligar"><Phone className="h-4 w-4" /></a>
-              </Button>
-              <Button asChild variant="outline" className="rounded-full h-12 w-12 p-0 bg-white/10 text-white border-white/20 hover:bg-white/20">
-                <a href={`https://maps.google.com/?q=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer" title="Ver no Mapa"><ArrowUpRight className="h-4 w-4" /></a>
-              </Button>
+              <div className="flex gap-2">
+                <Button asChild variant="outline" className="rounded-2xl h-14 w-14 p-0 bg-white/10 text-white border-white/10 hover:bg-white/20 hover:border-white/30 transition-all">
+                  <a href={`tel:${business.phone}`} title="Ligar"><Phone className="h-5 w-5" /></a>
+                </Button>
+                <Button asChild variant="outline" className="rounded-2xl h-14 w-14 p-0 bg-white/10 text-white border-white/10 hover:bg-white/20 hover:border-white/30 transition-all">
+                  <a href={`https://maps.google.com/?q=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer" title="Navegar"><ArrowUpRight className="h-5 w-5" /></a>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Content Section with Tabs */}
-      <div className="max-w-5xl mx-auto px-6 -mt-4 relative z-30">
+      {/* Floating Modern Tab Bar */}
+      <div className="max-w-5xl mx-auto px-6 -mt-8 relative z-30">
         <Tabs defaultValue="about" className="w-full">
-          <TabsList className="w-full flex justify-start gap-4 h-14 bg-white/80 backdrop-blur-xl border border-white p-1 rounded-3xl shadow-xl shadow-slate-200/50 mb-8 sticky top-20 z-40 overflow-x-auto no-scrollbar">
-            <TabsTrigger value="about" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
-              <Info className="h-3.5 w-3.5" /> Sobre
+          <TabsList className="w-full flex justify-start gap-4 h-16 bg-white shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] border border-slate-100 p-2 rounded-[2rem] mb-12 sticky top-24 z-40 overflow-x-auto no-scrollbar">
+            <TabsTrigger value="about" className="rounded-xl gap-2 px-8 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-primary/20 transition-all duration-300">
+              <Info className="h-4 w-4" /> Sobre
             </TabsTrigger>
-            <TabsTrigger value="menu" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
-              <Utensils className="h-3.5 w-3.5" /> Cardápio
-            </TabsTrigger>
-            <TabsTrigger value="booking" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
-              <Calendar className="h-3.5 w-3.5" /> Reserva
-            </TabsTrigger>
-            <TabsTrigger value="reviews" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
-              <StarIcon className="h-3.5 w-3.5" /> Avaliações
+            {(business as any).has_menu && (
+              <TabsTrigger value="menu" className="rounded-xl gap-2 px-8 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-primary/20 transition-all duration-300">
+                <Utensils className="h-4 w-4" /> Cardápio
+              </TabsTrigger>
+            )}
+            {(business as any).has_booking && (
+              <TabsTrigger value="booking" className="rounded-xl gap-2 px-8 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-primary/20 transition-all duration-300">
+                <Calendar className="h-4 w-4" /> Agendamento
+              </TabsTrigger>
+            )}
+            <TabsTrigger value="reviews" className="rounded-xl gap-2 px-8 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-primary/20 transition-all duration-300">
+              <StarIcon className="h-4 w-4" /> Avaliações
             </TabsTrigger>
           </TabsList>
 
@@ -276,13 +299,17 @@ const BusinessDetail = () => {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="menu" className="mt-0 outline-none">
-                <DigitalMenu products={displayProducts} businessName={business.name} whatsapp={business.whatsapp || ''} />
-              </TabsContent>
-
-              <TabsContent value="booking" className="mt-0 outline-none">
-                <BookingSection services={displayServices} businessName={business.name} whatsapp={business.whatsapp || ''} />
-              </TabsContent>
+              {(business as any).has_menu && (
+                <TabsContent value="menu" className="mt-0 outline-none">
+                  <DigitalMenu products={displayProducts} businessName={business.name} whatsapp={business.whatsapp || ''} />
+                </TabsContent>
+              )}
+              
+              {(business as any).has_booking && (
+                <TabsContent value="booking" className="mt-0 outline-none">
+                  <BookingSection services={displayServices} businessName={business.name} whatsapp={business.whatsapp || ''} />
+                </TabsContent>
+              )}
 
               <TabsContent value="reviews" className="mt-0 outline-none">
                 <div className="space-y-8">

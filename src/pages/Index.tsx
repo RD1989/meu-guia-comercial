@@ -40,6 +40,7 @@ import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { usePlatform } from "@/contexts/PlatformContext";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { DUMMY_TESTIMONIALS, DUMMY_CATEGORIES, DUMMY_BUSINESSES, DUMMY_BANNERS } from "@/data/dummy-data";
 
@@ -148,81 +149,134 @@ const Index = () => {
     <div className="min-h-screen bg-white pb-20 md:pb-0 font-sans selection:bg-primary/10 selection:text-primary overflow-x-hidden text-slate-900">
       <Header />
 
-      {/* Elite Compact Hero Section */}
-      <section ref={heroRef} className="relative min-h-[75vh] flex items-center justify-center overflow-hidden pt-20">
-        {/* Banner Slider Background */}
-        <div className="absolute inset-0 z-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentBanner}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-              className="absolute inset-0"
+      {/* High-Fidelity Elite Hero Section */}
+      <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20 bg-slate-950">
+        {/* Abstract Map Background */}
+        <div className="absolute inset-0 z-0 opacity-40">
+           <img 
+             src="/world_map_abstract_bg_1774527556200.png" 
+             className="w-full h-full object-cover" 
+             alt="World Map Background" 
+           />
+           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-white" />
+        </div>
+
+        {/* Floating Price Bubbles (Simulated Categories) */}
+        <div className="absolute inset-0 z-10 pointer-events-none hidden lg:block">
+           <motion.div 
+             animate={{ y: [0, -10, 0] }} 
+             transition={{ duration: 4, repeat: Infinity }}
+             className="absolute top-[25%] left-[15%] bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-2xl shadow-2xl"
+           >
+             <div className="flex items-center gap-2 px-2 py-1">
+               <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+               <span className="text-[10px] font-black text-white uppercase tracking-widest">Gastronomia</span>
+             </div>
+           </motion.div>
+           
+           <motion.div 
+             animate={{ y: [0, 10, 0] }} 
+             transition={{ duration: 5, repeat: Infinity, delay: 1 }}
+             className="absolute top-[40%] right-[20%] bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-2xl shadow-2xl"
+           >
+             <div className="flex items-center gap-2 px-2 py-1">
+               <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+               <span className="text-[10px] font-black text-white uppercase tracking-widest">Saúde & Bem-estar</span>
+             </div>
+           </motion.div>
+
+           <motion.div 
+             animate={{ y: [0, -15, 0] }} 
+             transition={{ duration: 6, repeat: Infinity, delay: 0.5 }}
+             className="absolute bottom-[30%] left-[30%] bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-2xl shadow-2xl"
+           >
+             <div className="flex items-center gap-2 px-2 py-1">
+               <div className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
+               <span className="text-[10px] font-black text-white uppercase tracking-widest">Serviços Locais</span>
+             </div>
+           </motion.div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-20 grid lg:grid-cols-2 gap-12 items-center">
+          <motion.div 
+            style={{ opacity: heroOpacity, scale: heroScale }}
+            className="text-left"
+          >
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-8"
             >
-              <div className="absolute inset-0 bg-slate-950/40 z-10" /> {/* Contrast Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-white z-10" />
-              <img 
-                src={banners[currentBanner]?.image_url} 
-                alt={banners[currentBanner]?.title}
-                className="w-full h-full object-cover scale-105 animate-slow-zoom"
-              />
+              <Sparkles className="h-3.5 w-3.5" />
+              Guia Elite {config.platform_city}
             </motion.div>
-          </AnimatePresence>
-        </div>
 
-        {/* Soft Background Accents */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-          <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-primary/20 blur-[100px] rounded-full"></div>
-        </div>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-[900] text-white tracking-tighter leading-[0.85] mb-8">
+              Sua cidade <br />
+              <span className="text-primary italic">bem conectada.</span>
+            </h1>
 
-        <motion.div 
-          style={{ opacity: heroOpacity, scale: heroScale }}
-          className="max-w-5xl mx-auto px-6 relative z-20 text-center"
-        >
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.2em] mb-8 shadow-xl"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-amber-400" />
-            Guia Premium {config.platform_city}
+            <p className="text-lg text-slate-300 font-medium max-w-lg mb-10 leading-relaxed">
+              Descubra estabelecimentos de elite, serviços exclusivos e oportunidades únicas na palma da sua mão através do guia mais tecnológico da região.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+               <Button size="lg" className="rounded-full h-14 px-10 bg-white text-slate-950 hover:bg-slate-100 font-black uppercase text-xs tracking-widest gap-2 group shadow-2xl">
+                 Ver Destaques <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+               </Button>
+               <Link to="/auth?mode=register">
+                 <Button size="lg" variant="outline" className="rounded-full h-14 px-10 border-white/20 text-white hover:bg-white/10 font-black uppercase text-xs tracking-widest gap-2">
+                   Cadastrar Empresa
+                 </Button>
+               </Link>
+            </div>
           </motion.div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-[900] text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl">
-            Sua cidade <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">bem conectada.</span>
-          </h1>
-
-          <p className="text-base md:text-xl text-slate-100 font-medium max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-lg">
-            Descubra estabelecimentos de elite, serviços exclusivos e oportunidades únicas na palma da sua mão.
-          </p>
-
+          {/* Floating Search Widget (Refined for Commercial Guide) */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="max-w-2xl mx-auto"
+            className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-100 relative overflow-hidden"
           >
-            <form onSubmit={handleSearch} className="relative group">
-              <div className="relative flex flex-col md:flex-row items-center bg-white border border-slate-200 rounded-[1.5rem] shadow-[0_15px_40px_rgba(0,0,0,0.05)] p-2 gap-2 group-focus-within:border-primary/40 transition-all duration-500">
-                <div className="flex items-center flex-1 w-full pl-4">
-                  <SearchIcon className="h-5 w-5 text-slate-300 group-hover:text-primary transition-colors" />
-                  <Input 
-                    className="border-none bg-transparent h-12 text-lg focus-visible:ring-0 placeholder:text-slate-200 w-full font-black text-slate-900"
-                    placeholder="O que você busca hoje?"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                  />
-                </div>
-                <Button type="submit" className="w-full md:w-auto h-12 px-8 rounded-[1.2rem] bg-slate-900 hover:bg-slate-800 text-white font-black text-base shadow-xl active:scale-95 transition-all">
-                  Explorar
-                </Button>
+            <div className="absolute top-0 right-0 p-6 opacity-5">
+              <Building2 className="h-24 w-24 text-primary" />
+            </div>
+            
+            <div className="space-y-6 relative z-10">
+              <div className="flex gap-4 border-b border-slate-100 pb-4">
+                 <button className="text-[10px] font-black uppercase tracking-widest text-primary border-b-2 border-primary pb-2">Empresas e Serviços</button>
+                 <button className="text-[10px] font-black uppercase tracking-widest text-slate-400 pb-2 hover:text-slate-600 transition-colors">Promoções Locais</button>
               </div>
-            </form>
+
+              <div className="space-y-4">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 group focus-within:border-primary/50 transition-all">
+                  <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block">O que você busca?</Label>
+                  <div className="flex items-center gap-3">
+                    <SearchIcon className="h-5 w-5 text-primary" />
+                    <Input 
+                      className="border-none bg-transparent h-8 text-lg focus-visible:ring-0 p-0 font-bold placeholder:text-slate-300" 
+                      placeholder="Ex: Pizzaria, Advogado, Academia..."
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 group focus-within:border-primary/50 transition-all">
+                  <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Localização</Label>
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-5 w-5 text-primary" />
+                    <div className="text-lg font-bold text-slate-900">{config.platform_city || "Sua Cidade"}</div>
+                  </div>
+                </div>
+              </div>
+
+              <Button onClick={handleSearch} className="w-full h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-lg shadow-xl shadow-primary/20 active:scale-95 transition-all">
+                Encontrar Agora
+              </Button>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Stats - Compact */}
@@ -446,47 +500,155 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials - Compact */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6 text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-[900] text-slate-950 tracking-tighter">Vozes da Comunidade</h2>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {DUMMY_TESTIMONIALS.slice(0, 3).map((testimonial, i) => (
+      {/* Testimonials - High-Fidelity Style */}
+      <section className="py-32 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <motion.div 
-              key={testimonial.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 flex flex-col justify-between"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="relative"
             >
-              <p className="text-lg text-slate-600 font-medium italic mb-8 leading-relaxed">"{testimonial.text}"</p>
-
-              <div className="flex items-center gap-4">
+              <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl relative group">
                 <img 
-                  src={testimonial.avatar_url} 
-                  alt={testimonial.name} 
-                  className="h-12 w-12 rounded-2xl object-cover border-2 border-white shadow-lg"
+                  src="/testimonial_woman_hat_1774527569763.png" 
+                  alt="Testimonial" 
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
-                <div>
-                  <div className="font-black text-slate-950 text-sm leading-none mb-1">{testimonial.name}</div>
-                  <div className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{testimonial.role}</div>
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
+              </div>
+              
+              {/* Floating Badge */}
+              <div className="absolute -bottom-6 -right-6 bg-white p-6 rounded-[2rem] shadow-2xl border border-slate-100 hidden md:block">
+                 <div className="flex items-center gap-1 mb-1">
+                    {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />)}
+                 </div>
+                 <div className="text-xl font-black text-slate-900">4.9/5.0</div>
+                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Avaliação Média</div>
               </div>
             </motion.div>
-          ))}
+
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              className="space-y-8"
+            >
+              <div>
+                <span className="text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-4 block">Depoimentos</span>
+                <h2 className="text-5xl md:text-6xl font-[900] text-slate-950 tracking-tighter leading-[0.9]">O que dizem <br /> sobre nós.</h2>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex gap-2">
+                   <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center">
+                      <Quote className="h-6 w-6 text-primary" />
+                   </div>
+                   <div className="flex-1">
+                      <p className="text-xl md:text-2xl text-slate-600 font-medium leading-relaxed italic">
+                        "O Guia Comercial mudou a forma como exploramos a cidade. Encontramos lugares incríveis que nunca tínhamos reparado antes. A interface é rápida e os benefícios de elite são reais!"
+                      </p>
+                      <div className="mt-6">
+                         <div className="font-black text-slate-950 text-lg leading-none">Ana Carla Mendonça</div>
+                         <div className="text-[10px] font-black text-primary uppercase tracking-widest mt-1">Usuária Premium</div>
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              <div className="pt-8 flex items-center gap-12 border-t border-slate-100">
+                 <div>
+                    <div className="text-3xl font-black text-slate-900 leading-none">2.5k+</div>
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Avaliações</div>
+                 </div>
+                 <div>
+                    <div className="text-3xl font-black text-slate-900 leading-none">100%</div>
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Segurança</div>
+                 </div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Final CTA Compact */}
-      <section className="bg-primary py-24 relative overflow-hidden">
-        <div className="max-w-3xl mx-auto px-6 text-center relative z-10 text-white">
-          <h3 className="text-4xl md:text-6xl font-[900] tracking-tighter mb-10 leading-[0.9]">Pronto para <br /> ser encontrado?</h3>
-          <Link to="/auth?mode=register">
-            <Button size="lg" className="h-14 px-12 rounded-xl bg-white text-primary font-black text-xl hover:bg-slate-100 shadow-2xl active:scale-95 transition-all">
-              Cadastrar Agora
-            </Button>
-          </Link>
+      {/* Community Section - Meet Our Community (Orange BG) */}
+      <section className="py-32 bg-primary relative overflow-hidden">
+        {/* Background Patterns */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+           <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent opacity-20" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10 text-center text-white space-y-16">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-5xl md:text-7xl font-[900] tracking-tighter leading-[0.9] mb-6">Conheça nossa Comunidade</h2>
+            <p className="text-lg text-white/80 font-medium leading-relaxed">Milhares de empresários e clientes conectados em uma jornada única de crescimento e descoberta.</p>
+          </div>
+
+          <div className="relative h-[500px] flex items-center justify-center">
+             {/* Central Feature Card */}
+             <motion.div 
+               initial={{ scale: 0.8, opacity: 0 }}
+               whileInView={{ scale: 1, opacity: 1 }}
+               className="bg-white p-6 rounded-[2.5rem] shadow-2xl relative z-20 w-72 md:w-80 group cursor-pointer"
+             >
+                <div className="aspect-[4/5] rounded-[2rem] overflow-hidden mb-4 border border-slate-100 shadow-inner">
+                   <img src="/community_center_card_1774527586781.png" alt="Community Main" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                </div>
+                <div className="space-y-1 text-left">
+                   <div className="text-xl font-black text-slate-950">Centro da Cidade</div>
+                   <div className="flex items-center gap-1">
+                      <MapPin className="h-3 w-3 text-primary" />
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{config.platform_city}</span>
+                   </div>
+                </div>
+             </motion.div>
+
+             {/* Orbital Avatars (Floating) */}
+             <div className="absolute inset-0 pointer-events-none">
+               {[
+                 { x: '-25%', y: '-30%', s: 64, d: 2 },
+                 { x: '25%', y: '-35%', s: 56, d: 3 },
+                 { x: '-35%', y: '10%', s: 72, d: 4 },
+                 { x: '35%', y: '15%', s: 60, d: 2.5 },
+                 { x: '-15%', y: '40%', s: 48, d: 3.5 },
+                 { x: '15%', y: '45%', s: 64, d: 2.8 },
+                 { x: '-40%', y: '-15%', s: 50, d: 4.2 },
+                 { x: '40%', y: '-10%', s: 68, d: 3.2 },
+               ].map((pos, i) => (
+                 <motion.div 
+                   key={i}
+                   animate={{ 
+                     y: [0, -15, 0],
+                     x: [0, 5, 0],
+                   }}
+                   transition={{ 
+                     duration: 4 + pos.d, 
+                     repeat: Infinity, 
+                     delay: i * 0.2 
+                   }}
+                   className="absolute left-1/2 top-1/2 rounded-full border-4 border-white/20 shadow-2xl overflow-hidden bg-white/10 hidden md:block"
+                   style={{ 
+                     transform: `translate(calc(${pos.x} - 50%), calc(${pos.y} - 50%))`,
+                     width: pos.s, 
+                     height: pos.s 
+                   }}
+                 >
+                   <img 
+                     src={`https://i.pravatar.cc/150?u=${i + 1}`} 
+                     alt="Community Member" 
+                     className="w-full h-full object-cover" 
+                   />
+                 </motion.div>
+               ))}
+             </div>
+          </div>
+
+          <div className="pt-8">
+             <Link to="/auth?mode=register">
+                <Button size="lg" className="h-14 px-12 rounded-2xl bg-white text-primary font-black text-lg hover:bg-slate-100 shadow-2xl active:scale-95 transition-all">
+                  Cadastrar Agora
+                </Button>
+             </Link>
+          </div>
         </div>
       </section>
 

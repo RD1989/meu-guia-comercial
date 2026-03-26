@@ -15,14 +15,14 @@ export function SearchBar() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="w-full max-w-lg">
+    <form onSubmit={handleSearch} className="w-full max-w-xl group">
       <div className="relative">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
         <Input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar estabelecimentos..."
-          className="pl-11 h-12 bg-card border-border rounded-2xl shadow-sm text-sm focus-visible:ring-primary/30"
+          placeholder="O que você está procurando hoje?"
+          className="pl-14 h-14 bg-white border-slate-100 rounded-3xl shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] text-sm font-bold focus-visible:ring-primary/20 focus-visible:border-primary/50 transition-all placeholder:text-slate-400 placeholder:font-medium"
         />
       </div>
     </form>

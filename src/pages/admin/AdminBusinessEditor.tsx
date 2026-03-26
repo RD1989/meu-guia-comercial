@@ -25,7 +25,9 @@ export default function AdminBusinessEditor() {
     category_id: "",
     plan_tier: "FREE",
     active: true,
-    image_url: ""
+    image_url: "",
+    has_menu: false,
+    has_booking: false
   });
 
   const { data: categories } = useQuery({
@@ -61,7 +63,9 @@ export default function AdminBusinessEditor() {
         category_id: business.category_id || "",
         plan_tier: business.plan_tier || "FREE",
         active: business.active ?? true,
-        image_url: business.image_url || ""
+        image_url: business.image_url || "",
+        has_menu: (business as any).has_menu || false,
+        has_booking: (business as any).has_booking || false
       });
     }
   }, [business]);
@@ -210,6 +214,33 @@ export default function AdminBusinessEditor() {
                 placeholder="https://..." 
                 className="bg-slate-50 border-none focus-visible:ring-primary/20"
               />
+            </div>
+
+            <div className="pt-4 border-t border-slate-100 grid md:grid-cols-2 gap-8">
+              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                <div className="space-y-0.5">
+                  <Label className="text-sm font-bold">Módulo Cardápio</Label>
+                  <p className="text-[10px] text-slate-500">Habilitar aba de produtos vinculados.</p>
+                </div>
+                <input 
+                  type="checkbox" 
+                  checked={formData.has_menu} 
+                  onChange={(e) => setFormData({...formData, has_menu: e.target.checked})}
+                  className="h-5 w-5 accent-primary"
+                />
+              </div>
+              <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                <div className="space-y-0.5">
+                  <Label className="text-sm font-bold">Módulo Agendamento</Label>
+                  <p className="text-[10px] text-slate-500">Habilitar aba de reserva de serviços.</p>
+                </div>
+                <input 
+                  type="checkbox" 
+                  checked={formData.has_booking} 
+                  onChange={(e) => setFormData({...formData, has_booking: e.target.checked})}
+                  className="h-5 w-5 accent-primary"
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
