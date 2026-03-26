@@ -369,137 +369,184 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Benefits - Modern Bento Grid Redesign */}
-      <section className="py-32 bg-[#09090b] text-white relative overflow-hidden">
-        {/* Abstract Background Emitters */}
-        <div className="absolute top-1/3 -left-64 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
-        <div className="absolute -bottom-64 -right-64 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
+      {/* Premium B2B Section - Crystal Glassmorphism & Abstract UI */}
+      <section className="py-32 bg-slate-50 relative overflow-hidden">
+        {/* Animated Background Mesh (Organic Gradient Orbs) */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div 
+            animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute top-0 right-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]" 
+          />
+          <motion.div 
+            animate={{ scale: [1, 1.5, 1], rotate: [0, -90, 0] }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[100px]" 
+          />
+        </div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-left mb-16 md:mb-24">
-            <span className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-6">
-              Para Negócios
-            </span>
-            <h2 className="text-5xl md:text-7xl font-[900] tracking-tighter mb-6 leading-[0.9] text-balance">
-              Escale sua <br className="hidden md:block" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-300 to-slate-500">
-                Autoridade Local.
-              </span>
-            </h2>
-            <p className="text-xl text-slate-400 font-medium max-w-2xl leading-relaxed">
-              Conecte-se com clientes de alto valor através de uma presença digital de elite. Domine a atenção na sua região.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[340px]">
-            {/* Bento Card 1: IA Local */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
+          <div className="text-center md:text-left mb-20">
+            <motion.span 
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="md:col-span-2 bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between relative group overflow-hidden"
+              className="inline-block py-2 px-6 rounded-full bg-white shadow-sm border border-slate-100 text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-6"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="relative z-10">
-                <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center mb-6">
-                  <Zap className="h-6 w-6 text-primary" />
+              Para Negócios
+            </motion.span>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-5xl md:text-7xl font-[900] tracking-tighter mb-6 leading-[0.9] text-slate-950 text-balance"
+            >
+              Escale sua <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-indigo-500">
+                Autoridade Local.
+              </span>
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-xl text-slate-500 font-medium max-w-2xl leading-relaxed mx-auto md:mx-0"
+            >
+              Conecte-se com clientes de alto valor através de uma presença digital de elite.
+            </motion.p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 auto-rows-[340px]">
+            {/* Crystal Card 1: IA Local */}
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="md:col-span-2 bg-white/60 backdrop-blur-2xl border border-white rounded-[3rem] p-10 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] relative group overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              
+              <div className="relative z-10 flex-1 space-y-6">
+                <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-white to-slate-50 flex items-center justify-center shadow-lg shadow-primary/10 border border-slate-100 group-hover:rotate-12 transition-transform duration-500">
+                  <Zap className="h-7 w-7 text-primary" />
                 </div>
-                <h3 className="text-3xl font-[900] tracking-tight mb-2">IA Local</h3>
-                <p className="text-slate-400 font-medium text-lg max-w-sm">
-                  Sugestões inteligentes para o público certo, no momento exato em que buscam.
+                <div>
+                  <h3 className="text-3xl font-[900] text-slate-950 tracking-tight mb-3">IA Local</h3>
+                  <p className="text-slate-500 font-medium text-lg max-w-sm leading-relaxed">
+                    Sugestões inteligentes para o público certo.
+                  </p>
+                </div>
+              </div>
+
+              {/* Decorative Abstract Shape */}
+               <div className="relative w-full md:w-64 h-48 bg-gradient-to-br from-slate-100/50 to-white rounded-[2rem] flex items-center justify-center shadow-inner border border-white overflow-hidden group-hover:shadow-2xl transition-all duration-700">
+                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }} className="absolute w-40 h-40 bg-primary/20 rounded-[4rem] blur-2xl" />
+                  <motion.div animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute w-32 h-32 bg-indigo-500/20 rounded-[3rem] blur-2xl mix-blend-multiply" />
+                  <Sparkles className="h-14 w-14 text-primary/60 relative z-10 backdrop-blur-sm" />
+               </div>
+            </motion.div>
+
+            {/* Crystal Card 2: Social Connect */}
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.1 }}
+              className="bg-white/60 backdrop-blur-2xl border border-white rounded-[3rem] p-10 flex flex-col justify-between shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] relative group overflow-hidden"
+            >
+              <div className="relative z-10">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-white to-slate-50 flex items-center justify-center shadow-lg shadow-indigo-500/10 border border-slate-100 group-hover:-rotate-12 transition-transform duration-500 mb-6">
+                  <Globe className="h-6 w-6 text-indigo-500" />
+                </div>
+                <h3 className="text-2xl font-[900] text-slate-950 tracking-tight mb-2">Social Connect</h3>
+                <p className="text-slate-500 font-medium text-base">
+                  Integração WhatsApp e Redes Sociais.
                 </p>
               </div>
-              <div className="relative h-24 w-full overflow-hidden rounded-xl border border-white/5 bg-black/20 mt-8 backdrop-blur-sm flex items-center justify-center">
-                 {/* Visual decoration for AI */}
-                 <div className="flex gap-2 items-end opacity-50">
-                    <motion.div animate={{ height: ["20%", "80%", "40%"] }} transition={{ repeat: Infinity, duration: 1.5 }} className="w-4 bg-primary rounded-full" />
-                    <motion.div animate={{ height: ["60%", "30%", "100%"] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.2 }} className="w-4 bg-primary/70 rounded-full" />
-                    <motion.div animate={{ height: ["40%", "90%", "20%"] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.4 }} className="w-4 bg-primary/40 rounded-full" />
-                    <motion.div animate={{ height: ["80%", "40%", "60%"] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.6 }} className="w-4 bg-primary/20 rounded-full" />
+
+              <div className="flex gap-2 items-end justify-center h-20 opacity-80 group-hover:opacity-100 transition-opacity">
+                 <motion.div animate={{ height: ["40%", "80%", "40%"] }} transition={{ duration: 2, repeat: Infinity }} className="w-8 rounded-t-xl bg-indigo-100 border-x border-t border-indigo-200" />
+                 <motion.div animate={{ height: ["60%", "100%", "60%"] }} transition={{ duration: 2, repeat: Infinity, delay: 0.2 }} className="w-8 rounded-t-xl bg-indigo-200 border-x border-t border-indigo-300" />
+                 <motion.div animate={{ height: ["30%", "60%", "30%"] }} transition={{ duration: 2, repeat: Infinity, delay: 0.4 }} className="w-8 rounded-t-xl bg-indigo-500 border-x border-t border-indigo-600 shadow-[0_0_15px_rgba(99,102,241,0.5)]" />
+              </div>
+            </motion.div>
+
+            {/* Crystal Card 3: Booking Pro */}
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.2 }}
+              className="bg-white/60 backdrop-blur-2xl border border-white rounded-[3rem] p-10 flex flex-col justify-between shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] relative group overflow-hidden"
+            >
+              <div className="relative z-10">
+                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-white to-slate-50 flex items-center justify-center shadow-lg shadow-emerald-500/10 border border-slate-100 group-hover:rotate-12 transition-transform duration-500 mb-6">
+                  <CheckCircle2 className="h-6 w-6 text-emerald-500" />
+                </div>
+                <h3 className="text-2xl font-[900] text-slate-950 tracking-tight mb-2">Booking Pro</h3>
+                <p className="text-slate-500 font-medium text-base">
+                  Reservas e orçamentos simplificados.
+                </p>
+              </div>
+
+              {/* Calendar Simulation */}
+              <div className="w-full h-24 bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex flex-col gap-2 relative group-hover:-translate-y-2 transition-transform duration-500">
+                 <div className="flex gap-2">
+                    <div className="h-2 w-8 bg-slate-200 rounded-full" />
+                    <div className="h-2 w-4 bg-emerald-400 rounded-full" />
+                 </div>
+                 <div className="flex gap-2 mt-auto">
+                    <div className="h-8 w-8 bg-slate-50 rounded-lg flex items-center justify-center border border-slate-100"><div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" /></div>
+                    <div className="h-8 flex-1 bg-slate-50 rounded-lg border border-slate-100" />
                  </div>
               </div>
             </motion.div>
 
-            {/* Bento Card 2: Social Connect */}
+            {/* Crystal Card 4: Growth Engine + CTA */}
             <motion.div 
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between relative group overflow-hidden"
+              viewport={{ once: true, margin: "-50px" }}
+              whileHover={{ y: -8, scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25, delay: 0.3 }}
+              className="md:col-span-2 bg-gradient-to-r from-slate-900 to-slate-950 border border-slate-800 rounded-[3rem] p-10 flex flex-col md:flex-row justify-between items-center shadow-2xl relative group overflow-hidden"
             >
-              <div className="relative z-10">
-                <div className="h-12 w-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center mb-6">
-                  <Globe className="h-6 w-6 text-indigo-400" />
-                </div>
-                <h3 className="text-3xl font-[900] tracking-tight mb-2">Social Connect</h3>
-                <p className="text-slate-400 font-medium text-base">
-                  Integração nativa com WhatsApp e Redes Sociais.
-                </p>
-              </div>
-              <div className="flex flex-col gap-3 mt-6">
-                 <div className="h-10 w-full bg-indigo-500/10 rounded-xl border border-indigo-500/20 animate-pulse" />
-                 <div className="h-10 w-3/4 bg-white/5 rounded-xl border border-white/10" />
-              </div>
-            </motion.div>
-
-            {/* Bento Card 3: Booking Pro */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between relative group overflow-hidden"
-            >
-              <div className="relative z-10">
-                <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center mb-6">
-                  <CheckCircle2 className="h-6 w-6 text-emerald-400" />
-                </div>
-                <h3 className="text-3xl font-[900] tracking-tight mb-2">Booking Pro</h3>
-                <p className="text-slate-400 font-medium text-base">
-                  Reservas e orçamentos simplificados e automáticos.
-                </p>
-              </div>
-              <div className="mt-6 font-mono text-xs text-emerald-400/70 p-4 bg-black/30 rounded-xl border border-emerald-500/10">
-                <div>&gt; Sync calendar...</div>
-                <div className="mt-1 text-emerald-300">Status: Automated</div>
-              </div>
-            </motion.div>
-
-            {/* Bento Card 4: Growth Engine + CTA */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="md:col-span-2 bg-[#121217] border border-white/5 rounded-[2.5rem] p-10 flex flex-col md:flex-row justify-between relative overflow-hidden items-center group"
-            >
-              <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.03)_50%,transparent_75%,transparent_100%)] bg-[length:10px_10px] pointer-events-none" />
+              {/* Starry Night Overlay */}
+              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none" />
+              
               <div className="relative z-10 max-w-sm mb-8 md:mb-0">
-                <div className="h-12 w-12 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-6">
-                  <TrendingUp className="h-6 w-6 text-amber-400" />
+                <div className="h-16 w-16 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <TrendingUp className="h-7 w-7 text-amber-400" />
                 </div>
-                <h3 className="text-3xl font-[900] tracking-tight mb-2">Growth Engine</h3>
-                <p className="text-slate-400 font-medium text-lg mb-8">
-                  Dados reais sobre seu crescimento na cidade.
+                <h3 className="text-3xl font-[900] text-white tracking-tight mb-3">Growth Engine</h3>
+                <p className="text-slate-400 font-medium text-lg mb-8 leading-relaxed">
+                  Dados reais sobre seu crescimento.
                 </p>
                 
-                <Link to="/auth?mode=register" className="inline-block relative">
-                   <div className="absolute inset-0 bg-primary/40 blur-xl rounded-full mix-blend-screen opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                   <Button size="lg" className="relative h-14 px-10 rounded-2xl bg-white text-slate-950 hover:bg-slate-200 font-black tracking-widest uppercase text-xs shadow-2xl transition-all">
-                     Anunciar Empresa <ArrowUpRight className="ml-2 h-4 w-4 text-primary" />
+                <Link to="/auth?mode=register" className="inline-block">
+                   <Button size="lg" className="h-14 px-8 rounded-2xl bg-white text-slate-950 hover:bg-slate-200 font-black tracking-widest uppercase text-[11px] shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all flex items-center gap-3">
+                     Anunciar Empresa
+                     <div className="h-6 w-6 rounded-full bg-slate-100 flex items-center justify-center">
+                        <ArrowUpRight className="h-3 w-3 text-slate-950" />
+                     </div>
                    </Button>
                 </Link>
               </div>
 
-              {/* Decorative Chart */}
-              <div className="relative flex-1 w-full h-full flex items-end justify-center pt-8 border-l border-white/5 pl-8 hidden md:flex">
-                 <div className="flex items-end gap-3 w-full h-full pb-4">
-                    <motion.div initial={{ height: 0 }} whileInView={{ height: '40%' }} className="flex-1 bg-white/5 rounded-t-lg" />
-                    <motion.div initial={{ height: 0 }} whileInView={{ height: '60%' }} className="flex-1 bg-white/10 rounded-t-lg" />
-                    <motion.div initial={{ height: 0 }} whileInView={{ height: '50%' }} className="flex-1 bg-white/5 rounded-t-lg" />
-                    <motion.div initial={{ height: 0 }} whileInView={{ height: '90%' }} className="flex-1 bg-gradient-to-t from-primary/50 to-primary rounded-t-lg relative">
-                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+              {/* Dark Mode Abstract Growth Graph */}
+              <div className="relative w-full md:w-64 h-48 bg-white/5 rounded-[2rem] border border-white/10 flex items-center justify-center p-6 backdrop-blur-sm overflow-hidden group-hover:bg-white/10 transition-colors duration-500">
+                 <div className="w-full flex items-end justify-between h-full gap-2 relative z-10">
+                    <motion.div initial={{ height: '30%' }} whileHover={{ height: '40%' }} className="w-full bg-slate-700/50 rounded-t-md" />
+                    <motion.div initial={{ height: '50%' }} whileHover={{ height: '70%' }} className="w-full bg-slate-600/50 rounded-t-md" />
+                    <motion.div initial={{ height: '40%' }} whileHover={{ height: '60%' }} className="w-full bg-slate-500/50 rounded-t-md" />
+                    <motion.div initial={{ height: '80%' }} whileHover={{ height: '100%' }} className="w-full bg-gradient-to-t from-amber-500/50 to-amber-400 rounded-t-md relative shadow-[0_0_15px_rgba(251,191,36,0.5)]">
+                       <div className="absolute -top-4 w-full flex justify-center"><div className="w-2 h-2 rounded-full bg-white animate-ping" /></div>
                     </motion.div>
                  </div>
               </div>
