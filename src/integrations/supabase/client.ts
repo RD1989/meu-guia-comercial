@@ -78,13 +78,15 @@ function resolveMock(tableName: string, filters: Record<string, any>): any[] | n
   }
 }
 
-/** Recebe o queryBuilder e injeta um proxy ao redor do `then` final */
-function wrapQueryBuilder(qb: any, tableName: string, filters: Record<string, any>, meta: { isHead?: boolean; isCount?: boolean; isSingle?: boolean }) {
-  const _origThen = qb.then?.bind(qb);
-  if (!_origThen) return qb;
 
-  qb.then = (ok: any, fail: any) =>
-    _origThen((result: any) => {
+/** Recebe o queryBuilder e injeta a lógica de fallback sem quebrar a cadeia de promessas */
+function wrapQueryBuilder(qb: any, tableName: string, filters: Record<string, any>, meta: { isHead?: boolean; isCount?: boolean; isSingle?: boolean }) {
+  // Em vez de mutar qb.then, retornamos um objeto que delega para o original
+  // mas intercepta o resultado final.
+  const originalThen = qb.then.bind(qb);
+
+  qb.then = (onFulfilled?: any, onRejected?: any) => {
+    return originalThen((result: any) => {
       const hasError = !!result.error;
       const isEmptyArray = Array.isArray(result.data) && result.data.length === 0;
       const isNullData = result.data === null || result.data === undefined;
@@ -109,29 +111,42 @@ function wrapQueryBuilder(qb: any, tableName: string, filters: Record<string, an
         }
       }
 
-      return ok ? ok(result) : result;
-    }, fail);
+      return onFulfilled ? onFulfilled(result) : result;
+    }, onRejected);
+  };
 
   return qb;
 }
 
-/** Proxy de Elite — garante funcionamento 100% sem banco migrado */
+/** Proxy de Elite — garante funcionamento 100% sem banco migrado e resiliência em produção */
 export const supabase = new Proxy(baseSupabase, {
   get(target, prop) {
     const original = (target as any)[prop];
 
-    // ── Edge Functions (simulação local) ─────────────────────────────────
+    // ── Edge Functions (simulação apenas se faltar credencial) ────────────
     if (prop === 'functions') {
+      // Se tivermos a URL real, usamos a função original
+      if (import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_URL !== "https://placeholder-url.supabase.co") {
+        return original.bind(target);
+      }
+      
       return {
-        invoke: async (functionName: string) => {
+        invoke: async (functionName: string, options?: any) => {
+          console.log(`[MOCK] Invocando função: ${functionName}`, options);
           if (functionName === 'autopilot-engine') {
             return {
               data: {
                 success: true,
                 mission: 'NEWS',
-                result: { title: 'Artigo gerado com sucesso pela IA 🚀' },
+                result: { title: 'Artigo gerado com sucesso pela IA (MOCK) 🚀' },
               },
               error: null,
+            };
+          }
+          if (functionName === 'local-concierge') {
+            return {
+              data: { answer: "Este é um exemplo de resposta do Concierge em Modo de Simulação. Em produção com Supabase configurado, eu responderia usando IA real pesquisando os estabelecimentos locais!" },
+              error: null
             };
           }
           return { data: { success: true }, error: null };
@@ -149,62 +164,64 @@ export const supabase = new Proxy(baseSupabase, {
           isSingle: false,
         };
 
-        // Criamos um Proxy sobre o queryBuilder para interceptar QUALQUER método
         const qb = (target as any).from(tableName);
 
-        return new Proxy(qb, {
-          get(qbTarget: any, qbProp: string | symbol) {
+        // Handler recursivo para o chain de métodos
+        const queryProxyHandler: ProxyHandler<any> = {
+          get(qbTarget, qbProp) {
             const qbOriginal = qbTarget[qbProp];
 
-            // Filtros — rastrear valores
-            if (qbProp === 'eq') {
-              return (col: string, val: any) => {
-                filters[col] = val;
-                const next = qbTarget.eq(col, val);
-                return new Proxy(next, this);
+            // .then() — O ponto mais crítico para o await
+            if (qbProp === 'then') {
+              return (onFulfilled?: any, onRejected?: any) => {
+                const wrapped = wrapQueryBuilder(qbTarget, tableName, filters, { ...meta });
+                return wrapped.then(onFulfilled, onRejected);
               };
             }
 
-            // .select() — detectar head/count
+            // Seleção e Metadados
             if (qbProp === 'select') {
               return (cols?: string, opts?: any) => {
                 if (opts?.head) meta.isHead = true;
                 if (opts?.count) meta.isCount = true;
-                const next = qbTarget.select(cols, opts);
-                return new Proxy(next, this);
+                return new Proxy(qbTarget.select(cols, opts), queryProxyHandler);
               };
             }
 
-            // .maybeSingle() / .single() — item único
+            // Single / maybeSingle
             if (qbProp === 'maybeSingle' || qbProp === 'single') {
               return () => {
                 meta.isSingle = true;
-                const next = qbTarget.maybeSingle ? qbTarget.maybeSingle() : qbTarget.single();
-                return wrapQueryBuilder(next, tableName, filters, { ...meta });
+                const next = qbTarget[qbProp as string]();
+                return new Proxy(next, queryProxyHandler);
               };
             }
 
-            // .then() — ponto final da execução da query
-            if (qbProp === 'then') {
-              return (ok: any, fail: any) => {
-                const wrappedQb = wrapQueryBuilder(qbTarget, tableName, filters, { ...meta });
-                return wrappedQb.then(ok, fail);
+            // Filtros comuns (eq, match, etc.)
+            if (qbProp === 'eq') {
+              return (col: string, val: any) => {
+                filters[col] = val;
+                return new Proxy(qbTarget.eq(col, val), queryProxyHandler);
               };
             }
 
-            // Outros métodos (.order, .limit, .neq, .gt, etc.) — repassar e manter Proxy
+            // Fallback genérico para métodos fluentes (order, limit, etc.)
             if (typeof qbOriginal === 'function') {
               return (...args: any[]) => {
-                const next = qbOriginal.apply(qbTarget, args);
-                // Se retornar um objeto (queryBuilder), envolver no proxy
-                if (next && typeof next === 'object') return new Proxy(next, this);
-                return next;
+                const result = qbOriginal.apply(qbTarget, args);
+                // Se o resultado parecer um queryBuilder (tem .then), mantemos o proxy
+                if (result && typeof result === 'object' && 'then' in result) {
+                  return new Proxy(result, queryProxyHandler);
+                }
+                return result;
               };
             }
 
             return qbOriginal;
-          },
-        });
+          }
+        };
+
+        return new Proxy(qb, queryProxyHandler);
       };
     }
 

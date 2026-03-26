@@ -1,8 +1,11 @@
+console.log("🚀 [BOOTSTRAP INITIALIZED] " + new Date().toISOString());
+window.__SAP_START = Date.now();
+
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-console.log("🚀 [DIAGNOSTICO] Ponto de entrada main.tsx carregado.");
+console.log("📦 [DIAGNOSTICO] Módulos importados. Iniciando renderização...");
 console.log("📍 [DIAGNOSTICO] Localização:", window.location.href);
 
 try {
