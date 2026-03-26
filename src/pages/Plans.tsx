@@ -8,16 +8,17 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const PLAN_FEATURES = [
-  { name: "Perfil de Negócio Básico", free: true, basic: true, pro: true },
-  { name: "Exibição na Busca", free: true, basic: true, pro: true },
-  { name: "Galeria de Fotos", free: "3 fotos", basic: "10 fotos", pro: "Ilimitado" },
-  { name: "Selo de Verificação", free: false, basic: true, pro: true },
-  { name: "Menu Digital / Catálogo", free: false, basic: true, pro: true },
-  { name: "Agendamento Online", free: false, basic: false, pro: true },
+  { name: "Perfil de Negócio", free: "Básico", basic: "Profissional", pro: "Elite" },
+  { name: "Fotos na Galeria", free: "1 foto", basic: "Até 10 fotos", pro: "Ilimitado" },
   { name: "Botão WhatsApp Direto", free: true, basic: true, pro: true },
-  { name: "Metas e Insights (ROI)", free: false, basic: "Básico", pro: "Avançado" },
-  { name: "Destaque na Categoria", free: false, basic: false, pro: true },
-  { name: "Suporte 24/7", free: false, basic: false, pro: true },
+  { name: "Horário de Funcionamento", free: true, basic: true, pro: true },
+  { name: "Cardápio Digital / Produtos", free: false, basic: true, pro: true },
+  { name: "Selo de Verificação", free: false, basic: "Bronze", pro: "Diamante" },
+  { name: "Prioridade na Busca", free: "Padrão", basic: "Alta", pro: "Máxima" },
+  { name: "Sistema de Agendamento", free: false, basic: false, pro: true },
+  { name: "Estatísticas (Analytics)", free: false, basic: "Simplificado", pro: "Avançado" },
+  { name: "Destaque na Home/Blog", free: false, basic: false, pro: true },
+  { name: "Inteligência Artificial (IA)", free: false, basic: false, pro: "Full Access" },
 ];
 
 const Plans = () => {
@@ -38,10 +39,10 @@ const Plans = () => {
             Parceria de Sucesso
           </motion.div>
           <h1 className="text-4xl md:text-6xl font-[900] text-white tracking-tighter mb-4 leading-[0.9]">
-            Escolha o Plano Ideal para seu <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">Crescimento</span>
+            Performance <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">Inteligente</span> para o seu Negócio
           </h1>
           <p className="text-slate-400 text-lg font-medium max-w-2xl mx-auto">
-            Transforme sua presença digital e conecte-se com clientes de alto valor na sua região.
+            Escolha o nível de autoridade ideal para conectar sua empresa ao público certo.
           </p>
         </div>
       </section>
@@ -112,13 +113,13 @@ const Plans = () => {
             </div>
 
             <div className="space-y-5 mb-10 flex-1">
-               {PLAN_FEATURES.slice(0, 6).map((f, i) => (
-                 <div key={i} className="flex items-center gap-3">
-                   <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">
-                     <Check className="h-3.5 w-3.5 text-primary" />
+               {PLAN_FEATURES.map((f, i) => (
+                 <div key={i} className={cn("flex items-center gap-3", !f.basic && "opacity-40")}>
+                   <div className={cn("h-6 w-6 rounded-full flex items-center justify-center", f.basic ? "bg-primary/20" : "bg-slate-800")}>
+                     {f.basic ? <Check className="h-3.5 w-3.5 text-primary" /> : <X className="h-3.5 w-3.5 text-slate-600" />}
                    </div>
                    <span className="text-[14px] font-bold text-slate-200">
-                     {typeof f.basic === 'string' ? f.basic + ' ' + f.name : f.name}
+                     {typeof f.basic === 'string' ? `${f.name}: ${f.basic}` : f.name}
                    </span>
                  </div>
                ))}
