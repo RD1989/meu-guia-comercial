@@ -21,7 +21,9 @@ const menuItems = [
   { title: "Painel", url: "/dashboard", icon: LayoutDashboard },
   { title: "Meu Negócio", url: "/dashboard/negocio", icon: Store },
   { title: "Produtos", url: "/dashboard/produtos", icon: Package },
+  { title: "Serviços", url: "/dashboard/servicos", icon: Zap },
   { title: "Vagas", url: "/dashboard/vagas", icon: Briefcase },
+  { title: "Impulsionar (Ads)", url: "/dashboard/anuncios", icon: Sparkles },
   { title: "Métricas", url: "/dashboard/metricas", icon: BarChart3 },
   { title: "Configurações", url: "/dashboard/config", icon: Settings },
 ];

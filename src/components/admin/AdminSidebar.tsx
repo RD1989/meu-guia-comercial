@@ -1,4 +1,4 @@
-import { LayoutDashboard, Store, Users, FileText, Settings, Sparkles, LogOut, Tags, Link as LinkIcon, Image as ImageIcon, Briefcase, CreditCard, Ticket, Bell, LifeBuoy, ExternalLink } from "lucide-react";
+import { LayoutDashboard, Store, Users, FileText, Settings, Sparkles, LogOut, Tags, Link as LinkIcon, Image as ImageIcon, Briefcase, CreditCard, Ticket, Bell, LifeBuoy, ExternalLink, ShieldAlert } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,6 +21,7 @@ const adminMenuItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
   { title: "Anúncios Pendentes", url: "/admin/pendentes", icon: Sparkles },
   { title: "Empresas", url: "/admin/empresas", icon: Store },
+  { title: "Moderação Comunidade", url: "/admin/moderacao", icon: ShieldAlert },
   { title: "Categorias", url: "/admin/categorias", icon: Tags },
   { title: "Planos", url: "/admin/planos", icon: CreditCard },
   { title: "Blog / Artigos", url: "/admin/blog", icon: FileText },

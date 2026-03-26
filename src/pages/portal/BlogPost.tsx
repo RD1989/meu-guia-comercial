@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from 'react-markdown';
 import { DUMMY_POSTS } from "@/data/dummy-data";
+import { SmartAdSlot } from "@/components/portal/SmartAdSlot";
 
 interface BlogPost {
   id: string;
@@ -144,6 +145,10 @@ export default function BlogPost() {
         <div className="bg-white rounded-2xl border border-slate-200 p-8 md:p-12 shadow-sm mb-12">
           <div className="prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-p:leading-relaxed prose-p:text-slate-600 prose-img:rounded-xl prose-a:text-primary font-medium">
             <ReactMarkdown>{post.content}</ReactMarkdown>
+          </div>
+
+          <div className="mt-12 pt-8 border-t border-slate-100">
+             <SmartAdSlot type="blog_inline" />
           </div>
         </div>
 

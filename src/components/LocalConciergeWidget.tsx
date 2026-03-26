@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import ReactMarkdown from "react-markdown";
+import { useLocation } from "@/hooks/use-location";
+import { MapPin } from "lucide-react";
 
 interface Message {
   role: "user" | "bot";
@@ -20,6 +22,18 @@ export const LocalConciergeWidget = () => {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const userLoc = useLocation();
+
+  useEffect(() => {
+    if (!userLoc.loading && userLoc.city) {
+      setMessages([
+        { 
+          role: "bot", 
+          content: `Olá! Notei que você está em **${userLoc.city}** (${userLoc.region}). Sou seu Concierge de Elite. Como posso te ajudar a explorar os melhores estabelecimentos da sua vizinhança agora?` 
+        }
+      ]);
+    }
+  }, [userLoc.loading, userLoc.city, userLoc.region]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -37,7 +51,15 @@ export const LocalConciergeWidget = () => {
 
     try {
       const { data, error } = await supabase.functions.invoke("local-concierge", {
-        body: { query: userMsg }
+        body: { 
+          query: userMsg,
+          location: {
+            lat: userLoc.lat,
+            lng: userLoc.lng,
+            city: userLoc.city,
+            region: userLoc.region
+          }
+        }
       });
 
       if (error) throw error;

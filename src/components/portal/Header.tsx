@@ -19,6 +19,7 @@ export function Header() {
     { label: "Início", href: "/" },
     { label: "Empresas", href: "/buscar" },
     { label: "Categorias", href: "/categorias" },
+    { label: "Comunidade", href: "/comunidade" },
     { label: "Blog", href: "/blog" },
     { label: "Planos", href: "/planos" },
   ];

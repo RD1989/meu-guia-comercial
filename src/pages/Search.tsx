@@ -9,11 +9,14 @@ import { BusinessCard } from "@/components/portal/BusinessCard";
 import { Loader2 } from "lucide-react";
 import { useLocation } from "@/hooks/use-location";
 import { getDistance } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
+import { Target, MapPin } from "lucide-react";
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategory = searchParams.get("categoria") || "";
   const queryText = searchParams.get("q") || "";
+  const [radius, setRadius] = useState(10); // Default 10km
   const userLoc = useLocation();
 
   const { data: categories = [] } = useQuery({
@@ -71,22 +74,47 @@ const Search = () => {
         <SearchBar />
 
         {/* Categories filter */}
-        <div className="mt-6 overflow-x-auto pb-2">
-          <div className="flex gap-2 min-w-max">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => handleCategoryClick(cat.slug)}
-                className={`px-4 py-2 rounded-full border text-xs font-medium transition-colors whitespace-nowrap ${
-                  selectedCategory === cat.slug
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-card border-border text-muted-foreground hover:border-primary/30 hover:text-primary"
-                }`}
-              >
-                {cat.name}
-              </button>
-            ))}
+        <div className="mt-6 space-y-4">
+          <div className="overflow-x-auto pb-2">
+            <div className="flex gap-2 min-w-max">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => handleCategoryClick(cat.slug)}
+                  className={`px-4 py-2 rounded-full border text-xs font-medium transition-colors whitespace-nowrap ${
+                    selectedCategory === cat.slug
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-card border-border text-muted-foreground hover:border-primary/30 hover:text-primary"
+                  }`}
+                >
+                  {cat.name}
+                </button>
+              ))}
+            </div>
           </div>
+
+          {!userLoc.loading && userLoc.lat && (
+            <div className="bg-white/50 backdrop-blur-sm border border-slate-100 rounded-[2rem] p-6 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Target className="h-4 w-4 text-primary" />
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Filtro Raio X</span>
+                </div>
+                <span className="text-sm font-black text-slate-900">{radius}km</span>
+              </div>
+              <Slider
+                defaultValue={[radius]}
+                max={50}
+                min={1}
+                step={1}
+                onValueChange={(val) => setRadius(val[0])}
+                className="py-4"
+              />
+              <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest text-center mt-2">
+                Mostrando apenas estabelecimentos em um raio de {radius}km de você
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Results */}
@@ -118,6 +146,13 @@ const Search = () => {
                         );
                       }
                       return { ...biz, distance };
+                    })
+                    .filter((biz) => {
+                      // Apply radius filter if distance is available
+                      if (biz.distance !== undefined) {
+                        return biz.distance <= radius;
+                      }
+                      return true; // Keep if no location data (optional)
                     })
                     .sort((a, b) => {
                       // Se tem distância, prioriza os mais próximos

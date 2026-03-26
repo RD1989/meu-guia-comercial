@@ -39,6 +39,7 @@ import { useLocation } from "@/hooks/use-location";
 import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { usePlatform } from "@/contexts/PlatformContext";
+import { SmartAdSlot } from "@/components/portal/SmartAdSlot";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
@@ -393,6 +394,9 @@ const Index = () => {
               </Button>
             </Link>
           </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 mt-12">
+          <SmartAdSlot type="hero_banner" />
         </div>
       </section>
 
@@ -783,6 +787,7 @@ const Index = () => {
       </footer>
 
       <BottomTabBar />
+      <SmartAdSlot type="popup" />
     </div>
   );
 };

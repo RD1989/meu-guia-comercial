@@ -161,6 +161,15 @@ const DashboardHome = () => {
                   <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1" />
                 </Button>
               </Link>
+              <Link to="/comunidade">
+                <Button className="w-full justify-between h-14 rounded-2xl bg-white border-2 border-primary/20 text-slate-900 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6 mt-3">
+                  <span className="flex items-center gap-3 font-black text-sm">
+                    <Sparkles className="h-5 w-5 text-primary group-hover:text-white transition-colors" />
+                    Postar na Comunidade
+                  </span>
+                  <ArrowRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
             </CardContent>
           </Card>
 

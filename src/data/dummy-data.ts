@@ -275,3 +275,45 @@ export const DUMMY_BANNERS = [
     sort_order: 3
   }
 ];
+
+export const DUMMY_ADS = [
+  {
+    id: 'ad-1',
+    merchant_id: 'user-1',
+    business_id: 'biz-gym-1',
+    title: 'Projeto Verão 2026',
+    description: 'Comece hoje sua transformação com 20% de desconto na matrícula!',
+    image_url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800',
+    target_url: '/negocio/elite-fitness',
+    city: 'São Paulo',
+    type: 'hero_banner',
+    status: 'active',
+    latitude: -23.5505,
+    longitude: -46.6333,
+    radius: 5000,
+    start_date: new Date().toISOString(),
+    end_date: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
+    impressions: 1240,
+    clicks: 85
+  },
+  {
+    id: 'ad-2',
+    merchant_id: 'user-2',
+    business_id: 'biz-pet-1',
+    title: 'Banho de Elite 🧼',
+    description: 'Seu pet merece o melhor cuidado. Agende um banho e ganhe uma hidratação exclusiva.',
+    image_url: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=800',
+    target_url: '/negocio/pet-love-care',
+    city: 'Curitiba',
+    type: 'popup',
+    status: 'active',
+    latitude: -25.4284,
+    longitude: -49.2733,
+    radius: 2000, // 2km radius for Flash Deal
+    is_flash_deal: true,
+    start_date: new Date().toISOString(),
+    end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    impressions: 0,
+    clicks: 0
+  }
+];

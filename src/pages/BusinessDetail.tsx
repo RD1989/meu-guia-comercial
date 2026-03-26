@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Phone, MessageCircle, MapPin, Star, Share2, Loader2, Info, Utensils, Calendar, Star as StarIcon, Clock, Globe, ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowLeft, Phone, MessageCircle, MapPin, Star, Share2, Loader2, Info, Utensils, Calendar, Star as StarIcon, Clock, Globe, ArrowUpRight, Sparkles, Navigation, Car } from "lucide-react";
+import { useLocation } from "@/hooks/use-location";
+import { getDistance } from "@/lib/utils";
 import { Header } from "@/components/portal/Header";
 import { BottomTabBar } from "@/components/portal/BottomTabBar";
 import { Button } from "@/components/ui/button";
@@ -24,6 +26,7 @@ const BusinessDetail = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
+  const userLoc = useLocation();
 
   // Core Business Query
   const { data: business, isLoading } = useQuery({
@@ -160,6 +163,15 @@ const BusinessDetail = () => {
   const displayProducts = products && products.length > 0 ? products : DUMMY_PRODUCTS.filter(p => p.business_id === business?.id).slice(0, 8);
   const displayServices = services && services.length > 0 ? services : DUMMY_SERVICES.filter(s => s.business_id === business?.id).slice(0, 6);
 
+  // Distance calculation
+  let distanceToUser: number | null = null;
+  let estimatedTime: number | null = null;
+  if (!userLoc.loading && userLoc.lat && (business as any).latitude) {
+    distanceToUser = getDistance(userLoc.lat, userLoc.lng, (business as any).latitude, (business as any).longitude);
+    // Rough estimate: 2 mins per km + 3 mins base
+    estimatedTime = Math.round(distanceToUser * 2 + 3);
+  }
+
   return (
     <div className="min-h-screen bg-white pb-20 md:pb-0">
       <Header />
@@ -217,6 +229,11 @@ const BusinessDetail = () => {
                   <div className="flex items-center gap-2 text-sm font-bold tracking-tight">
                     <MapPin className="h-4 w-4 text-primary" />
                     <span className="opacity-90">{business.address?.split(',')[0]}</span>
+                    {distanceToUser && (
+                      <Badge variant="outline" className="ml-2 bg-primary/20 border-primary/30 text-white text-[9px] font-black uppercase">
+                        {distanceToUser.toFixed(1)} km de você
+                      </Badge>
+                    )}
                   </div>
                 </div>
               </div>
@@ -290,10 +307,35 @@ const BusinessDetail = () => {
                     </div>
                     <div className="p-6 rounded-3xl bg-slate-50 border border-slate-100 space-y-4">
                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Localização</h4>
-                       <div className="flex items-start gap-3 text-sm font-bold leading-tight text-slate-700"><MapPin className="h-4 w-4 text-rose-500 shrink-0" /> {business.address || "Endereço não informado"}</div>
-                       <Button variant="link" className="text-primary p-0 h-auto font-black text-[10px] uppercase tracking-wider" asChild>
-                         <a href={`https://maps.google.com/?q=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer">Ver no Google Maps</a>
-                       </Button>
+                       <div className="flex items-start gap-3 text-sm font-bold leading-tight text-slate-700">
+                          <MapPin className="h-4 w-4 text-rose-500 shrink-0" /> 
+                          <span className="flex-1">{business.address || "Endereço não informado"}</span>
+                       </div>
+                       
+                       {distanceToUser && (
+                         <div className="p-4 bg-white rounded-2xl border border-slate-100 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                               <div className="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                  <Car className="h-4 w-4" />
+                               </div>
+                               <div>
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Chegada em</p>
+                                  <p className="text-xs font-black text-slate-900">~{estimatedTime} min</p>
+                               </div>
+                            </div>
+                            <Button variant="ghost" className="h-10 px-4 rounded-xl font-black text-[10px] uppercase tracking-widest bg-slate-950 text-white hover:bg-primary transition-all gap-2" asChild>
+                               <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer">
+                                  <Navigation className="h-3 w-3" /> Trajeto
+                               </a>
+                            </Button>
+                         </div>
+                       )}
+
+                       {!distanceToUser && (
+                         <Button variant="link" className="text-primary p-0 h-auto font-black text-[10px] uppercase tracking-wider" asChild>
+                           <a href={`https://maps.google.com/?q=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer">Ver no Google Maps</a>
+                         </Button>
+                       )}
                     </div>
                   </div>
                 </Card>

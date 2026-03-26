@@ -20,6 +20,8 @@ import BlogPost from "./pages/portal/BlogPost";
 import JobApplicationsPage from "./pages/portal/JobApplications";
 import Categories from "./pages/Categories";
 import Plans from "./pages/Plans";
+import Community from "./pages/portal/Community";
+import CommunityProfile from "./pages/portal/CommunityProfile";
 import NotFound from "./pages/NotFound";
 
 // Lojista Dashboard
@@ -30,6 +32,7 @@ import DashboardMetrics from "./pages/dashboard/DashboardMetrics";
 import DashboardConfig from "./pages/dashboard/DashboardConfig";
 import DashboardJobs from "./pages/dashboard/DashboardJobs";
 import DashboardServices from "./pages/dashboard/DashboardServices";
+import DashboardAds from "./pages/dashboard/DashboardAds";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminEmpresas from "./pages/admin/AdminEmpresas";
@@ -46,6 +49,7 @@ import AdminJobs from "@/pages/admin/AdminJobs";
 import AdminPendentes from "./pages/admin/AdminPendentes";
 import AdminPlanos from "./pages/admin/AdminPlanos";
 import AdminBusinessEditor from "./pages/admin/AdminBusinessEditor";
+import AdminCommunityModeration from "./pages/admin/AdminCommunityModeration";
 import { LocalConciergeWidget } from "./components/LocalConciergeWidget";
 
 const queryClient = new QueryClient();
@@ -84,6 +88,8 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/buscar" element={<Search />} />
               <Route path="/negocio/:slug" element={<BusinessDetail />} />
+              <Route path="/comunidade" element={<Community />} />
+              <Route path="/comunidade/perfil/:id" element={<CommunityProfile />} />
               <Route path="/noticias" element={<Blog />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
@@ -101,6 +107,7 @@ const App = () => (
               <Route path="/dashboard/vagas" element={<ProtectedRoute role="LOJISTA"><DashboardJobs /></ProtectedRoute>} />
               <Route path="/dashboard/metricas" element={<ProtectedRoute role="LOJISTA"><DashboardMetrics /></ProtectedRoute>} />
               <Route path="/dashboard/config" element={<ProtectedRoute role="LOJISTA"><DashboardConfig /></ProtectedRoute>} />
+              <Route path="/dashboard/anuncios" element={<ProtectedRoute role="LOJISTA"><DashboardAds /></ProtectedRoute>} />
 
               {/* Super Admin Dashboard */}
               <Route path="/admin" element={<ProtectedRoute role="SUPERADMIN"><AdminDashboard /></ProtectedRoute>} />
@@ -120,6 +127,7 @@ const App = () => (
               <Route path="/admin/vagas" element={<ProtectedRoute role="SUPERADMIN"><AdminJobs /></ProtectedRoute>} />
               <Route path="/admin/pendentes" element={<ProtectedRoute role="SUPERADMIN"><AdminPendentes /></ProtectedRoute>} />
               <Route path="/admin/planos" element={<ProtectedRoute role="SUPERADMIN"><AdminPlanos /></ProtectedRoute>} />
+              <Route path="/admin/moderacao" element={<ProtectedRoute role="SUPERADMIN"><AdminCommunityModeration /></ProtectedRoute>} />
 
               {/* Catch-all */}
               <Route path="*" element={<NotFound />} />
