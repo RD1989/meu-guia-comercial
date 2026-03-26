@@ -77,7 +77,7 @@ export function BusinessCard({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        className="relative flex flex-col h-full bg-white/70 backdrop-blur-xl rounded-[32px] overflow-visible border border-white/50 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.05)] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.12)] transition-shadow duration-500"
+        className="relative flex flex-col h-full bg-white rounded-[32px] overflow-visible border border-slate-100 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.08)] hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] transition-all duration-500"
       >
         {/* Glow effect on hover */}
         <div className="absolute inset-0 rounded-[32px] bg-gradient-to-tr from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

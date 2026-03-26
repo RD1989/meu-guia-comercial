@@ -26,8 +26,8 @@ export function Header() {
   const isSuperAdmin = userRole === "SUPERADMIN";
 
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 h-20">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100 transition-all duration-300">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 h-20">
         
         {/* LOGO */}
         <Link to="/" className="flex items-center gap-2 group transition-all shrink-0">
@@ -84,7 +84,7 @@ export function Header() {
                 </Button>
               </Link>
               <Link to="/auth?mode=register">
-                <Button className="bg-amber-500 hover:bg-amber-600 text-white rounded-lg px-6 font-bold text-sm h-10 shadow-none border-none">
+                <Button className="bg-primary hover:bg-primary/90 text-white rounded-xl px-7 font-black text-sm h-11 shadow-lg shadow-primary/10 border-none transition-all active:scale-95">
                   Anunciar Grátis
                 </Button>
               </Link>
