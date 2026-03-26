@@ -166,18 +166,41 @@ export const DUMMY_SERVICES = [
   { id: 's6', business_id: 'biz-mech-1', name: 'Troca de Óleo', price: 250.00, duration_minutes: 30, active: true }
 ];
 
-export const DUMMY_POSTS = [
+export const DUMMY_TESTIMONIALS = [
   {
-    id: 'post-new-1',
-    title: '5 Dicas para sua empresa vender mais no WhatsApp',
-    slug: 'vender-mais-whatsapp',
-    excerpt: 'Descubra como transformar cliques em leads qualificados usando o WhatsApp.',
-    content: 'O WhatsApp se tornou a principal ferramenta de vendas... [Conteúdo Completo]',
-    category: 'Tecnologia',
-    status: 'published',
-    published_at: new Date().toISOString(),
-    cover_image_url: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=800',
-    author_name: 'Equipe Guia',
-    views: 850
+    id: 'test-1',
+    name: 'Roberto Mendonça',
+    role: 'Empresário - Elite Fitness',
+    avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200',
+    text: 'O Meu Guia Comercial transformou a visibilidade da minha academia. O número de consultas via WhatsApp dobrou no primeiro mês de uso!',
+    rating: 5,
+    location: 'Centro, SP'
+  },
+  {
+    id: 'test-2',
+    name: 'Juliana Cavalcante',
+    role: 'Usuária Frequente',
+    avatar_url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200',
+    text: 'Sempre que preciso de um serviço de confiança na cidade, recorro ao guia. As avaliações reais me ajudam a escolher o melhor lugar sempre.',
+    rating: 5,
+    location: 'Bairro Nobre, SP'
+  },
+  {
+    id: 'test-3',
+    name: 'Carlos Alberto',
+    role: 'Dono de Restaurante',
+    avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200',
+    text: 'A facilidade do cardápio digital integrado é fantástica. Nossos clientes elogiam a modernidade e a velocidade para fazer pedidos.',
+    rating: 4.9,
+    location: 'Polo Gastronômico, SP'
+  },
+  {
+    id: 'test-4',
+    name: 'Beatriz Fontes',
+    role: 'Consultora Imobiliária',
+    avatar_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200',
+    text: 'Finalmente uma plataforma local que valoriza o corretor. O suporte da equipe é impecável e as leads são de altíssima qualidade.',
+    rating: 5,
+    location: 'Jardins, SP'
   }
 ];
