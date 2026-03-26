@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Save, MapPin, Phone, MessageCircle, Loader2, Globe, Instagram, Facebook, Youtube, Twitter, Video, Search, Plus } from "lucide-react";
+import { Save, MapPin, Phone, MessageCircle, Loader2, Globe, Instagram, Facebook, Youtube, Twitter, Video, Search, Plus, Camera, Image as ImageIcon } from "lucide-react";
 import { useBusiness } from "@/hooks/use-business";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
+import { BusinessGallery } from "@/components/dashboard/BusinessGallery";
 import { AICompanyOptimizer } from "@/components/admin/AICompanyOptimizer";
 import { AISeoOptimizer } from "@/components/admin/AISeoOptimizer";
 

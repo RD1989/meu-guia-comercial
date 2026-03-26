@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles, Image as ImageIcon, Plus, Trash2, ArrowUp, ArrowDown, MapPin } from "lucide-react";
+import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles, Image as ImageIcon, Plus, Trash2, ArrowUp, ArrowDown, MapPin, CreditCard, Layout, ShieldCheck } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { paymentService, PaymentGateway } from "@/services/payment";
 import { toast } from "sonner";
 
 export default function AdminConfig() {
@@ -17,6 +18,9 @@ export default function AdminConfig() {
   const [saving, setSaving] = useState(false);
   const [banners, setBanners] = useState<any[]>([]);
   const [bannersLoading, setBannersLoading] = useState(false);
+  const [gateways, setGateways] = useState<any[]>([]);
+  const [checkoutSettings, setCheckoutSettings] = useState<any>(null);
+  const [gatewaysLoading, setGatewaysLoading] = useState(false);
 
   useEffect(() => {
     fetchBanners();
@@ -31,6 +35,26 @@ export default function AdminConfig() {
     if (data) setBanners(data);
     setBannersLoading(false);
   };
+
+  const fetchPaymentData = async () => {
+    setGatewaysLoading(true);
+    try {
+      const gres = await supabase.from("payment_gateways").select("*");
+      if (gres.data) setGateways(gres.data);
+      
+      const sres = await paymentService.getCheckoutSettings();
+      setCheckoutSettings(sres);
+    } catch (err) {
+      console.error("Erro ao buscar dados de pagamento:", err);
+    } finally {
+      setGatewaysLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBanners();
+    fetchPaymentData();
+  }, []);
 
   useEffect(() => {
     setFormData(config);
@@ -112,6 +136,7 @@ export default function AdminConfig() {
             <TabsTrigger value="social" className="gap-2"><Share2 className="h-4 w-4" /> Redes Sociais</TabsTrigger>
             <TabsTrigger value="cidades" className="gap-2"><MapPin className="h-4 w-4" /> Cidades</TabsTrigger>
             <TabsTrigger value="banners" className="gap-2"><ImageIcon className="h-4 w-4" /> Banners Hero</TabsTrigger>
+            <TabsTrigger value="pagamentos" className="gap-2"><CreditCard className="h-4 w-4" /> Pagamentos & Checkout</TabsTrigger>
             <TabsTrigger value="ia" className="gap-2"><Sparkles className="h-4 w-4" /> Inteligência Artificial</TabsTrigger>
           </TabsList>
 
@@ -461,6 +486,169 @@ export default function AdminConfig() {
                   )}
                 </CardContent>
               </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="pagamentos">
+            <div className="grid gap-6 lg:grid-cols-3">
+              <div className="lg:col-span-2 space-y-6">
+                <Card className="border-none shadow-sm bg-white">
+                  <CardHeader>
+                    <CardTitle>Gateways de Pagamento</CardTitle>
+                    <CardDescription>Ative e configure os provedores que processarão as vendas.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {gateways.map((gw) => (
+                      <div key={gw.id} className="p-6 border rounded-2xl bg-slate-50/50 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className={`h-10 w-10 rounded-xl flex items-center justify-center font-black text-xs ${gw.is_active ? 'bg-primary text-white' : 'bg-slate-200 text-slate-500'}`}>
+                              {gw.name.toUpperCase().substring(0, 2)}
+                            </div>
+                            <div>
+                              <h4 className="font-black text-slate-900 uppercase tracking-tight">{gw.name}</h4>
+                              <p className="text-[10px] font-bold text-slate-400">STATUS: {gw.is_active ? 'ATIVO' : 'DESATIVADO'}</p>
+                            </div>
+                          </div>
+                          <Button 
+                            variant={gw.is_active ? "destructive" : "default"} 
+                            size="sm"
+                            onClick={async () => {
+                              const { error } = await supabase.from("payment_gateways").update({ is_active: !gw.is_active }).eq("id", gw.id);
+                              if (!error) {
+                                toast.success(`${gw.name} ${!gw.is_active ? 'ativado' : 'desativado'}`);
+                                fetchPaymentData();
+                              }
+                            }}
+                          >
+                            {gw.is_active ? "Desativar" : "Ativar Provedor"}
+                          </Button>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-black uppercase">Chave Pública / Client ID</Label>
+                            <Input 
+                              value={gw.config?.public_key || ""} 
+                              onChange={(e) => {
+                                const newGateways = [...gateways];
+                                const idx = gateways.findIndex(g => g.id === gw.id);
+                                newGateways[idx].config = { ...newGateways[idx].config, public_key: e.target.value };
+                                setGateways(newGateways);
+                              }}
+                              placeholder="pk_test_..."
+                              className="bg-white"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-[10px] font-black uppercase">Chave Secreta / Token</Label>
+                            <Input 
+                              type="password"
+                              value={gw.config?.secret_key || ""} 
+                              onChange={(e) => {
+                                const newGateways = [...gateways];
+                                const idx = gateways.findIndex(g => g.id === gw.id);
+                                newGateways[idx].config = { ...newGateways[idx].config, secret_key: e.target.value };
+                                setGateways(newGateways);
+                              }}
+                              placeholder="sk_test_..."
+                              className="bg-white"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-end">
+                          <Button 
+                             size="sm" 
+                             variant="outline" 
+                             className="h-8 text-[10px] font-black uppercase"
+                             onClick={async () => {
+                               const { error } = await supabase.from("payment_gateways").update({ config: gw.config }).eq("id", gw.id);
+                               if (!error) toast.success(`Configurações de ${gw.name} salvas!`);
+                             }}
+                          >
+                            Salvar Chaves
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="space-y-6">
+                <Card className="border-none shadow-sm bg-white sticky top-24">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Layout className="h-5 w-5 text-primary" /> Checkout Customizer
+                    </CardTitle>
+                    <CardDescription>Personalize a experiência de pagamento do cliente.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                      <Label>Tema Visual</Label>
+                      <select 
+                        className="w-full h-10 rounded-xl border bg-slate-50 px-3 text-sm font-bold"
+                        value={checkoutSettings?.active_theme}
+                        onChange={(e) => setCheckoutSettings({...checkoutSettings, active_theme: e.target.value})}
+                      >
+                        <option value="glassmorphism">Glassmorphism Elite</option>
+                        <option value="minimalist">Minimalista Clean</option>
+                        <option value="corporate">Corporativo Sólido</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Cor de Destaque</Label>
+                      <div className="flex gap-2">
+                        <Input 
+                          value={checkoutSettings?.primary_color || "#2563eb"} 
+                          onChange={(e) => setCheckoutSettings({...checkoutSettings, primary_color: e.target.value})}
+                        />
+                        <input 
+                          type="color" 
+                          value={checkoutSettings?.primary_color || "#2563eb"}
+                          onChange={(e) => setCheckoutSettings({...checkoutSettings, primary_color: e.target.value})}
+                          className="h-10 w-12 rounded border cursor-pointer p-0"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Selo de Segurança</Label>
+                      <div className="flex items-center gap-2 p-3 bg-emerald-50 border border-emerald-100 rounded-xl">
+                        <ShieldCheck className="h-5 w-5 text-emerald-500" />
+                        <Input 
+                          value={checkoutSettings?.security_badge_text || "Pagamento 100% Seguro"}
+                          onChange={(e) => setCheckoutSettings({...checkoutSettings, security_badge_text: e.target.value})}
+                          className="bg-transparent border-none h-auto p-0 text-[11px] font-bold text-emerald-700 focus-visible:ring-0"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="pt-4">
+                      <Button 
+                        className="w-full bg-slate-900 hover:bg-black gap-2"
+                        onClick={async () => {
+                          const { error } = await supabase.from("checkout_settings").upsert(checkoutSettings);
+                          if (!error) toast.success("Checkout personalizado com sucesso!");
+                          else toast.error("Erro ao salvar: " + error.message);
+                        }}
+                      >
+                        <Save className="h-4 w-4" /> Aplicar Estética
+                      </Button>
+                    </div>
+
+                    <div className="p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                       <p className="text-[10px] font-black text-primary uppercase mb-2">💡 Preview do Estilo</p>
+                       <div className={`p-4 rounded-xl border ${checkoutSettings?.active_theme === 'glassmorphism' ? 'glass-morphism' : 'bg-white'}`}>
+                          <div className="h-2 w-1/2 bg-slate-200 rounded-full mb-3" />
+                          <div className="h-2 w-3/4 bg-slate-100 rounded-full mb-4" />
+                          <div className="h-8 w-full rounded-lg" style={{ backgroundColor: checkoutSettings?.primary_color }} />
+                       </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </TabsContent>
 

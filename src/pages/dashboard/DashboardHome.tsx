@@ -3,7 +3,7 @@ import { ROIMagico } from "@/components/dashboard/ROIMagico";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowRight, Loader2, TrendingUp, Star, Award, Info, Zap, Calendar } from "lucide-react";
+import { Plus, ArrowRight, Loader2, TrendingUp, Star, Award, Info, Zap, Calendar, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useBusiness } from "@/hooks/use-business";
 import { useProducts } from "@/hooks/use-products";
@@ -135,7 +135,7 @@ const DashboardHome = () => {
             </CardHeader>
             <CardContent className="space-y-3 p-8 pt-0">
               <Link to="/dashboard/produtos">
-                <Button className="w-full justify-between h-14 rounded-2xl bg-white border border-slate-100 text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6">
+                <Button className="w-full justify-between h-14 rounded-2xl glass-morphism border-primary/10 text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6">
                   <span className="flex items-center gap-3 font-bold text-sm">
                     <Plus className="h-5 w-5 text-primary group-hover:text-white transition-colors" />
                     Novo Produto
@@ -144,7 +144,7 @@ const DashboardHome = () => {
                 </Button>
               </Link>
               <Link to="/dashboard/negocio">
-                <Button className="w-full justify-between h-14 rounded-2xl bg-white border border-slate-100 text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6 mt-3">
+                <Button className="w-full justify-between h-14 rounded-2xl glass-morphism border-primary/10 text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6 mt-3">
                   <span className="flex items-center gap-3 font-bold text-sm">
                     <Zap className="h-5 w-5 text-primary group-hover:text-white transition-colors" />
                     Gerenciar Vitrine
@@ -153,7 +153,7 @@ const DashboardHome = () => {
                 </Button>
               </Link>
               <Link to="/dashboard/servicos">
-                <Button className="w-full justify-between h-14 rounded-2xl bg-white border border-slate-100 text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6 mt-3">
+                <Button className="w-full justify-between h-14 rounded-2xl glass-morphism border-primary/10 text-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6 mt-3">
                   <span className="flex items-center gap-3 font-bold text-sm">
                     <Calendar className="h-5 w-5 text-primary group-hover:text-white transition-colors" />
                     Horários & Agendas
@@ -162,7 +162,7 @@ const DashboardHome = () => {
                 </Button>
               </Link>
               <Link to="/comunidade">
-                <Button className="w-full justify-between h-14 rounded-2xl bg-white border-2 border-primary/20 text-slate-900 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6 mt-3">
+                <Button className="w-full justify-between h-14 rounded-2xl glass-morphism border-primary/20 text-slate-900 hover:bg-primary hover:text-white hover:border-primary transition-all group px-6 mt-3">
                   <span className="flex items-center gap-3 font-black text-sm">
                     <Sparkles className="h-5 w-5 text-primary group-hover:text-white transition-colors" />
                     Postar na Comunidade

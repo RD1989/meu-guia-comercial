@@ -11,7 +11,7 @@ interface MetricCardProps {
 
 function MetricCard({ title, value, description, icon: Icon, trend, isSpecial }: MetricCardProps & { isSpecial?: boolean }) {
   return (
-    <Card className={`border-none shadow-xl shadow-slate-200/40 rounded-[2rem] transition-all duration-500 hover:translate-y-[-4px] overflow-hidden group ${isSpecial ? 'bg-slate-900' : 'bg-white'}`}>
+    <Card className={`border-none shadow-xl shadow-slate-200/40 rounded-[2rem] transition-all duration-500 hover:translate-y-[-4px] overflow-hidden group relative ${isSpecial ? 'bg-slate-900' : 'glass-morphism'}`}>
       <CardHeader className="flex flex-row items-center justify-between pb-2 p-6">
         <CardTitle className={`text-[10px] font-black uppercase tracking-widest ${isSpecial ? 'text-slate-400' : 'text-slate-500'}`}>{title}</CardTitle>
         <div className={`h-10 w-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 ${isSpecial ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-primary/5'}`}>
@@ -38,15 +38,15 @@ function MetricCard({ title, value, description, icon: Icon, trend, isSpecial }:
 }
 
 interface ROIMagicoProps {
-  profileViews: number;
-  whatsappClicks: number;
-  averageTicket: number;
+  profileViews?: number;
+  whatsappClicks?: number;
+  averageTicket?: number;
 }
 
-export function ROIMagico({ profileViews, whatsappClicks, averageTicket }: ROIMagicoProps) {
+export function ROIMagico({ profileViews = 0, whatsappClicks = 0, averageTicket = 0 }: ROIMagicoProps) {
   const conversionRate = 0.20;
-  const estimatedRevenue = whatsappClicks * conversionRate * averageTicket;
-  const clickRate = profileViews > 0 ? ((whatsappClicks / profileViews) * 100).toFixed(1) : "0";
+  const estimatedRevenue = (whatsappClicks || 0) * conversionRate * (averageTicket || 0);
+  const clickRate = (profileViews || 0) > 0 ? (((whatsappClicks || 0) / (profileViews || 0)) * 100).toFixed(1) : "0";
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

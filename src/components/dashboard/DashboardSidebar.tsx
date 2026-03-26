@@ -74,24 +74,24 @@ export function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 bg-sidebar border-t border-sidebar-border">
+      <SidebarFooter className="p-4 bg-sidebar border-t border-sidebar-border/50">
         {!collapsed && (
           <div className="mb-4">
             <Link to="/" target="_blank">
-              <Button variant="outline" className="w-full justify-center text-white border-white/20 hover:bg-white/10 gap-2 mb-4 h-9 rounded-xl">
+              <Button className="w-full justify-center glass-morphism text-slate-900 border-none hover:bg-white gap-2 mb-4 h-12 rounded-xl font-black shadow-lg transition-all active:scale-95">
                 <ExternalLink className="h-4 w-4" />
                 Ver site
               </Button>
             </Link>
-            <div className="flex items-center gap-3 px-2">
-              <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center text-white font-black text-xs">
+            <div className="flex items-center gap-3 px-2 py-3 rounded-2xl bg-sidebar-accent/50 border border-sidebar-border/30">
+              <div className="h-9 w-9 rounded-xl bg-primary flex items-center justify-center text-white font-black text-sm shadow-lg shadow-primary/20">
                 {user?.user_metadata?.name?.[0]?.toUpperCase() || "L"}
               </div>
               <div className="flex flex-col overflow-hidden">
-                <p className="text-sm font-bold text-white truncate">
+                <p className="text-sm font-black text-white truncate leading-tight">
                   {user?.user_metadata?.name || "Lojista"}
                 </p>
-                <p className="text-[10px] text-sidebar-foreground/50 truncate">{user?.email}</p>
+                <p className="text-[10px] font-medium text-slate-400 truncate tracking-tight">{user?.email}</p>
               </div>
             </div>
           </div>
@@ -100,10 +100,10 @@ export function DashboardSidebar() {
           variant="ghost"
           size="sm"
           onClick={handleSignOut}
-          className={`w-full text-sidebar-foreground/60 hover:text-white hover:bg-red-500/20 gap-2 rounded-xl ${collapsed ? "justify-center" : "justify-start px-2"}`}
+          className={`w-full text-slate-400 hover:text-white hover:bg-red-500/20 gap-2 rounded-xl h-10 font-bold transition-all ${collapsed ? "justify-center" : "justify-start px-2"}`}
         >
           <LogOut className="h-4 w-4" />
-          {!collapsed && "Sair"}
+          {!collapsed && "Sair da Conta"}
         </Button>
       </SidebarFooter>
     </Sidebar>

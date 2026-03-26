@@ -183,7 +183,7 @@ const Index = () => {
             Guia Comercial {config.platform_city}
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-[900] text-white tracking-tighter leading-[0.85] mb-8">
+          <h1 className="text-4xl xs:text-5xl md:text-7xl font-[900] text-white tracking-tighter leading-[0.85] mb-8 text-balance">
             {selectedCity || config.platform_city} <br />
             <span className="text-primary italic">sempre conectada.</span>
           </h1>
@@ -535,7 +535,7 @@ const Index = () => {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="absolute top-6 left-6 z-20 bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-primary/20 flex items-center gap-3"
+                  className="absolute top-6 left-6 z-20 glass-morphism px-6 py-3 rounded-2xl shadow-xl border border-primary/20 flex items-center gap-3"
                 >
                    <div className="h-2 w-2 rounded-full bg-primary animate-ping" />
                    <div className="text-xs font-black text-slate-900 uppercase tracking-widest">
@@ -547,13 +547,14 @@ const Index = () => {
              <iframe 
                width="100%" 
                height="100%" 
+               key={`${userLocation.lat}-${userLocation.lng}`}
                style={{ border: 0 }} 
                loading="lazy" 
                allowFullScreen 
                referrerPolicy="no-referrer-when-downgrade"
                src={userLocation.lat && userLocation.lng 
                  ? `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}&z=15&output=embed` 
-                 : `https://www.google.com/maps?q=${encodeURIComponent(selectedCity || config.platform_city)}&output=embed`}
+                 : `https://www.google.com/maps?q=${encodeURIComponent(selectedCity || config.platform_city || "Rio de Janeiro")}&output=embed`}
                title="Google Maps"
              ></iframe>
           </div>

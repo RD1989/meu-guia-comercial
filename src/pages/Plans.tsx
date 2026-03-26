@@ -136,7 +136,7 @@ const Plans = () => {
                ))}
             </div>
 
-            <Link to="/auth?mode=register" className="relative z-10">
+            <Link to="/checkout?plan=prof&amount=49&name=Plano%20Profissional" className="relative z-10">
               <Button className="w-full h-16 py-6 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase text-xs tracking-widest shadow-xl shadow-primary/40 transition-all active:scale-95">
                 Ativar Plano Pro
               </Button>
@@ -176,7 +176,7 @@ const Plans = () => {
                ))}
             </div>
 
-            <Link to="/auth?mode=register">
+            <Link to="/checkout?plan=elite&amount=149&name=Plano%20Elite%20Max">
               <Button variant="outline" className="w-full h-14 rounded-2xl border-2 border-emerald-500/20 font-black uppercase text-[10px] tracking-widest text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10">
                 Domination Regional
               </Button>

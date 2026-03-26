@@ -51,40 +51,57 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
 
   const fetchConfig = async () => {
     setLoading(true);
-    const { data } = await supabase
-      .from("platform_config")
-      .select("key, value");
+    try {
+      const { data, error } = await supabase
+        .from("platform_config")
+        .select("key, value");
 
-    if (data && data.length > 0) {
+      if (error) {
+        console.warn("Tabela platform_config não encontrada ou erro de permissão:", error.message);
+      }
+
       const configObj: any = {};
-      data.forEach(({ key, value }) => {
-        configObj[key] = value || "";
-      });
+      if (data && data.length > 0) {
+        data.forEach(({ key, value }) => {
+          configObj[key] = value || "";
+        });
+      }
 
-      setConfig({ ...defaultConfig, ...configObj });
+      // Merge with defaultConfig to ensure a working state
+      const finalConfig = { ...defaultConfig, ...configObj };
+      setConfig(finalConfig);
 
       // Apply primary color as CSS variable
       const color = configObj.platform_primary_color || defaultConfig.platform_primary_color;
       document.documentElement.style.setProperty("--platform-primary", color);
 
       // Fetch AI settings
-      const { data: aiData } = await (supabase as any)
-        .from("ai_settings")
-        .select("openrouter_api_key, default_model")
-        .maybeSingle();
-      
-      if (aiData) {
-        setConfig(prev => ({ 
-          ...prev, 
-          ...configObj,
-          openrouter_api_key: aiData.openrouter_api_key || "",
-          default_model: aiData.default_model || "openai/gpt-4o-mini"
-        }));
-      } else {
-        setConfig({ ...defaultConfig, ...configObj });
+      try {
+        const { data: aiData, error: aiError } = await (supabase as any)
+          .from("ai_settings")
+          .select("openrouter_api_key, default_model")
+          .maybeSingle();
+        
+        if (aiError) {
+          console.warn("Tabela ai_settings não encontrada ou erro de permissão:", aiError.message);
+        }
+
+        if (aiData) {
+          setConfig(prev => ({ 
+            ...prev, 
+            openrouter_api_key: aiData.openrouter_api_key || "",
+            default_model: aiData.default_model || "openai/gpt-4o-mini"
+          }));
+        }
+      } catch (aiErr) {
+        console.error("Falha ao buscar ai_settings:", aiErr);
       }
+    } catch (err) {
+      console.error("Erro crítico ao carregar configurações da plataforma:", err);
+      setConfig(defaultConfig); // Fallback total
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {

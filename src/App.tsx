@@ -20,6 +20,7 @@ import BlogPost from "./pages/portal/BlogPost";
 import JobApplicationsPage from "./pages/portal/JobApplications";
 import Categories from "./pages/Categories";
 import Plans from "./pages/Plans";
+import Checkout from "./pages/Checkout";
 import Community from "./pages/portal/Community";
 import CommunityProfile from "./pages/portal/CommunityProfile";
 import NotFound from "./pages/NotFound";
@@ -100,6 +101,7 @@ const App = () => (
                   <Route path="/vagas" element={<JobApplicationsPage />} />
                   <Route path="/categorias" element={<Categories />} />
                   <Route path="/planos" element={<Plans />} />
+                  <Route path="/checkout" element={<Checkout />} />
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
