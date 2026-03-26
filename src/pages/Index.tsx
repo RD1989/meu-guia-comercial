@@ -41,7 +41,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { usePlatform } from "@/contexts/PlatformContext";
 import { Input } from "@/components/ui/input";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { DUMMY_TESTIMONIALS, DUMMY_CATEGORIES } from "@/data/dummy-data";
+import { DUMMY_TESTIMONIALS, DUMMY_CATEGORIES, DUMMY_BUSINESSES } from "@/data/dummy-data";
 
 const ICON_MAP: Record<string, any> = {
   UtensilsCrossed,
@@ -256,18 +256,68 @@ const Index = () => {
             {bizLoading ? (
               [1, 2, 3, 4].map((i) => <div key={i} className="aspect-[3/4] rounded-[2rem] bg-slate-100 animate-pulse"></div>)
             ) : (
-              businesses.map((biz, i) => (
+              (businesses.length > 0 ? businesses : DUMMY_BUSINESSES).map((biz: any, i) => (
                 <motion.div 
                   key={biz.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                 >
-                  <BusinessCard {...biz} categoryName={(biz.categories as any)?.name} />
+                  <BusinessCard 
+                    {...biz} 
+                    imageUrl={biz.image_url} // Fix for image fallback
+                    categoryName={biz.categories?.name || biz.categoryName} 
+                  />
                 </motion.div>
               ))
             )}
           </div>
+        </div>
+      </section>
+
+      {/* NEW: Elite Ribbon Content (Continuous Carousel) */}
+      <section className="py-12 bg-slate-50 border-y border-slate-100 overflow-hidden relative">
+        <div className="max-w-7xl mx-auto px-6 mb-8 text-center md:text-left">
+          <span className="text-primary font-black text-[9px] uppercase tracking-[0.3em] mb-2 block">Parceiros de Elite</span>
+          <h2 className="text-xl md:text-3xl font-black text-slate-950 tracking-tighter">Empresas Certificadas</h2>
+        </div>
+        
+        <div className="relative flex overflow-x-hidden">
+          <motion.div 
+            animate={{ x: "-100%" }}
+            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+            className="flex whitespace-nowrap gap-12 items-center py-4 px-12"
+          >
+            {[...DUMMY_BUSINESSES, ...DUMMY_BUSINESSES].map((biz, i) => (
+              <div key={`${biz.id}-${i}`} className="flex items-center gap-4 bg-white px-8 py-5 rounded-[2rem] border border-slate-200 shadow-sm hover:border-primary transition-all group shrink-0">
+                <div className="h-10 w-10 rounded-xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20">
+                   <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                </div>
+                <div>
+                   <div className="text-sm font-black text-slate-800 group-hover:text-primary transition-colors">{biz.name}</div>
+                   <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{biz.address}</div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+
+          <motion.div 
+            animate={{ x: "-100%" }}
+            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+            className="flex whitespace-nowrap gap-12 items-center py-4 px-12 absolute top-0 left-full h-full"
+          >
+            {[...DUMMY_BUSINESSES, ...DUMMY_BUSINESSES].map((biz, i) => (
+              <div key={`${biz.id}-dup-${i}`} className="flex items-center gap-4 bg-white px-8 py-5 rounded-[2rem] border border-slate-200 shadow-sm hover:border-primary transition-all group shrink-0">
+                <div className="h-10 w-10 rounded-xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20">
+                   <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                </div>
+                <div>
+                   <div className="text-sm font-black text-slate-800 group-hover:text-primary transition-colors">{biz.name}</div>
+                   <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{biz.address}</div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
