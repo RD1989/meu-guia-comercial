@@ -755,7 +755,9 @@ const Index = () => {
                loading="lazy" 
                allowFullScreen 
                referrerPolicy="no-referrer-when-downgrade"
-               src={`https://www.google.com/maps?q=${encodeURIComponent(selectedCity || config.platform_city)}&output=embed`}
+               src={userLocation.lat && userLocation.lng 
+                 ? `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}&z=15&output=embed` 
+                 : `https://www.google.com/maps?q=${encodeURIComponent(selectedCity || config.platform_city)}&output=embed`}
                title="Google Maps"
              ></iframe>
           </div>
