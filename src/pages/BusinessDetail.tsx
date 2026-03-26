@@ -351,14 +351,68 @@ const BusinessDetail = () => {
               <Card className="p-8 border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-white space-y-6">
                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 leading-none"><Clock className="h-4 w-4 text-primary" /> Horários</h4>
                  <div className="space-y-3">
-                   {['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'].map(d => (
-                     <div key={d} className="flex justify-between text-[11px] font-bold">
-                       <span className="text-slate-400 uppercase tracking-tighter">{d}</span>
-                       <span className={d === 'Domingo' ? 'text-rose-500' : 'text-slate-900'}>{d === 'Domingo' ? 'Fechado' : '08:00 - 18:00'}</span>
-                     </div>
-                   ))}
+                   {(() => {
+                     const schedule = (business as any)?.business_hours || {
+                       mon: { open: "08:00", close: "18:00", closed: false },
+                       tue: { open: "08:00", close: "18:00", closed: false },
+                       wed: { open: "08:00", close: "18:00", closed: false },
+                       thu: { open: "08:00", close: "18:00", closed: false },
+                       fri: { open: "08:00", close: "18:00", closed: false },
+                       sat: { open: "08:00", close: "18:00", closed: false },
+                       sun: { open: "08:00", close: "18:00", closed: true },
+                     };
+                     
+                     const daysMap: any = {
+                       0: 'sun', 1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat'
+                     };
+                     
+                     const dayLabels: any = {
+                       mon: 'Segunda', tue: 'Terça', wed: 'Quarta', thu: 'Quinta', fri: 'Sexta', sat: 'Sábado', sun: 'Domingo'
+                     };
+
+                     const now = new Date();
+                     const currentDayKey = daysMap[now.getDay()];
+                     const currentSchedule = schedule[currentDayKey];
+                     
+                     let isOpen = false;
+                     if (currentSchedule && !currentSchedule.closed) {
+                       const currentTime = now.getHours() * 60 + now.getMinutes();
+                       const [openH, openM] = currentSchedule.open.split(':').map(Number);
+                       const [closeH, closeM] = currentSchedule.close.split(':').map(Number);
+                       const openTime = openH * 60 + openM;
+                       const closeTime = closeH * 60 + closeM;
+                       isOpen = currentTime >= openTime && currentTime <= closeTime;
+                     }
+
+                     return (
+                       <>
+                         {Object.entries(dayLabels).map(([key, label]: [any, any]) => {
+                           const dayData = schedule[key];
+                           const isToday = key === currentDayKey;
+                           
+                           return (
+                             <div key={key} className={`flex justify-between text-[11px] font-bold ${isToday ? 'bg-primary/5 -mx-2 px-2 py-1 rounded-lg border border-primary/10' : ''}`}>
+                               <span className="text-slate-400 uppercase tracking-tighter">{label}</span>
+                               <span className={dayData?.closed ? 'text-rose-500' : 'text-slate-900'}>
+                                 {dayData?.closed ? 'Fechado' : `${dayData?.open} - ${dayData?.close}`}
+                               </span>
+                             </div>
+                           );
+                         })}
+                         <Badge 
+                           variant="outline" 
+                           className={`w-full justify-center py-2 rounded-xl font-black uppercase text-[9px] tracking-widest mt-2 ${
+                             isOpen 
+                               ? 'border-emerald-100 bg-emerald-50 text-emerald-600' 
+                               : 'border-rose-100 bg-rose-50 text-rose-600'
+                           }`}
+                         >
+                           {isOpen ? 'Aberto Agora' : 'Fechado no Momento'}
+                         </Badge>
+                       </>
+                     );
+                   })()}
                  </div>
-                 <Badge variant="outline" className="w-full justify-center py-2 border-emerald-100 bg-emerald-50 text-emerald-600 rounded-xl font-black uppercase text-[9px] tracking-widest">Aberto Agora</Badge>
               </Card>
               <Card onClick={handleWhatsAppClick} className="p-8 border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-primary group hover:bg-slate-900 transition-all cursor-pointer text-center space-y-4">
                  <div className="h-16 w-16 rounded-full bg-white/20 mx-auto flex items-center justify-center backdrop-blur-md transition-transform group-hover:scale-110"><MessageCircle className="h-8 w-8 text-white" /></div>

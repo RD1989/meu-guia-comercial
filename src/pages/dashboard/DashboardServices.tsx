@@ -10,11 +10,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useBusiness } from "@/hooks/use-business";
 import { toast } from "sonner";
 
+import { BusinessScheduleConfig } from "@/components/dashboard/BusinessScheduleConfig";
+
 const DashboardServices = () => {
-  const { business } = useBusiness();
+  const { business, updateBusiness } = useBusiness();
   const queryClient = useQueryClient();
   const [isAdding, setIsAdding] = useState(false);
   const [newService, setNewService] = useState({ name: "", price: "", duration: "30" });
+
+  const handleSaveSchedule = async (hours: any) => {
+    await updateBusiness.mutateAsync({
+      ...({ business_hours: hours } as any)
+    });
+  };
 
   const { data: services = [], isLoading } = useQuery({
     queryKey: ["my-services", business?.id],
@@ -78,6 +86,19 @@ const DashboardServices = () => {
           <Button onClick={() => setIsAdding(true)} className="rounded-xl gap-2">
             <Plus className="h-4 w-4" /> Novo Serviço
           </Button>
+        </div>
+
+        <BusinessScheduleConfig 
+          initialHours={(business as any)?.business_hours}
+          onSave={handleSaveSchedule}
+          isSaving={updateBusiness.isPending}
+        />
+
+        <div className="pt-6 border-t border-slate-100">
+           <h3 className="text-lg font-black tracking-tight mb-4 flex items-center gap-2">
+             <div className="h-6 w-1 bg-primary rounded-full" />
+             Seus Serviços
+           </h3>
         </div>
 
         {isAdding && (

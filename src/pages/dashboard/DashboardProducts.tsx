@@ -98,53 +98,63 @@ const DashboardProducts = () => {
         </div>
 
         {products.length === 0 ? (
-          <Card className="p-12 text-center">
-            <Package className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">Nenhum produto cadastrado</p>
-            <Button onClick={openNew} variant="outline" className="mt-4 rounded-xl gap-2">
+          <Card className="p-12 text-center border-dashed border-2 rounded-[2rem] bg-slate-50/50">
+            <Package className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+            <p className="text-base font-bold text-slate-400 capitalize">Nenhum produto em seu catálogo</p>
+            <p className="text-xs text-slate-400 mt-1 mb-6">Comece adicionando seus itens para aparecerem no cardápio digital.</p>
+            <Button onClick={openNew} className="rounded-2xl h-12 gap-2 shadow-lg shadow-primary/10 px-8 font-black uppercase text-[10px] tracking-widest">
               <Plus className="h-4 w-4" />
               Adicionar Primeiro Produto
             </Button>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {products.map((product) => (
-              <Card key={product.id} className={!product.active ? "opacity-60" : ""}>
+              <Card 
+                key={product.id} 
+                className={`group border-0 shadow-xl shadow-slate-200/40 rounded-[2rem] overflow-hidden bg-white hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 ${!product.active ? "opacity-60 grayscale-[0.5]" : ""}`}
+              >
                 <CardContent className="p-0">
-                  {product.image_url && (
-                    <div className="aspect-[16/10] overflow-hidden rounded-t-lg">
-                      <img src={product.image_url} alt={product.name} className="w-full h-full object-cover" />
-                    </div>
-                  )}
-                  <div className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-sm font-semibold text-foreground truncate">{product.name}</h3>
-                          <Badge
-                            variant={product.active ? "default" : "secondary"}
-                            className="text-[10px] cursor-pointer"
-                            onClick={() => toggleActive(product)}
-                          >
-                            {product.active ? "Ativo" : "Inativo"}
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-muted-foreground line-clamp-1">{product.description}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                           <p className="text-sm font-bold text-primary">
-                            R$ {(product.price ?? 0).toFixed(2)}
-                          </p>
-                          {(product as any).category && (
-                            <Badge variant="outline" className="text-[9px] uppercase tracking-tighter ml-auto">{ (product as any).category }</Badge>
-                          )}
-                        </div>
+                  <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+                    {product.image_url ? (
+                      <img src={product.image_url} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Package className="h-8 w-8 text-slate-200" />
                       </div>
-                      <div className="flex gap-1 ml-2">
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => openEdit(product)}>
-                          <Pencil className="h-3.5 w-3.5" />
+                    )}
+                    <div className="absolute top-4 right-4 flex gap-2">
+                       <Badge
+                        variant={product.active ? "default" : "secondary"}
+                        className={`text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full border-0 cursor-pointer shadow-lg backdrop-blur-md ${product.active ? 'bg-emerald-500/90 text-white' : 'bg-slate-500/90 text-white'}`}
+                        onClick={(e) => { e.stopPropagation(); toggleActive(product); }}
+                      >
+                        {product.active ? "Ativo" : "Inativo"}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <div className="p-5 space-y-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="text-sm font-black text-slate-900 truncate tracking-tight">{product.name}</h3>
+                        <p className="text-sm font-black text-primary whitespace-nowrap">R$ {(product.price ?? 0).toFixed(2)}</p>
+                      </div>
+                      <p className="text-[11px] text-slate-500 font-medium line-clamp-1 h-4">{product.description || "Sem descrição..."}</p>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="flex flex-wrap gap-1.5 min-h-[22px]">
+                        {(product as any).category && (
+                          <Badge variant="outline" className="text-[8px] font-black uppercase tracking-widest border-slate-100 bg-slate-50 text-slate-500 px-2 leading-none">{ (product as any).category }</Badge>
+                        )}
+                      </div>
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-primary/10 hover:text-primary transition-all" onClick={() => openEdit(product)}>
+                          <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive" onClick={() => handleDelete(product.id)}>
-                          <Trash2 className="h-3.5 w-3.5" />
+                        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl hover:bg-rose-50 hover:text-rose-500 transition-all" onClick={() => handleDelete(product.id)}>
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>

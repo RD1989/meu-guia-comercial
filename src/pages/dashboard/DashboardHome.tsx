@@ -3,7 +3,7 @@ import { ROIMagico } from "@/components/dashboard/ROIMagico";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Plus, ArrowRight, Loader2, TrendingUp, Star, Award, Info, Zap } from "lucide-react";
+import { Plus, ArrowRight, Loader2, TrendingUp, Star, Award, Info, Zap, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useBusiness } from "@/hooks/use-business";
 import { useProducts } from "@/hooks/use-products";
@@ -122,6 +122,15 @@ const DashboardHome = () => {
                   <span className="flex items-center gap-2">
                     <Plus className="h-4 w-4" />
                     Editar Vitrine
+                  </span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link to="/dashboard/servicos">
+                <Button variant="outline" className="w-full justify-between h-11 rounded-xl mt-2">
+                  <span className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4" />
+                    Horários & Agendas
                   </span>
                   <ArrowRight className="h-4 w-4" />
                 </Button>
