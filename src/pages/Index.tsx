@@ -233,7 +233,7 @@ const Index = () => {
             </motion.div>
 
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-[900] text-white tracking-tighter leading-[0.85] mb-8">
-              Sua cidade <br />
+              {selectedCity || "Sua cidade"} <br />
               <span className="text-primary italic">bem conectada.</span>
             </h1>
 
@@ -435,62 +435,63 @@ const Index = () => {
       </section>
 
       {/* NEW: Elite Ribbon Content (Continuous Carousel) */}
-      <section className="py-12 bg-slate-50 border-y border-slate-100 overflow-hidden relative">
-        <div className="max-w-7xl mx-auto px-6 mb-8 text-center md:text-left">
-          <span className="text-primary font-black text-[9px] uppercase tracking-[0.3em] mb-2 block">Parceiros de Elite</span>
-          <h2 className="text-xl md:text-3xl font-black text-slate-950 tracking-tighter">Empresas Certificadas</h2>
+      <section className="py-20 bg-slate-50 border-y border-slate-100 overflow-hidden relative">
+        <div className="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="text-left">
+            <span className="text-primary font-black text-[9px] uppercase tracking-[0.3em] mb-2 block">Parceiros de Elite</span>
+            <h2 className="text-3xl md:text-5xl font-[900] text-slate-950 tracking-tighter leading-none">Empresas Certificadas</h2>
+          </div>
+          <div className="bg-primary/5 px-6 py-3 rounded-2xl border border-primary/10">
+             <div className="text-[10px] font-black text-primary uppercase tracking-widest mb-1 text-center md:text-left">Destaques em:</div>
+             <div className="text-lg font-black text-slate-900">{selectedCity || config.platform_city}</div>
+          </div>
         </div>
         
         <div className="relative flex overflow-x-hidden pt-4 pb-12">
           <motion.div 
-            animate={{ x: "-100%" }}
-            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-            className="flex whitespace-nowrap gap-8 items-center px-4"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            className="flex gap-8 items-center px-4"
           >
-            {[...DUMMY_BUSINESSES, ...DUMMY_BUSINESSES].map((biz, i) => (
-              <Link 
-                key={`${biz.id}-${i}`} 
-                to={`/negocio/${biz.slug}`}
-                className="flex items-center gap-6 bg-white px-10 py-8 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/20 hover:border-primary transition-all group shrink-0 min-w-[300px]"
+            {[
+              { id: 'elite-1', name: 'Elite Fitness Center', address: 'Av. Principal, 1000', rating: '4.8', badge: 'Professional', slug: 'elite-fitness' },
+              ...DUMMY_BUSINESSES,
+              ...DUMMY_BUSINESSES
+            ].map((biz: any, i) => (
+              <motion.div 
+                key={`${biz.id}-${i}`}
+                className="inline-block w-[320px] bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 relative group cursor-pointer shrink-0"
+                whileHover={{ y: -10 }}
               >
-                <div className="h-20 w-20 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20 shadow-inner">
-                   <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
-                </div>
-                <div className="flex flex-col gap-1">
-                   <div className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors leading-tight">{biz.name}</div>
-                   <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{biz.address}</div>
-                   <div className="flex items-center gap-1 mt-1">
-                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                      <span className="text-[10px] font-black text-slate-600">{biz.average_rating} Professional</span>
+                <div className="absolute top-4 right-4 z-10">
+                   <div className="bg-primary text-white text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+                      <ShieldCheck className="h-3 w-3" /> Certified
                    </div>
                 </div>
-              </Link>
-            ))}
-          </motion.div>
 
-          <motion.div 
-            animate={{ x: "-100%" }}
-            transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-            className="flex whitespace-nowrap gap-8 items-center px-4 absolute top-4 left-full h-full"
-          >
-            {[...DUMMY_BUSINESSES, ...DUMMY_BUSINESSES].map((biz, i) => (
-              <Link 
-                key={`${biz.id}-dup-${i}`} 
-                to={`/negocio/${biz.slug}`}
-                className="flex items-center gap-6 bg-white px-10 py-8 rounded-[2.5rem] border border-slate-200 shadow-xl shadow-slate-200/20 hover:border-primary transition-all group shrink-0 min-w-[300px]"
-              >
-                <div className="h-20 w-20 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:border-primary/20 shadow-inner">
-                   <img src={biz.image_url} alt={biz.name} className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-110" />
+                <div className="aspect-[16/9] rounded-[1.5rem] bg-slate-100 mb-4 overflow-hidden shadow-inner">
+                   <img 
+                     src={biz.image_url || `https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&u=${i}`}
+                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                     alt={biz.name} 
+                   />
                 </div>
-                <div className="flex flex-col gap-1">
-                   <div className="text-xl font-black text-slate-900 group-hover:text-primary transition-colors leading-tight">{biz.name}</div>
-                   <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{biz.address}</div>
-                   <div className="flex items-center gap-1 mt-1">
-                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                      <span className="text-[10px] font-black text-slate-600">{biz.average_rating} Professional</span>
+
+                <div className="space-y-2">
+                   <h3 className="text-lg font-[900] text-slate-950 tracking-tight">{biz.name}</h3>
+                   <div className="flex items-center gap-2 text-slate-400">
+                      <MapPin className="h-3 w-3" />
+                      <span className="text-[10px] font-bold truncate">{biz.address || "Endereço em " + (selectedCity || config.platform_city)}</span>
+                   </div>
+                   <div className="flex items-center justify-between pt-2">
+                      <div className="flex items-center gap-1">
+                         <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                         <span className="text-xs font-black text-slate-900">{biz.rating || "5.0"}</span>
+                      </div>
+                      <div className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{biz.badge || "Premium"}</div>
                    </div>
                 </div>
-              </Link>
+              </motion.div>
             ))}
           </motion.div>
         </div>
