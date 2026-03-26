@@ -204,3 +204,8 @@ export const DUMMY_TESTIMONIALS = [
     location: 'Jardins, SP'
   }
 ];
+
+export const DUMMY_POSTS = [
+  { id: 'post-1', title: 'Como aumentar suas vendas locais', content: 'Dicas práticas para lojistas...', author: 'Equipe Guia', date: new Date().toISOString() },
+  { id: 'post-2', title: 'Novidades em Rio de Janeiro', content: 'O que há de novo na cidade...', author: 'Redação', date: new Date().toISOString() }
+];
