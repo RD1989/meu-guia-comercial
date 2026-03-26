@@ -84,7 +84,7 @@ export function BusinessCard({
 
         {/* Image Container */}
         <div 
-          className="relative h-56 w-full overflow-hidden rounded-t-[32px] rounded-b-[8px]"
+          className="relative h-48 w-full overflow-hidden rounded-t-[32px] rounded-b-[4px]"
           style={{ transform: "translateZ(30px)" }}
         >
           <div className="absolute inset-0 bg-slate-200 animate-pulse transition-transform duration-700" />
@@ -130,16 +130,16 @@ export function BusinessCard({
 
         {/* Content */}
         <div 
-          className="flex flex-col flex-1 p-6 relative z-10 bg-white/40 rounded-b-[32px] backdrop-blur-sm"
+          className="flex flex-col flex-1 p-5 relative z-10 bg-white/40 rounded-b-[32px] backdrop-blur-sm"
           style={{ transform: "translateZ(20px)" }}
         >
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-xl font-black text-slate-800 leading-tight group-hover:text-primary transition-colors line-clamp-1">
+          <div className="flex justify-between items-start mb-1.5">
+            <h3 className="text-lg font-black text-slate-800 leading-tight group-hover:text-primary transition-colors line-clamp-1">
               {name}
             </h3>
           </div>
           
-          <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed mb-6 font-medium">
+          <p className="text-slate-500 text-xs line-clamp-2 leading-relaxed mb-4 font-medium">
             {description || "O melhor estabelecimento da região com preços incríveis."}
           </p>
 

@@ -42,7 +42,7 @@ const Index = () => {
   const { scrollY } = useScroll();
   
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const heroScale = useTransform(scrollY, [0, 300], [1, 0.98]);
+  const heroScale = useTransform(scrollY, [0, 300], [1, 0.99]);
 
   const { data: categories = [], isLoading: catLoading } = useQuery({
     queryKey: ["categories"],
@@ -82,54 +82,54 @@ const Index = () => {
     <div className="min-h-screen bg-white pb-20 md:pb-0 font-sans selection:bg-primary/10 selection:text-primary overflow-x-hidden text-slate-900">
       <Header />
 
-      {/* Elite Light Hero Section */}
-      <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-28 bg-[#F8FAFC]">
+      {/* Elite Compact Hero Section */}
+      <section ref={heroRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-20 bg-[#F8FAFC]">
         {/* Soft Background Accents */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/5 blur-[120px] rounded-full"></div>
-          <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-emerald-100/30 blur-[100px] rounded-full"></div>
+          <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-primary/5 blur-[80px] rounded-full"></div>
+          <div className="absolute bottom-0 right-0 w-[30%] h-[30%] bg-emerald-50/20 blur-[60px] rounded-full"></div>
         </div>
 
         <motion.div 
           style={{ opacity: heroOpacity, scale: heroScale }}
-          className="max-w-7xl mx-auto px-6 relative z-10 text-center"
+          className="max-w-5xl mx-auto px-6 relative z-10 text-center"
         >
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white border border-slate-200 text-slate-800 text-xs font-black uppercase tracking-[0.2em] mb-10 shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 text-slate-800 text-[10px] font-black uppercase tracking-[0.2em] mb-8 shadow-sm"
           >
-            <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+            <Sparkles className="h-3.5 w-3.5 text-primary" />
             Guia Premium {config.platform_city}
           </motion.div>
 
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-[900] text-slate-950 tracking-tighter leading-[0.85] mb-10">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-[900] text-slate-950 tracking-tighter leading-[0.9] mb-6">
             Sua cidade <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-500">bem conectada.</span>
           </h1>
 
-          <p className="text-lg md:text-2xl text-slate-500 font-medium max-w-3xl mx-auto mb-16 leading-relaxed">
+          <p className="text-base md:text-xl text-slate-500 font-medium max-w-2xl mx-auto mb-10 leading-relaxed">
             Descubra estabelecimentos de elite, serviços exclusivos e oportunidades únicas na palma da sua mão.
           </p>
 
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 1 }}
-            className="max-w-4xl mx-auto"
+            transition={{ delay: 0.2 }}
+            className="max-w-2xl mx-auto"
           >
             <form onSubmit={handleSearch} className="relative group">
-              <div className="relative flex flex-col md:flex-row items-center bg-white border border-slate-200 rounded-[2.5rem] shadow-[0_30px_70px_rgba(0,0,0,0.08)] p-3 gap-3 group-focus-within:border-primary/40 transition-all duration-500">
-                <div className="flex items-center flex-1 w-full pl-6">
-                  <SearchIcon className="h-7 w-7 text-slate-300 group-hover:text-primary transition-colors" />
+              <div className="relative flex flex-col md:flex-row items-center bg-white border border-slate-200 rounded-[1.5rem] shadow-[0_15px_40px_rgba(0,0,0,0.05)] p-2 gap-2 group-focus-within:border-primary/40 transition-all duration-500">
+                <div className="flex items-center flex-1 w-full pl-4">
+                  <SearchIcon className="h-5 w-5 text-slate-300 group-hover:text-primary transition-colors" />
                   <Input 
-                    className="border-none bg-transparent h-16 text-2xl focus-visible:ring-0 placeholder:text-slate-200 w-full font-black text-slate-900"
+                    className="border-none bg-transparent h-12 text-lg focus-visible:ring-0 placeholder:text-slate-200 w-full font-black text-slate-900"
                     placeholder="O que você busca hoje?"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
-                <Button type="submit" className="w-full md:w-auto h-16 px-12 rounded-[1.8rem] bg-slate-900 hover:bg-slate-800 text-white font-black text-xl shadow-2xl active:scale-95 transition-all">
+                <Button type="submit" className="w-full md:w-auto h-12 px-8 rounded-[1.2rem] bg-slate-900 hover:bg-slate-800 text-white font-black text-base shadow-xl active:scale-95 transition-all">
                   Explorar
                 </Button>
               </div>
@@ -138,56 +138,53 @@ const Index = () => {
         </motion.div>
       </section>
 
-      {/* Stats - Ultra Clean */}
-      <section className="bg-white py-24 border-b border-slate-100">
+      {/* Stats - Compact */}
+      <section className="bg-white py-12 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              { label: 'Empresas Ativas', value: '4.8k+', color: 'text-primary' },
+              { label: 'Empresas', value: '4.8k+', color: 'text-primary' },
               { label: 'Categorias', value: '50+', color: 'text-emerald-500' },
-              { label: 'Usuários Mensais', value: '25k+', color: 'text-indigo-500' },
+              { label: 'Visitas', value: '25k+', color: 'text-indigo-500' },
               { label: 'Satisfação', value: '100%', color: 'text-amber-500' },
             ].map((stat, i) => (
-              <div key={i} className="text-center group cursor-default">
-                <div className={cn("text-5xl font-[900] tracking-tighter mb-2 transition-transform group-hover:scale-110 duration-300", stat.color)}>{stat.value}</div>
-                <div className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{stat.label}</div>
+              <div key={i} className="text-center">
+                <div className={cn("text-3xl font-[900] tracking-tighter mb-1", stat.color)}>{stat.value}</div>
+                <div className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Categories - Elegant Grid */}
-      <section className="py-32 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6 text-center mb-20">
-          <h2 className="text-4xl md:text-6xl font-black text-slate-950 tracking-tighter mb-6">Categorias de Elite</h2>
-          <p className="text-slate-500 text-xl font-medium max-w-2xl mx-auto">Navegue pelos melhores segmentos cuidadosamente selecionados por nossa equipe local.</p>
+      {/* Categories - Compact Grid */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-6 text-center mb-12">
+          <h2 className="text-3xl md:text-5xl font-black text-slate-950 tracking-tighter mb-4">Destaques por Segmento</h2>
+          <p className="text-slate-500 text-lg font-medium max-w-xl mx-auto">Explore as melhores opções cuidadosamente selecionadas.</p>
         </div>
 
         <div className="max-w-7xl mx-auto px-6">
           {catLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="h-48 rounded-[2rem] bg-slate-200 animate-pulse"></div>
+                <div key={i} className="h-40 rounded-[1.5rem] bg-slate-200 animate-pulse"></div>
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {categories.map((cat, i) => (
                 <motion.div 
                   key={cat.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -10 }}
+                  whileHover={{ y: -5 }}
                   onClick={() => navigate(`/buscar?categoria=${cat.slug}`)}
-                  className="group bg-white border border-slate-100 rounded-[2.5rem] p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
+                  className="group bg-white border border-slate-100 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:shadow-primary/5 transition-all duration-500"
                 >
-                  <div className="h-20 w-20 rounded-3xl bg-slate-50 flex items-center justify-center mb-6 group-hover:bg-primary/10 transition-colors shadow-inner">
-                    <Building2 className="h-10 w-10 text-slate-200 group-hover:text-primary transition-colors" />
+                  <div className="h-14 w-14 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+                    <Building2 className="h-7 w-7 text-slate-200 group-hover:text-primary transition-colors" />
                   </div>
-                  <span className="font-black text-slate-900 text-base mb-2">{cat.name}</span>
-                  <div className="h-1 w-8 bg-slate-100 group-hover:w-12 group-hover:bg-primary transition-all rounded-full"></div>
+                  <span className="font-black text-slate-900 text-sm mb-1">{cat.name}</span>
+                  <div className="h-0.5 w-4 bg-slate-100 group-hover:w-8 group-hover:bg-primary transition-all rounded-full"></div>
                 </motion.div>
               ))}
             </div>
@@ -195,32 +192,31 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Businesses */}
-      <section id="destaques" className="py-32 bg-white">
+      {/* Featured Businesses - Compact */}
+      <section id="destaques" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+          <div className="flex items-end justify-between mb-12 gap-4">
             <div className="text-left">
-              <span className="text-primary font-black text-xs uppercase tracking-[0.3em] mb-4 block">Destaques Premium</span>
-              <h2 className="text-4xl md:text-6xl font-[900] text-slate-950 tracking-tighter">O Melhor da Região</h2>
+              <span className="text-primary font-black text-[9px] uppercase tracking-[0.3em] mb-2 block">Premium Selection</span>
+              <h2 className="text-3xl md:text-5xl font-[900] text-slate-950 tracking-tighter">O Melhor da Região</h2>
             </div>
             <Link to="/buscar">
-              <Button variant="outline" className="h-14 px-10 rounded-2xl border-slate-200 font-black text-slate-600 hover:border-primary hover:text-primary transition-all">
-                Ver Tudo <ArrowUpRight className="ml-2 h-5 w-5" />
+              <Button variant="ghost" className="h-10 px-6 rounded-xl font-black text-primary hover:bg-primary/5 transition-all text-xs">
+                Ver Tudo <ArrowUpRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {bizLoading ? (
-              [1, 2, 3, 4].map((i) => <div key={i} className="aspect-[3/4] rounded-[2.5rem] bg-slate-100 animate-pulse"></div>)
+              [1, 2, 3, 4].map((i) => <div key={i} className="aspect-[3/4] rounded-[2rem] bg-slate-100 animate-pulse"></div>)
             ) : (
               businesses.map((biz, i) => (
                 <motion.div 
                   key={biz.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.05 }}
                 >
                   <BusinessCard {...biz} categoryName={(biz.categories as any)?.name} />
                 </motion.div>
@@ -230,104 +226,85 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Benefits - Professional Context */}
-      <section className="py-32 bg-slate-950 text-white overflow-hidden relative">
-        <div className="absolute inset-0 overflow-hidden opacity-30 pointer-events-none">
-          <div className="absolute -top-[20%] -right-[10%] w-[60%] h-[60%] bg-primary/20 blur-[150px] rounded-full"></div>
-          <div className="absolute -bottom-[20%] -left-[10%] w-[50%] h-[50%] bg-emerald-500/10 blur-[120px] rounded-full"></div>
-        </div>
-
+      {/* Benefits - Professional Compact */}
+      <section className="py-24 bg-slate-950 text-white overflow-hidden relative">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div>
-              <span className="text-primary font-black text-xs uppercase tracking-[0.3em] mb-6 block">Soluções para Negócios</span>
-              <h2 className="text-5xl md:text-7xl font-[900] tracking-tighter mb-10 leading-[0.9]">Escale sua <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary">Autoridade Local.</span></h2>
-              <p className="text-xl text-slate-400 font-medium mb-12 leading-relaxed">Não apenas um anúncio, mas uma presença digital de elite desenvolvida para converter e fidelizar clientes de alto valor.</p>
+              <span className="text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-4 block">Para Negócios</span>
+              <h2 className="text-4xl md:text-5xl font-[900] tracking-tighter mb-8 leading-[0.9]">Escale sua <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary">Autoridade Local.</span></h2>
+              <p className="text-lg text-slate-400 font-medium mb-10 leading-relaxed">Conecte-se com clientes de alto valor através de uma presença digital de elite.</p>
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 {[
-                  { title: 'IA Local', desc: 'Sua empresa sugerida para quem realmente busca.', icon: Zap },
-                  { title: 'Social Connect', desc: 'Integração total com WhatsApp e Redes Sociais.', icon: Globe },
-                  { title: 'Booking Pro', desc: 'Sistema de reservas e orçamentos via Web Local.', icon: CheckCircle2 },
-                  { title: 'Growth Engine', desc: 'Acompanhe seu crescimento com dados reais.', icon: TrendingUp }
+                  { title: 'IA Local', desc: 'Sugestões inteligentes para o público certo.', icon: Zap },
+                  { title: 'Social Connect', desc: 'Integração WhatsApp e Redes Sociais.', icon: Globe },
+                  { title: 'Booking Pro', desc: 'Reservas e orçamentos simplificados.', icon: CheckCircle2 },
+                  { title: 'Growth Engine', desc: 'Dados reais sobre seu crescimento.', icon: TrendingUp }
                 ].map((item, i) => (
-                  <div key={i} className="flex flex-col gap-4 group">
-                    <div className="h-14 w-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-primary transition-all duration-500">
-                      <item.icon className="h-7 w-7 text-white" />
+                  <div key={i} className="flex flex-col gap-2 group">
+                    <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-primary transition-all">
+                      <item.icon className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                      <h4 className="text-xl font-black mb-1 group-hover:text-primary transition-colors">{item.title}</h4>
-                      <p className="text-slate-500 text-sm font-medium leading-relaxed">{item.desc}</p>
+                      <h4 className="text-lg font-black mb-1">{item.title}</h4>
+                      <p className="text-slate-500 text-xs font-medium">{item.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-16">
+              <div className="mt-12">
                  <Link to="/auth?mode=register">
-                    <Button size="lg" className="h-16 px-12 rounded-[1.5rem] bg-white text-slate-950 font-black text-xl hover:bg-slate-200 shadow-2xl transition-all">
-                      Anunciar Minha Empresa <ArrowUpRight className="ml-2 h-6 w-6 text-primary" />
+                    <Button size="lg" className="h-12 px-10 rounded-xl bg-white text-slate-950 font-black text-sm hover:bg-slate-200 transition-all">
+                      Anunciar Empresa <ArrowUpRight className="ml-2 h-5 w-5 text-primary" />
                     </Button>
                  </Link>
               </div>
             </motion.div>
             
             <motion.div 
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
               className="relative hidden lg:block"
             >
-              <div className="aspect-[4/5] rounded-[3rem] bg-indigo-500 relative overflow-hidden shadow-2xl rotate-3">
+              <div className="aspect-square max-w-sm ml-auto rounded-[2rem] bg-indigo-500 overflow-hidden shadow-2xl">
                 <img 
                   src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800" 
                   alt="Elite Office" 
-                  className="w-full h-full object-cover grayscale ml-1"
+                  className="w-full h-full object-cover grayscale"
                 />
-                <div className="absolute inset-0 bg-primary/20 mix-blend-multiply"></div>
-              </div>
-              {/* Overlay elements */}
-              <div className="absolute -bottom-10 -left-10 bg-white p-10 rounded-[2rem] shadow-2xl border border-slate-100 max-w-[280px] -rotate-3">
-                 <div className="flex items-center gap-4 mb-4">
-                    <Users2 className="h-8 w-8 text-primary" />
-                    <div className="text-4xl font-black text-slate-900">4.9/5</div>
-                 </div>
-                 <p className="text-xs font-black text-slate-400 uppercase tracking-widest leading-normal">Satisfação média dos lojistas da plataforma</p>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials - Elite Carousel Style */}
-      <section className="py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-6 text-center mb-24">
-          <span className="text-primary font-black text-xs uppercase tracking-[0.3em] mb-4 block">Experiências Reais</span>
-          <h2 className="text-4xl md:text-6xl font-[900] text-slate-950 tracking-tighter">Vozes da Comunidade</h2>
+      {/* Testimonials - Compact */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6 text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-[900] text-slate-950 tracking-tighter">Vozes da Comunidade</h2>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {DUMMY_TESTIMONIALS.slice(0, 3).map((testimonial, i) => (
             <motion.div 
               key={testimonial.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative p-12 bg-slate-50 rounded-[3rem] border border-slate-100 flex flex-col justify-between"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="p-8 bg-slate-50 rounded-[2rem] border border-slate-100 flex flex-col justify-between"
             >
-              <Quote className="absolute top-10 right-10 h-12 w-12 text-slate-200" />
-              <p className="text-xl text-slate-700 font-medium italic mb-12 leading-relaxed">"{testimonial.text}"</p>
+              <p className="text-lg text-slate-600 font-medium italic mb-8 leading-relaxed">"{testimonial.text}"</p>
 
-              <div className="flex items-center gap-5">
+              <div className="flex items-center gap-4">
                 <img 
                   src={testimonial.avatar_url} 
                   alt={testimonial.name} 
-                  className="h-16 w-16 rounded-3xl object-cover border-4 border-white shadow-xl"
+                  className="h-12 w-12 rounded-2xl object-cover border-2 border-white shadow-lg"
                 />
                 <div>
-                  <div className="font-[900] text-slate-950 text-base leading-none mb-1">{testimonial.name}</div>
-                  <div className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">{testimonial.role}</div>
+                  <div className="font-black text-slate-950 text-sm leading-none mb-1">{testimonial.name}</div>
+                  <div className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{testimonial.role}</div>
                 </div>
               </div>
             </motion.div>
@@ -335,70 +312,31 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="bg-primary py-32 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[size:40px_40px]"></div>
-        <div className="max-w-4xl mx-auto px-6 text-center relative z-10 text-white">
-          <h3 className="text-5xl md:text-8xl font-[900] tracking-tighter leading-[0.85] mb-12">Pronto para <br /> ser encontrado?</h3>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Link to="/auth?mode=register">
-              <Button size="lg" className="h-20 px-16 rounded-[2rem] bg-white text-primary font-black text-2xl hover:bg-slate-100 shadow-3xl active:scale-95 transition-all">
-                Cadastrar Agora
-              </Button>
-            </Link>
-          </div>
+      {/* Final CTA Compact */}
+      <section className="bg-primary py-24 relative overflow-hidden">
+        <div className="max-w-3xl mx-auto px-6 text-center relative z-10 text-white">
+          <h3 className="text-4xl md:text-6xl font-[900] tracking-tighter mb-10 leading-[0.9]">Pronto para <br /> ser encontrado?</h3>
+          <Link to="/auth?mode=register">
+            <Button size="lg" className="h-14 px-12 rounded-xl bg-white text-primary font-black text-xl hover:bg-slate-100 shadow-2xl active:scale-95 transition-all">
+              Cadastrar Agora
+            </Button>
+          </Link>
         </div>
       </section>
 
-      {/* Corporate Footer */}
-      <footer className="bg-slate-950 text-white py-24 relative z-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="h-12 w-12 rounded-2xl bg-primary flex items-center justify-center">
-                   <MapPin className="text-white h-7 w-7" />
-                </div>
-                <span className="font-[900] text-3xl tracking-tighter uppercase">{config.platform_name}</span>
-              </div>
-              <p className="text-slate-400 text-lg max-w-sm mb-10 font-medium">Liderando a transformação digital de {config.platform_city} através de conexões autênticas e tecnologia de elite.</p>
-              <div className="flex gap-4">
-                 {[Globe, Users2, ShieldCheck, Zap].map((Icon, i) => (
-                    <a key={i} href="#" className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary hover:border-primary transition-all duration-300">
-                       <Icon className="h-5 w-5" />
-                    </a>
-                 ))}
-              </div>
+      <footer className="bg-slate-950 text-white py-16">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="h-8 w-8 rounded-xl bg-primary flex items-center justify-center">
+               <MapPin className="text-white h-5 w-5" />
             </div>
-            
-            <div>
-              <h5 className="font-black text-xs uppercase tracking-[0.3em] text-primary mb-10">Plataforma</h5>
-              <ul className="flex flex-col gap-6 text-slate-400 font-bold text-sm uppercase tracking-widest">
-                <li><Link to="/buscar" className="hover:text-white transition-colors">Busca Local</Link></li>
-                <li><Link to="/categorias" className="hover:text-white transition-colors">Categorias</Link></li>
-                <li><Link to="/noticias" className="hover:text-white transition-colors">Blog Local</Link></li>
-                <li><Link to="/planos" className="hover:text-white transition-colors">Planos Elite</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h5 className="font-black text-xs uppercase tracking-[0.3em] text-emerald-400 mb-10">Suporte</h5>
-              <ul className="flex flex-col gap-6 text-slate-400 font-bold text-sm uppercase tracking-widest">
-                <li><a href="#" className="hover:text-white transition-colors">Central de Ajuda</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Políticas</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Fale Conosco</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Anunciar</a></li>
-              </ul>
-            </div>
+            <span className="font-black text-xl tracking-tighter uppercase">{config.platform_name}</span>
           </div>
-          
-          <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-8 text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">
-            <span>© {new Date().getFullYear()} {config.platform_name} — Developed with Elite Standards.</span>
-            <div className="flex gap-10">
-               <a href="#" className="hover:text-white transition-colors">Termos</a>
-               <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-               <a href="#" className="hover:text-white transition-colors">Segurança</a>
-            </div>
+          <p className="text-slate-500 text-sm font-medium mb-8">Developed with Elite Standards — {new Date().getFullYear()}</p>
+          <div className="flex justify-center gap-8 text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">
+             <a href="#" className="hover:text-white transition-colors">Termos</a>
+             <a href="#" className="hover:text-white transition-colors">Privacidade</a>
+             <a href="#" className="hover:text-white transition-colors">Suporte</a>
           </div>
         </div>
       </footer>

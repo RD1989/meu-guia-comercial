@@ -26,8 +26,8 @@ export function Header() {
   const isSuperAdmin = userRole === "SUPERADMIN";
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100 transition-all duration-300">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-12 h-20">
+    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-50 transition-all duration-300">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8 h-16">
         
         {/* LOGO */}
         <Link to="/" className="flex items-center gap-2 group transition-all shrink-0">
@@ -35,8 +35,8 @@ export function Header() {
             {config.platform_logo_url ? (
               <img src={config.platform_logo_url} alt="Logo" className="h-8 object-contain" />
             ) : (
-              <span className="font-extrabold text-slate-800 text-xl tracking-tight flex items-center">
-                 <MapPin className="h-6 w-6 text-primary mr-1" />
+              <span className="font-extrabold text-slate-800 text-lg tracking-tight flex items-center">
+                 <MapPin className="h-5 w-5 text-primary mr-1" />
                  {config.platform_name}
               </span>
             )}
@@ -62,14 +62,14 @@ export function Header() {
             <div className="flex items-center gap-3">
               {isSuperAdmin && (
                 <Link to="/admin">
-                  <Button variant="ghost" size="sm" className="gap-2 text-primary font-bold hover:bg-primary/5 rounded-lg border border-transparent">
-                    <LayoutDashboard className="h-4 w-4" /> Admin
+                  <Button variant="ghost" size="sm" className="gap-2 text-primary font-bold hover:bg-primary/5 rounded-lg border border-transparent h-9">
+                    <LayoutDashboard className="h-3.5 w-3.5" /> Admin
                   </Button>
                 </Link>
               )}
               <Link to="/perfil">
-                <Button variant="ghost" size="sm" className="text-slate-600 font-semibold gap-2 hover:bg-slate-100 rounded-lg">
-                  <User className="h-4 w-4" /> Perfil
+                <Button variant="ghost" size="sm" className="text-slate-600 font-semibold gap-2 hover:bg-slate-100 rounded-lg h-9">
+                  <User className="h-3.5 w-3.5" /> Perfil
                 </Button>
               </Link>
               <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-slate-400 hover:text-destructive gap-2 rounded-lg" title="Sair">
