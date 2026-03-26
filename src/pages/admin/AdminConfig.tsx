@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles, Image as ImageIcon, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
+import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles, Image as ImageIcon, Plus, Trash2, ArrowUp, ArrowDown, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -110,6 +110,7 @@ export default function AdminConfig() {
             <TabsTrigger value="geral" className="gap-2"><Globe className="h-4 w-4" /> Geral</TabsTrigger>
             <TabsTrigger value="aparencia" className="gap-2"><Palette className="h-4 w-4" /> Aparência</TabsTrigger>
             <TabsTrigger value="social" className="gap-2"><Share2 className="h-4 w-4" /> Redes Sociais</TabsTrigger>
+            <TabsTrigger value="cidades" className="gap-2"><MapPin className="h-4 w-4" /> Cidades</TabsTrigger>
             <TabsTrigger value="banners" className="gap-2"><ImageIcon className="h-4 w-4" /> Banners Hero</TabsTrigger>
             <TabsTrigger value="ia" className="gap-2"><Sparkles className="h-4 w-4" /> Inteligência Artificial</TabsTrigger>
           </TabsList>
@@ -234,6 +235,42 @@ export default function AdminConfig() {
                 <div className="col-span-full space-y-2">
                   <Label htmlFor="platform_footer_text">Texto do Rodapé</Label>
                   <Input id="platform_footer_text" value={formData.platform_footer_text} onChange={handleChange} />
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="cidades">
+            <Card className="border-none shadow-sm bg-white max-w-2xl">
+              <CardHeader>
+                <CardTitle>Cidades Atendidas</CardTitle>
+                <CardDescription>Gerencie as cidades que estarão disponíveis para os usuários na página inicial.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="platform_cities">Lista de Cidades (Separadas por vírgula)</Label>
+                  <Textarea 
+                    id="platform_cities" 
+                    value={formData.platform_cities} 
+                    onChange={handleChange} 
+                    placeholder="Ex: São Paulo, Rio de Janeiro, Curitiba..."
+                    rows={5}
+                    className="font-medium"
+                  />
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2">
+                    💡 Dica: Digite os nomes das cidades exatamente como deseja que apareçam no seletor da Home.
+                  </p>
+                </div>
+                
+                <div className="p-6 bg-primary/5 rounded-[1.5rem] border border-primary/10">
+                   <h4 className="text-sm font-black text-slate-800 mb-2">Cidades Ativas Atualmente:</h4>
+                   <div className="flex flex-wrap gap-2">
+                      {formData.platform_cities?.split(',').map((city, i) => (
+                        <div key={i} className="px-3 py-1 bg-white border border-primary/10 rounded-full text-[10px] font-black text-primary uppercase tracking-widest">
+                          {city.trim()}
+                        </div>
+                      ))}
+                   </div>
                 </div>
               </CardContent>
             </Card>

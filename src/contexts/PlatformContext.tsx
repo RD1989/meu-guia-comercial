@@ -13,6 +13,7 @@ interface PlatformConfig {
   platform_facebook: string;
   platform_email: string;
   platform_footer_text: string;
+  platform_cities: string;
   openrouter_api_key: string;
   default_model: string;
   banner_interval: number;
@@ -21,6 +22,7 @@ interface PlatformConfig {
 const defaultConfig: PlatformConfig = {
   platform_name: "Meu Guia Comercial",
   platform_city: "Sua Cidade",
+  platform_cities: "Sua Cidade",
   platform_state: "Estado",
   platform_logo_url: "",
   platform_primary_color: "#2563eb",

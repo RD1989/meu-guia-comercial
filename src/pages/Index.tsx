@@ -79,6 +79,8 @@ const Index = () => {
   const navigate = useNavigate();
   const { config } = usePlatform();
   const [search, setSearch] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [activeTab, setActiveTab] = useState<"businesses" | "promotions">("businesses");
   const heroRef = useRef(null);
   const { scrollY } = useScroll();
   
@@ -138,10 +140,21 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [banners.length, config.banner_interval]);
 
+  useEffect(() => {
+    if (config.platform_city && !selectedCity) {
+      setSelectedCity(config.platform_city);
+    }
+  }, [config.platform_city, selectedCity]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (search.trim()) {
-      navigate(`/buscar?q=${encodeURIComponent(search)}`);
+      const cityParam = selectedCity && selectedCity !== config.platform_city ? `&cidade=${encodeURIComponent(selectedCity)}` : '';
+      if (activeTab === "businesses") {
+        navigate(`/buscar?q=${encodeURIComponent(search)}${cityParam}`);
+      } else {
+        navigate(`/promocoes?q=${encodeURIComponent(search)}${cityParam}`);
+      }
     }
   };
 
@@ -225,7 +238,7 @@ const Index = () => {
                  Ver Destaques <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                </Button>
                <Link to="/auth?mode=register">
-                 <Button size="lg" variant="outline" className="rounded-full h-14 px-10 border-white/20 text-white hover:bg-white/10 font-black uppercase text-xs tracking-widest gap-2">
+                 <Button size="lg" className="rounded-full h-14 px-10 bg-primary text-white hover:bg-primary/90 font-black uppercase text-xs tracking-widest gap-2 shadow-xl shadow-primary/20 border border-primary/50">
                    Cadastrar Empresa
                  </Button>
                </Link>
@@ -243,10 +256,26 @@ const Index = () => {
             </div>
             
             <div className="space-y-6 relative z-10">
-              <div className="flex gap-4 border-b border-slate-100 pb-4">
-                 <button className="text-[10px] font-black uppercase tracking-widest text-primary border-b-2 border-primary pb-2">Empresas e Serviços</button>
-                 <button className="text-[10px] font-black uppercase tracking-widest text-slate-400 pb-2 hover:text-slate-600 transition-colors">Promoções Locais</button>
-              </div>
+               <div className="flex gap-4 border-b border-slate-100 pb-4">
+                  <button 
+                    onClick={() => setActiveTab("businesses")}
+                    className={cn(
+                      "text-[10px] font-black uppercase tracking-widest pb-2 transition-all",
+                      activeTab === "businesses" ? "text-primary border-b-2 border-primary" : "text-slate-400 hover:text-slate-600"
+                    )}
+                  >
+                    Empresas e Serviços
+                  </button>
+                  <button 
+                    onClick={() => setActiveTab("promotions")}
+                    className={cn(
+                      "text-[10px] font-black uppercase tracking-widest pb-2 transition-all",
+                      activeTab === "promotions" ? "text-primary border-b-2 border-primary" : "text-slate-400 hover:text-slate-600"
+                    )}
+                  >
+                    Promoções Locais
+                  </button>
+               </div>
 
               <div className="space-y-4">
                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 group focus-within:border-primary/50 transition-all">
@@ -262,13 +291,26 @@ const Index = () => {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 group focus-within:border-primary/50 transition-all">
-                  <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Localização</Label>
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-primary" />
-                    <div className="text-lg font-bold text-slate-900">{config.platform_city || "Sua Cidade"}</div>
-                  </div>
-                </div>
+                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 group focus-within:border-primary/50 transition-all">
+                   <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Localização</Label>
+                   <div className="flex items-center gap-3">
+                     <MapPin className="h-5 w-5 text-primary" />
+                     <select 
+                       className="bg-transparent border-none text-lg font-bold text-slate-900 focus:ring-0 cursor-pointer w-full"
+                       value={selectedCity}
+                       onChange={(e) => setSelectedCity(e.target.value)}
+                     >
+                        {config.platform_city && <option value={config.platform_city}>{config.platform_city}</option>}
+                        {config.platform_cities?.split(',')
+                          .map(c => c.trim())
+                          .filter(c => c && c !== config.platform_city)
+                          .map((city, i) => (
+                            <option key={i} value={city}>{city}</option>
+                          ))
+                        }
+                     </select>
+                   </div>
+                 </div>
               </div>
 
               <Button onClick={handleSearch} className="w-full h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-lg shadow-xl shadow-primary/20 active:scale-95 transition-all">
@@ -538,9 +580,9 @@ const Index = () => {
                 <h2 className="text-5xl md:text-6xl font-[900] text-slate-950 tracking-tighter leading-[0.9]">O que dizem <br /> sobre nós.</h2>
               </div>
 
-              <div className="space-y-6">
-                <div className="flex gap-2">
-                   <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center">
+              <div className="space-y-12">
+                <div className="flex gap-4">
+                   <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
                       <Quote className="h-6 w-6 text-primary" />
                    </div>
                    <div className="flex-1">
@@ -550,6 +592,26 @@ const Index = () => {
                       <div className="mt-6">
                          <div className="font-black text-slate-950 text-lg leading-none">Ana Carla Mendonça</div>
                          <div className="text-[10px] font-black text-primary uppercase tracking-widest mt-1">Usuária Premium</div>
+                      </div>
+                   </div>
+                </div>
+
+                <div className="flex gap-4 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 relative">
+                   <div className="absolute -top-4 -left-4 h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white shadow-lg">
+                      <Quote className="h-4 w-4" />
+                   </div>
+                   <div className="flex-1">
+                      <p className="text-lg text-slate-600 font-medium leading-relaxed">
+                        "Como empresário, o retorno foi imediato. A plataforma nos coloca na frente do público certo com uma estética que passa muita autoridade."
+                      </p>
+                      <div className="mt-4 flex items-center gap-4">
+                         <div className="h-10 w-10 rounded-full overflow-hidden bg-slate-200">
+                            <img src="/testimonial_woman_hat_1774527569763.png" className="w-full h-full object-cover" alt="User" />
+                         </div>
+                         <div>
+                            <div className="font-black text-slate-950 text-sm leading-none">Roberto Silveira</div>
+                            <div className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">CEO - Tech Synergy</div>
+                         </div>
                       </div>
                    </div>
                 </div>
@@ -648,6 +710,32 @@ const Index = () => {
                   Cadastrar Agora
                 </Button>
              </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Google Maps Section - Discovery */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+           <div>
+              <span className="text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-4 block">Exploração Local</span>
+              <h2 className="text-4xl md:text-5xl font-[900] text-slate-950 tracking-tighter leading-none">Descubra em {selectedCity || config.platform_city}.</h2>
+           </div>
+           <p className="text-slate-500 font-medium max-w-sm">Navegue pelo mapa e encontre os estabelecimentos de elite mais próximos de você.</p>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="w-full h-[500px] rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 bg-slate-100 relative">
+             <iframe 
+               width="100%" 
+               height="100%" 
+               style={{ border: 0 }} 
+               loading="lazy" 
+               allowFullScreen 
+               referrerPolicy="no-referrer-when-downgrade"
+               src={`https://www.google.com/maps?q=${encodeURIComponent(selectedCity || config.platform_city)}&output=embed`}
+               title="Google Maps"
+             ></iframe>
           </div>
         </div>
       </section>
