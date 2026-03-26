@@ -24,6 +24,7 @@ const adminMenuItems = [
   { title: "Categorias", url: "/admin/categorias", icon: Tags },
   { title: "Planos", url: "/admin/planos", icon: CreditCard },
   { title: "Blog / Artigos", url: "/admin/blog", icon: FileText },
+  { title: "Categorias do Blog", url: "/admin/blog/categorias", icon: Tags },
   { title: "Vagas de Emprego", url: "/admin/vagas", icon: Briefcase },
   { title: "Biblioteca de Mídias", url: "/admin/midias", icon: ImageIcon },
   { title: "Configurações", url: "/admin/config", icon: Settings },

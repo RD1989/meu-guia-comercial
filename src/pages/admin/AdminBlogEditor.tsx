@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AdminLayout } from "@/components/admin/AdminLayout";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,6 +50,15 @@ export default function AdminBlogEditor() {
     seo_title: "",
     seo_description: "",
     ai_generated: false
+  });
+
+  const { data: blogCategories = [] } = useQuery({
+    queryKey: ["admin-blog-categories-list"],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any).from("blog_categories").select("*");
+      if (error) return [];
+      return data;
+    }
   });
 
   useEffect(() => {
@@ -314,7 +324,17 @@ export default function AdminBlogEditor() {
                 </div>
                 <div className="space-y-2">
                   <Label className="text-[10px] font-bold">Categoria</Label>
-                  <Input value={post.category} onChange={(e) => setPost({...post, category: e.target.value})} className="bg-slate-50 border-none h-10" />
+                  <Select value={post.category} onValueChange={(val) => setPost({...post, category: val})}>
+                    <SelectTrigger className="bg-slate-50 border-none h-10">
+                      <SelectValue placeholder="Selecione uma categoria" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Geral">Geral</SelectItem>
+                      {blogCategories.map((cat: any) => (
+                        <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
               </CardContent>
             </Card>

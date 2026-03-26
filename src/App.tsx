@@ -37,6 +37,7 @@ import AdminUsuarios from "./pages/admin/AdminUsuarios";
 import AdminCategorias from "./pages/admin/AdminCategorias";
 import AdminBlog from "./pages/admin/AdminBlog";
 import AdminBlogEditor from "./pages/admin/AdminBlogEditor";
+import AdminBlogCategories from "./pages/admin/AdminBlogCategories";
 import AdminConfig from "./pages/admin/AdminConfig";
 import AdminIAConfig from "./pages/admin/AdminIAConfig";
 import AdminReferences from "./pages/admin/AdminReferences";
@@ -109,6 +110,7 @@ const App = () => (
               <Route path="/admin/usuarios" element={<ProtectedRoute role="SUPERADMIN"><AdminUsuarios /></ProtectedRoute>} />
               <Route path="/admin/categorias" element={<ProtectedRoute role="SUPERADMIN"><AdminCategorias /></ProtectedRoute>} />
               <Route path="/admin/blog" element={<ProtectedRoute role="SUPERADMIN"><AdminBlog /></ProtectedRoute>} />
+              <Route path="/admin/blog/categorias" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogCategories /></ProtectedRoute>} />
               <Route path="/admin/blog/novo" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogEditor /></ProtectedRoute>} />
               <Route path="/admin/blog/editar/:slug" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogEditor /></ProtectedRoute>} />
               <Route path="/admin/config" element={<ProtectedRoute role="SUPERADMIN"><AdminConfig /></ProtectedRoute>} />
