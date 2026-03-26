@@ -25,7 +25,6 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { DUMMY_CATEGORIES } from "@/data/dummy-data";
 import { Button } from "@/components/ui/button";
 
 const ICON_MAP: Record<string, any> = {
@@ -72,7 +71,7 @@ const Categories = () => {
   });
 
   const featuredCategories = categories.slice(0, 3);
-  const displayCategories = categories.length > 0 ? categories : DUMMY_CATEGORIES;
+  const displayCategories = categories;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-24">
@@ -167,7 +166,7 @@ const Categories = () => {
                  <Award className="h-4 w-4 text-primary" /> Segmentos Populares
                </h4>
                <div className="space-y-4">
-                  {DUMMY_CATEGORIES.slice(0, 5).map((cat) => (
+                  {categories.slice(0, 5).map((cat: any) => (
                     <div 
                       key={cat.id} 
                       onClick={() => navigate(`/buscar?categoria=${cat.slug}`)}
@@ -182,6 +181,9 @@ const Categories = () => {
                        <ArrowRight className="h-4 w-4 text-slate-200 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                     </div>
                   ))}
+                  {categories.length === 0 && (
+                     <p className="text-xs text-slate-400 font-medium">Nenhuma categoria encontrada.</p>
+                  )}
                </div>
             </div>
 

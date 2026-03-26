@@ -1,5 +1,7 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ROIMagico } from "@/components/dashboard/ROIMagico";
+import { QRCodeVitrine } from "@/components/dashboard/QRCodeVitrine";
+import { ProfileCompletion } from "@/components/dashboard/ProfileCompletion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -128,7 +130,13 @@ const DashboardHome = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Completude do Perfil + QR Code */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <ProfileCompletion business={business} />
+          <QRCodeVitrine slug={business.slug} businessName={business.name} />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <Card className="border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-white overflow-hidden">
             <CardHeader className="pb-4 p-8">
               <CardTitle className="text-lg font-black text-slate-900 tracking-tight">Ações Rápidas</CardTitle>

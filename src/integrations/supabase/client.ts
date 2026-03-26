@@ -1,13 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
-import {
-  DUMMY_BUSINESSES,
-  DUMMY_CATEGORIES,
-  DUMMY_POSTS,
-  DUMMY_PRODUCTS,
-  DUMMY_SERVICES,
-} from '@/data/dummy-data';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://placeholder-url.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || "placeholder-key";
@@ -40,85 +33,6 @@ const DEFAULT_AI_SETTINGS = {
   last_autopilot_run: new Date().toISOString(),
 };
 
-function resolveMock(tableName: string, filters: Record<string, any>): any[] | null {
-  switch (tableName) {
-    case 'businesses': {
-      let data = DUMMY_BUSINESSES.map((b) => ({
-        ...b,
-        categories: DUMMY_CATEGORIES.find((c) => c.id === b.category_id) || { name: 'Comércio' },
-        reviews: [{ count: b.total_reviews || 0 }],
-      }));
-      if (filters.slug) data = data.filter((b) => b.slug === filters.slug);
-      if (filters.active !== undefined) data = data.filter((b) => b.active === filters.active);
-      return data;
-    }
-    case 'categories':
-      return [...DUMMY_CATEGORIES];
-    case 'products': {
-      let data = [...DUMMY_PRODUCTS];
-      if (filters.business_id) data = data.filter((p) => p.business_id === filters.business_id);
-      if (filters.active !== undefined) data = data.filter((p) => p.active === filters.active);
-      return data;
-    }
-    case 'business_services': {
-      let data = [...DUMMY_SERVICES];
-      if (filters.business_id) data = data.filter((s) => s.business_id === filters.business_id);
-      return data;
-    }
-    case 'posts':
-    case 'blog_posts':
-      return [...DUMMY_POSTS];
-    case 'ai_settings':
-      return [DEFAULT_AI_SETTINGS];
-    case 'news_sources':
-    case 'ai_references':
-    case 'reviews':
-    case 'profiles':
-      return [];
-    default:
-      return null;
-  }
-}
-
-
-/** Recebe o queryBuilder e injeta a lógica de fallback sem quebrar a cadeia de promessas */
-function wrapQueryBuilder(qb: any, tableName: string, filters: Record<string, any>, meta: { isHead?: boolean; isCount?: boolean; isSingle?: boolean }) {
-  // Em vez de mutar qb.then, retornamos um objeto que delega para o original
-  // mas intercepta o resultado final.
-  const originalThen = qb.then.bind(qb);
-
-  qb.then = (onFulfilled?: any, onRejected?: any) => {
-    return originalThen((result: any) => {
-      const hasError = !!result.error;
-      const isEmptyArray = Array.isArray(result.data) && result.data.length === 0;
-      const isNullData = result.data === null || result.data === undefined;
-
-      if (hasError || isEmptyArray || isNullData) {
-        const mockArr = resolveMock(tableName, filters);
-        if (mockArr !== null) {
-          if (meta.isSingle) {
-            const found = filters.slug
-              ? mockArr.find((x: any) => x.slug === filters.slug)
-              : mockArr[0] || null;
-            result.data = found || null;
-          } else if (meta.isHead) {
-            result.data = null;
-            result.count = mockArr.length;
-          } else {
-            result.data = mockArr;
-            if (meta.isCount) result.count = mockArr.length;
-          }
-          result.error = null;
-          result.status = 200;
-        }
-      }
-
-      return onFulfilled ? onFulfilled(result) : result;
-    }, onRejected);
-  };
-
-  return qb;
-}
 
 /** Proxy de Elite — garante funcionamento 100% sem banco migrado e resiliência em produção */
 export const supabase = new Proxy(baseSupabase, {
@@ -173,13 +87,7 @@ export const supabase = new Proxy(baseSupabase, {
           get(qbTarget, qbProp) {
             const qbOriginal = qbTarget[qbProp];
 
-            // .then() — O ponto mais crítico para o await
-            if (qbProp === 'then') {
-              return (onFulfilled?: any, onRejected?: any) => {
-                const wrapped = wrapQueryBuilder(qbTarget, tableName, filters, { ...meta });
-                return wrapped.then(onFulfilled, onRejected);
-              };
-            }
+            // .then() — Omitido para parar de injetar o mockup. Repassa direto ao Supabase.
 
             // Seleção e Metadados
             if (qbProp === 'select') {

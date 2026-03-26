@@ -23,7 +23,8 @@ import {
   Rocket
 } from "lucide-react";
 import { useState } from "react";
-import { DUMMY_ADS } from "@/data/dummy-data";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -35,9 +36,32 @@ import { Slider } from "@/components/ui/slider";
 export default function DashboardAds() {
   const { user } = useAuth();
   const { config } = usePlatform();
-  const [ads, setAds] = useState(DUMMY_ADS);
   const [activeTab, setActiveTab] = useState("overview");
   const [isGenerating, setIsGenerating] = useState(false);
+
+  const { data: dbAds = [], isLoading, refetch } = useQuery({
+    queryKey: ["business-ads", user?.id],
+    enabled: !!user?.id,
+    queryFn: async () => {
+      const { data: businesses } = await supabase
+        .from('businesses')
+        .select('id')
+        .eq('owner_id', user!.id);
+        
+      if (!businesses || businesses.length === 0) return [];
+      
+      const businessIds = businesses.map(b => b.id);
+      
+      const { data, error } = await (supabase as any)
+        .from('business_ads')
+        .select('*')
+        .in('business_id', businessIds)
+        .order('created_at', { ascending: false });
+        
+      if (error) throw error;
+      return data || [];
+    }
+  });
   
   // New Ad State
   const [newAd, setNewAd] = useState({
@@ -83,6 +107,56 @@ export default function DashboardAds() {
     }, 3000);
   };
 
+  const handleActivateAd = async () => {
+    if (!newAd.title || !newAd.description || !newAd.image_url) {
+      toast.error("Preencha título, copy e gere ou adicione a imagem antes de ativar.");
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const { data: businesses } = await supabase
+        .from('businesses')
+        .select('id')
+        .eq('owner_id', user!.id)
+        .limit(1);
+        
+      if (!businesses || businesses.length === 0) {
+        toast.error("Você precisa ter um negócio cadastrado para impulsionar.");
+        setIsGenerating(false);
+        return;
+      }
+        
+      const { error } = await (supabase as any).from('business_ads').insert({
+        business_id: businesses[0].id,
+        title: newAd.title,
+        description: newAd.description,
+        image_url: newAd.image_url,
+        type: newAd.type,
+        city: newAd.city,
+        duration_days: parseInt(newAd.duration),
+        status: 'pending',
+        latitude: newAd.lat,
+        longitude: newAd.lng,
+        radius_meters: newAd.radius,
+        impressions: 0,
+        clicks: 0
+      });
+      
+      if (error) throw error;
+      
+      toast.success("Sucesso! Sua campanha foi enviada para análise e ativação.");
+      await refetch();
+      setActiveTab("overview");
+      setNewAd(prev => ({ ...prev, title: "", description: "", image_url: "" }));
+    } catch(err: any) {
+      console.error(err);
+      toast.error("Erro ao ativar campanha: " + err.message);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   const calculateROI = (duration: string) => {
     const days = parseInt(duration);
     const reach = days * 500; // Mock estimate
@@ -98,9 +172,9 @@ export default function DashboardAds() {
         {/* Header Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {[
-            { label: 'Alcance Total', value: '45.2k', icon: Eye, color: 'text-primary' },
-            { label: 'Cliques Reais', value: '2.8k', icon: Zap, color: 'text-amber-500' },
-            { label: 'Campanhas Ativas', value: ads.filter(a => a.status === 'active').length, icon: Target, color: 'text-emerald-500' },
+            { label: 'Alcance Total', value: dbAds.reduce((acc: any, ad: any) => acc + (ad.impressions || 0), 0) + 'k', icon: Eye, color: 'text-primary' },
+            { label: 'Cliques Reais', value: dbAds.reduce((acc: any, ad: any) => acc + (ad.clicks || 0), 0) + 'k', icon: Zap, color: 'text-amber-500' },
+            { label: 'Campanhas Ativas', value: dbAds.filter((a: any) => a.status === 'active').length, icon: Target, color: 'text-emerald-500' },
             { label: 'Saldo Elite', value: 'R$ 450,00', icon: TrendingUp, color: 'text-indigo-500' },
           ].map((stat, i) => (
             <Card key={i} className="border-none shadow-sm bg-white overflow-hidden group">
@@ -129,7 +203,17 @@ export default function DashboardAds() {
 
           <TabsContent value="overview">
              <div className="grid gap-6">
-                {ads.map((ad) => (
+                {isLoading ? (
+                  <div className="flex justify-center py-12">
+                     <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+                  </div>
+                ) : dbAds.length === 0 ? (
+                  <div className="text-center py-12 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                    <Target className="h-10 w-10 text-slate-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-bold text-slate-900 mb-2">Nenhuma campanha encontrada</h3>
+                    <p className="text-slate-500 text-sm">Crie sua primeira campanha para atrair mais clientes.</p>
+                  </div>
+                ) : dbAds.map((ad: any) => (
                   <motion.div 
                     layout
                     key={ad.id}
@@ -152,7 +236,7 @@ export default function DashboardAds() {
                         <h4 className="text-lg font-black text-slate-900 tracking-tight">{ad.title}</h4>
                         <div className="flex items-center gap-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                            <div className="flex items-center gap-1.5"><MapPin className="h-3 w-3 text-primary" /> {ad.city}</div>
-                           <div className="flex items-center gap-1.5"><Calendar className="h-3 w-3" /> Expira em {new Date(ad.end_date).toLocaleDateString()}</div>
+                           <div className="flex items-center gap-1.5"><Calendar className="h-3 w-3" /> Expira em {new Date(ad.end_date || ad.created_at).toLocaleDateString()}</div>
                         </div>
                      </div>
 
@@ -359,8 +443,12 @@ export default function DashboardAds() {
                       </Card>
 
                       {/* Activation Button */}
-                      <Button className="w-full h-16 rounded-3xl bg-primary hover:bg-primary/90 text-white font-black text-xl shadow-2xl shadow-primary/30 group active:scale-95 transition-all">
-                         Ativar Campanha Impulsionada <Rocket className="ml-3 h-6 w-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      <Button 
+                        onClick={handleActivateAd}
+                        disabled={isGenerating}
+                        className="w-full h-16 rounded-3xl bg-primary hover:bg-primary/90 text-white font-black text-xl shadow-2xl shadow-primary/30 group active:scale-95 transition-all"
+                      >
+                         {isGenerating ? <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" /> : "Ativar Campanha Impulsionada"} <Rocket className="ml-3 h-6 w-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                       </Button>
                       <p className="text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
                          * O custo será debitado do seu saldo Elite após a aprovação manual.

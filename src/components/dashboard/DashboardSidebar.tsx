@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Store, BarChart3, Settings, LogOut, Briefcase, ExternalLink, Zap, Sparkles } from "lucide-react";
+import { LayoutDashboard, Package, Store, BarChart3, Settings, LogOut, Briefcase, ExternalLink, Zap, Sparkles, Megaphone, Ticket, Stamp, Calendar } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,12 +21,17 @@ const menuItems = [
   { title: "Painel", url: "/dashboard", icon: LayoutDashboard },
   { title: "Meu Negócio", url: "/dashboard/negocio", icon: Store },
   { title: "Produtos", url: "/dashboard/produtos", icon: Package },
-  { title: "Serviços", url: "/dashboard/servicos", icon: Zap },
+  { title: "Serviços & Agenda", url: "/dashboard/servicos", icon: Zap },
   { title: "Vagas", url: "/dashboard/vagas", icon: Briefcase },
+  { title: "Feed do Negócio", url: "/dashboard/feed", icon: Megaphone },
+  { title: "Cupons & Promoções", url: "/dashboard/cupons", icon: Ticket },
+  { title: "Carimbo Digital", url: "/dashboard/carimbo", icon: Stamp },
+  { title: "Eventos Locais", url: "/dashboard/eventos", icon: Calendar },
   { title: "Impulsionar (Ads)", url: "/dashboard/anuncios", icon: Sparkles },
   { title: "Métricas", url: "/dashboard/metricas", icon: BarChart3 },
   { title: "Configurações", url: "/dashboard/config", icon: Settings },
 ];
+
 
 export function DashboardSidebar() {
   const { state } = useSidebar();

@@ -9,55 +9,9 @@ import { useLocation } from "@/hooks/use-location";
 import { toast } from "sonner";
 import { getDistance } from "@/lib/utils";
 
-const DUMMY_POSTS: (Post & { lat: number; lng: number })[] = [
-  {
-    id: "p1",
-    user_id: "u1",
-    user_name: "Rodrigo L.",
-    user_avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?q=80&w=200",
-    content: "O melhor café da cidade! Recomendo muito o Elite Coffee, o atendimento é impecável. ☕️✨",
-    media_urls: ["https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=800"],
-    media_type: "image",
-    likes_count: 24,
-    comments_count: 5,
-    city: "São Paulo",
-    lat: -23.5505,
-    lng: -46.6333,
-    created_at: new Date(Date.now() - 3600000).toISOString(),
-    is_verified: true
-  },
-  {
-    id: "p2",
-    user_id: "u2",
-    user_name: "Elite Fitness Center",
-    business_name: "Elite Fitness",
-    content: "Projeto Verão 2026 a todo vapor! Venha conhecer nossa nova área VIP de musculação. 🏋️‍♂️🔥",
-    media_urls: ["https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800"],
-    media_type: "image",
-    likes_count: 156,
-    comments_count: 12,
-    city: "São Paulo",
-    lat: -23.5615,
-    lng: -46.6553,
-    created_at: new Date(Date.now() - 7200000).toISOString(),
-    is_sponsored: true,
-    is_verified: true
-  },
-  {
-    id: "p3",
-    user_id: "u3",
-    user_name: "Marina S.",
-    content: "Passeio incrível hoje no parque. A cidade está linda com essa iluminação nova! 😍🌳",
-    media_urls: ["https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=800"],
-    media_type: "image",
-    likes_count: 42,
-    comments_count: 3,
-    city: "Curitiba",
-    lat: -25.4284,
-    lng: -49.2733,
-    created_at: new Date(Date.now() - 10800000).toISOString()
-  }
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2 } from "lucide-react";
 
 export const CommunityFeed = () => {
   const [filter, setFilter] = useState("all");
@@ -65,21 +19,55 @@ export const CommunityFeed = () => {
   const { user } = useAuth();
   const userLocation = useLocation();
 
+  const { data: dbPosts = [], isLoading, refetch } = useQuery({
+    queryKey: ["community-posts"],
+    queryFn: async () => {
+      const { data, error } = await (supabase as any)
+        .from("community_posts")
+        .select(`
+          *,
+          profiles ( name, avatar_url ),
+          businesses ( name )
+        `)
+        .order("created_at", { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
   const rankedPosts = useMemo(() => {
-    let posts = [...DUMMY_POSTS];
+    let posts = dbPosts.map((post: any) => ({
+      id: post.id,
+      user_id: post.user_id,
+      user_name: post.profiles?.name || post.businesses?.name || "Usuário",
+      user_avatar: post.profiles?.avatar_url,
+      business_name: post.businesses?.name,
+      content: post.content,
+      media_urls: post.media_urls || [],
+      media_type: post.media_type,
+      likes_count: post.likes_count,
+      comments_count: post.comments_count,
+      city: post.city,
+      lat: post.latitude,
+      lng: post.longitude,
+      created_at: post.created_at,
+      is_sponsored: post.is_sponsored,
+      is_verified: post.is_verified
+    }));
 
     // Simulação do Algoritmo Local-First
     if (!userLocation.loading && userLocation.lat && filter === "local") {
       return posts
-        .map(post => ({
+        .map((post: any) => ({
           ...post,
-          distance: getDistance(userLocation.lat, userLocation.lng, post.lat, post.lng)
+          distance: getDistance(userLocation.lat!, userLocation.lng!, post.lat, post.lng)
         }))
-        .sort((a, b) => (a.distance || 0) - (b.distance || 0));
+        .sort((a: any, b: any) => (a.distance || 0) - (b.distance || 0));
     }
 
-    return posts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }, [userLocation, filter]);
+    return posts;
+  }, [userLocation, filter, dbPosts]);
 
   const handleCreatePost = () => {
     if (!user) {
@@ -95,7 +83,7 @@ export const CommunityFeed = () => {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
         onPostCreated={() => {
-          // Relod logic would go here
+          refetch(); // Reload actual posts from Supabase!
         }}
       />
       
@@ -145,9 +133,21 @@ export const CommunityFeed = () => {
 
       {/* Posts List */}
       <div className="space-y-4">
-        {rankedPosts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="h-8 w-8 text-primary animate-spin" />
+          </div>
+        ) : rankedPosts.length === 0 ? (
+          <div className="text-center py-12 bg-slate-50 rounded-3xl border border-slate-100">
+             <MessageSquare className="h-10 w-10 text-slate-300 mx-auto mb-4" />
+             <h3 className="text-xl font-bold text-slate-900 mb-2">Comunidade Silenciosa</h3>
+             <p className="text-slate-500 font-medium text-sm">Seja o primeiro a compartilhar algo incrível na sua região!</p>
+          </div>
+        ) : (
+          rankedPosts.map((post: any) => (
+            <PostCard key={post.id} post={post} />
+          ))
+        )}
       </div>
 
       {/* Loading Footer */}
