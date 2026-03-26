@@ -171,32 +171,104 @@ const Index = () => {
     <div className="min-h-screen bg-white pb-20 md:pb-0 font-sans selection:bg-primary/10 selection:text-primary overflow-x-hidden text-slate-900">
       <Header />
 
-      {/* Hero Section Simplificada */}
-      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-20 bg-slate-950">
-        <div className="absolute inset-0 z-0 opacity-20">
-           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-primary/5 to-white" />
+      {/* Hero Banners Carousel */}
+      <section className="relative w-full h-[60vh] md:h-[75vh] overflow-hidden bg-slate-950">
+        <AnimatePresence mode="wait">
+          {banners.length > 0 && (
+            <motion.div
+              key={currentBanner}
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.05 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="absolute inset-0"
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent z-10" />
+              <img
+                src={banners[currentBanner]?.image_url}
+                alt={banners[currentBanner]?.title}
+                className="w-full h-full object-cover opacity-60"
+              />
+              
+              <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6">
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                  className="max-w-4xl space-y-6"
+                >
+                  <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 text-primary text-[10px] font-black uppercase tracking-[0.2em]">
+                    <Sparkles className="h-3.5 w-3.5" />
+                    Elite Partner
+                  </span>
+                  <h2 className="text-4xl md:text-7xl font-[900] text-white tracking-tighter leading-[0.85] text-balance">
+                    {banners[currentBanner]?.title}
+                  </h2>
+                  <p className="text-lg md:text-xl text-slate-300 font-medium max-w-2xl mx-auto line-clamp-2">
+                    {banners[currentBanner]?.subtitle}
+                  </p>
+                  
+                  {banners[currentBanner]?.button_link && (
+                    <div className="pt-8">
+                       <Button 
+                         onClick={() => navigate(banners[currentBanner].button_link)}
+                         size="lg" 
+                         className="rounded-full h-14 px-10 bg-primary text-white hover:bg-primary/90 font-black uppercase text-xs tracking-widest gap-2 shadow-xl shadow-primary/20 border border-primary/50"
+                       >
+                         {banners[currentBanner]?.button_text || "Saiba Mais"} <ArrowUpRight className="h-4 w-4" />
+                       </Button>
+                    </div>
+                  )}
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Carousel Indicators */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+          {banners.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentBanner(i)}
+              className={cn(
+                "h-1.5 transition-all duration-500 rounded-full",
+                currentBanner === i ? "w-12 bg-primary" : "w-4 bg-white/20 hover:bg-white/40"
+              )}
+            />
+          ))}
         </div>
+      </section>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-20 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-8">
-            <Sparkles className="h-3.5 w-3.5" />
-            Guia Comercial {config.platform_city}
-          </div>
+      {/* Hero Search Section - Compactada */}
+      <section className="relative py-16 flex items-center justify-center overflow-hidden bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 relative z-20 w-full">
+          <div className="bg-slate-950 p-8 md:p-12 rounded-[3.5rem] shadow-2xl relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] rounded-full -mr-32 -mt-32" />
+             
+             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div className="text-center lg:text-left">
+                   <h2 className="text-3xl md:text-5xl font-[900] text-white tracking-tighter leading-none mb-4">
+                      O que você busca <br /> em <span className="text-primary italic">{selectedCity || config.platform_city}?</span>
+                   </h2>
+                   <p className="text-slate-400 font-medium">Encontre os melhores serviços e empresas da sua região.</p>
+                </div>
 
-          <h1 className="text-4xl xs:text-5xl md:text-7xl font-[900] text-white tracking-tighter leading-[0.85] mb-8 text-balance">
-            {selectedCity || config.platform_city} <br />
-            <span className="text-primary italic">sempre conectada.</span>
-          </h1>
-
-          <div className="flex justify-center flex-wrap gap-4 mt-12">
-             <Button size="lg" onClick={() => navigate('/buscar')} className="rounded-full h-14 px-10 bg-primary text-white hover:bg-primary/90 font-black uppercase text-xs tracking-widest gap-2 shadow-xl shadow-primary/20 border border-primary/50">
-               Explorar Cidade
-             </Button>
-             <Link to="/auth?mode=register">
-               <Button size="lg" variant="outline" className="rounded-full h-14 px-10 border-white/20 text-white hover:bg-white/10 bg-transparent backdrop-blur-sm font-black uppercase text-xs tracking-widest gap-2 transition-all">
-                 Cadastrar Empresa
-               </Button>
-             </Link>
+                <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
+                   <div className="flex-1 relative group">
+                      <SearchIcon className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500 group-focus-within:text-primary transition-colors" />
+                      <Input 
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="Ex: Restaurantes, Academias..." 
+                        className="h-16 pl-14 pr-6 rounded-2xl bg-white/5 border-white/10 text-white placeholder:text-slate-600 focus:border-primary/50 focus:bg-white/10 transition-all font-bold"
+                      />
+                   </div>
+                   <Button type="submit" size="lg" className="h-16 px-10 rounded-2xl bg-primary text-white hover:bg-primary/90 font-black uppercase text-xs tracking-widest gap-2">
+                      Buscar <ArrowRight className="h-4 w-4" />
+                   </Button>
+                </form>
+             </div>
           </div>
         </div>
       </section>
