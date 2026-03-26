@@ -73,73 +73,77 @@ const ProtectedRoute = ({ children, role }: { children: ReactNode, role?: string
   return <>{children}</>;
 };
 
+import ErrorBoundary from "./components/ErrorBoundary";
+
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <PlatformProvider>
-        <CartProvider>
-          <BrowserRouter>
-            <AuthProvider>
-              <HydrationGuard>
-                <LocalConciergeWidget />
-              </HydrationGuard>
-              <Routes>
-              {/* Public Portal */}
-              <Route path="/" element={<Index />} />
-              <Route path="/buscar" element={<Search />} />
-              <Route path="/negocio/:slug" element={<BusinessDetail />} />
-              <Route path="/comunidade" element={<Community />} />
-              <Route path="/comunidade/perfil/:id" element={<CommunityProfile />} />
-              <Route path="/noticias" element={<Blog />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPost />} />
-              <Route path="/vagas" element={<JobApplicationsPage />} />
-              <Route path="/categorias" element={<Categories />} />
-              <Route path="/planos" element={<Plans />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <PlatformProvider>
+          <CartProvider>
+            <BrowserRouter>
+              <AuthProvider>
+                <HydrationGuard>
+                  <LocalConciergeWidget />
+                </HydrationGuard>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  {/* ... outras rotas ... */}
+                  <Route path="/buscar" element={<Search />} />
+                  <Route path="/negocio/:slug" element={<BusinessDetail />} />
+                  <Route path="/comunidade" element={<Community />} />
+                  <Route path="/comunidade/perfil/:id" element={<CommunityProfile />} />
+                  <Route path="/noticias" element={<Blog />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:slug" element={<BlogPost />} />
+                  <Route path="/vagas" element={<JobApplicationsPage />} />
+                  <Route path="/categorias" element={<Categories />} />
+                  <Route path="/planos" element={<Plans />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
-              {/* Lojista Dashboard */}
-              <Route path="/dashboard" element={<ProtectedRoute role="LOJISTA"><DashboardHome /></ProtectedRoute>} />
-              <Route path="/dashboard/negocio" element={<ProtectedRoute role="LOJISTA"><DashboardBusiness /></ProtectedRoute>} />
-              <Route path="/dashboard/produtos" element={<ProtectedRoute role="LOJISTA"><DashboardProducts /></ProtectedRoute>} />
-              <Route path="/dashboard/servicos" element={<ProtectedRoute role="LOJISTA"><DashboardServices /></ProtectedRoute>} />
-              <Route path="/dashboard/vagas" element={<ProtectedRoute role="LOJISTA"><DashboardJobs /></ProtectedRoute>} />
-              <Route path="/dashboard/metricas" element={<ProtectedRoute role="LOJISTA"><DashboardMetrics /></ProtectedRoute>} />
-              <Route path="/dashboard/config" element={<ProtectedRoute role="LOJISTA"><DashboardConfig /></ProtectedRoute>} />
-              <Route path="/dashboard/anuncios" element={<ProtectedRoute role="LOJISTA"><DashboardAds /></ProtectedRoute>} />
+                  {/* Lojista Dashboard */}
+                  <Route path="/dashboard" element={<ProtectedRoute role="LOJISTA"><DashboardHome /></ProtectedRoute>} />
+                  <Route path="/dashboard/negocio" element={<ProtectedRoute role="LOJISTA"><DashboardBusiness /></ProtectedRoute>} />
+                  <Route path="/dashboard/produtos" element={<ProtectedRoute role="LOJISTA"><DashboardProducts /></ProtectedRoute>} />
+                  <Route path="/dashboard/servicos" element={<ProtectedRoute role="LOJISTA"><DashboardServices /></ProtectedRoute>} />
+                  <Route path="/dashboard/vagas" element={<ProtectedRoute role="LOJISTA"><DashboardJobs /></ProtectedRoute>} />
+                  <Route path="/dashboard/metricas" element={<ProtectedRoute role="LOJISTA"><DashboardMetrics /></ProtectedRoute>} />
+                  <Route path="/dashboard/config" element={<ProtectedRoute role="LOJISTA"><DashboardConfig /></ProtectedRoute>} />
+                  <Route path="/dashboard/anuncios" element={<ProtectedRoute role="LOJISTA"><DashboardAds /></ProtectedRoute>} />
 
-              {/* Super Admin Dashboard */}
-              <Route path="/admin" element={<ProtectedRoute role="SUPERADMIN"><AdminDashboard /></ProtectedRoute>} />
-              <Route path="/admin/empresas" element={<ProtectedRoute role="SUPERADMIN"><AdminEmpresas /></ProtectedRoute>} />
-              <Route path="/admin/empresas/novo" element={<ProtectedRoute role="SUPERADMIN"><AdminBusinessEditor /></ProtectedRoute>} />
-              <Route path="/admin/empresas/editar/:slug" element={<ProtectedRoute role="SUPERADMIN"><AdminBusinessEditor /></ProtectedRoute>} />
-              <Route path="/admin/usuarios" element={<ProtectedRoute role="SUPERADMIN"><AdminUsuarios /></ProtectedRoute>} />
-              <Route path="/admin/categorias" element={<ProtectedRoute role="SUPERADMIN"><AdminCategorias /></ProtectedRoute>} />
-              <Route path="/admin/blog" element={<ProtectedRoute role="SUPERADMIN"><AdminBlog /></ProtectedRoute>} />
-              <Route path="/admin/blog/categorias" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogCategories /></ProtectedRoute>} />
-              <Route path="/admin/blog/novo" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogEditor /></ProtectedRoute>} />
-              <Route path="/admin/blog/editar/:slug" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogEditor /></ProtectedRoute>} />
-              <Route path="/admin/config" element={<ProtectedRoute role="SUPERADMIN"><AdminConfig /></ProtectedRoute>} />
-              <Route path="/admin/ia" element={<ProtectedRoute role="SUPERADMIN"><AdminIAConfig /></ProtectedRoute>} />
-              <Route path="/admin/referencias" element={<ProtectedRoute role="SUPERADMIN"><AdminReferences /></ProtectedRoute>} />
-              <Route path="/admin/midias" element={<ProtectedRoute role="SUPERADMIN"><AdminMediaLibrary /></ProtectedRoute>} />
-              <Route path="/admin/vagas" element={<ProtectedRoute role="SUPERADMIN"><AdminJobs /></ProtectedRoute>} />
-              <Route path="/admin/pendentes" element={<ProtectedRoute role="SUPERADMIN"><AdminPendentes /></ProtectedRoute>} />
-              <Route path="/admin/planos" element={<ProtectedRoute role="SUPERADMIN"><AdminPlanos /></ProtectedRoute>} />
-              <Route path="/admin/moderacao" element={<ProtectedRoute role="SUPERADMIN"><AdminCommunityModeration /></ProtectedRoute>} />
+                  {/* Super Admin Dashboard */}
+                  <Route path="/admin" element={<ProtectedRoute role="SUPERADMIN"><AdminDashboard /></ProtectedRoute>} />
+                  <Route path="/admin/empresas" element={<ProtectedRoute role="SUPERADMIN"><AdminEmpresas /></ProtectedRoute>} />
+                  <Route path="/admin/empresas/novo" element={<ProtectedRoute role="SUPERADMIN"><AdminBusinessEditor /></ProtectedRoute>} />
+                  <Route path="/admin/empresas/editar/:slug" element={<ProtectedRoute role="SUPERADMIN"><AdminBusinessEditor /></ProtectedRoute>} />
+                  <Route path="/admin/usuarios" element={<ProtectedRoute role="SUPERADMIN"><AdminUsuarios /></ProtectedRoute>} />
+                  <Route path="/admin/categorias" element={<ProtectedRoute role="SUPERADMIN"><AdminCategorias /></ProtectedRoute>} />
+                  <Route path="/admin/blog" element={<ProtectedRoute role="SUPERADMIN"><AdminBlog /></ProtectedRoute>} />
+                  <Route path="/admin/blog/categorias" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogCategories /></ProtectedRoute>} />
+                  <Route path="/admin/blog/novo" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogEditor /></ProtectedRoute>} />
+                  <Route path="/admin/blog/editar/:slug" element={<ProtectedRoute role="SUPERADMIN"><AdminBlogEditor /></ProtectedRoute>} />
+                  <Route path="/admin/config" element={<ProtectedRoute role="SUPERADMIN"><AdminConfig /></ProtectedRoute>} />
+                  <Route path="/admin/ia" element={<ProtectedRoute role="SUPERADMIN"><AdminIAConfig /></ProtectedRoute>} />
+                  <Route path="/admin/referencias" element={<ProtectedRoute role="SUPERADMIN"><AdminReferences /></ProtectedRoute>} />
+                  <Route path="/admin/midias" element={<ProtectedRoute role="SUPERADMIN"><AdminMediaLibrary /></ProtectedRoute>} />
+                  <Route path="/admin/vagas" element={<ProtectedRoute role="SUPERADMIN"><AdminJobs /></ProtectedRoute>} />
+                  <Route path="/admin/pendentes" element={<ProtectedRoute role="SUPERADMIN"><AdminPendentes /></ProtectedRoute>} />
+                  <Route path="/admin/planos" element={<ProtectedRoute role="SUPERADMIN"><AdminPlanos /></ProtectedRoute>} />
+                  <Route path="/admin/moderacao" element={<ProtectedRoute role="SUPERADMIN"><AdminCommunityModeration /></ProtectedRoute>} />
 
-              {/* Catch-all */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthProvider>
-        </BrowserRouter>
-      </CartProvider>
-    </PlatformProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+                  {/* Catch-all */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </AuthProvider>
+            </BrowserRouter>
+          </CartProvider>
+        </PlatformProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 const HydrationGuard = ({ children }: { children: React.ReactNode }) => {

@@ -171,267 +171,58 @@ const Index = () => {
     <div className="min-h-screen bg-white pb-20 md:pb-0 font-sans selection:bg-primary/10 selection:text-primary overflow-x-hidden text-slate-900">
       <Header />
 
-      {/* High-Fidelity Elite Hero Section */}
-      <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20 bg-slate-950">
-        {/* Abstract Map Background */}
-        <div className="absolute inset-0 z-0 opacity-40">
-           <img 
-             src="/world_map_abstract_bg_1774527556200.png" 
-             className="w-full h-full object-cover" 
-             alt="World Map Background" 
-           />
-           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-white" />
+      {/* Hero Section Simplificada */}
+      <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-20 bg-slate-950">
+        <div className="absolute inset-0 z-0 opacity-20">
+           <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-primary/5 to-white" />
         </div>
 
-        {/* Floating Price Bubbles (Simulated Categories) */}
-        <div className="absolute inset-0 z-10 pointer-events-none hidden lg:block">
-           <motion.div 
-             animate={{ y: [0, -10, 0] }} 
-             transition={{ duration: 4, repeat: Infinity }}
-             className="absolute top-[25%] left-[15%] bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-2xl shadow-2xl"
-           >
-             <div className="flex items-center gap-2 px-2 py-1">
-               <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-               <span className="text-[10px] font-black text-white uppercase tracking-widest">Gastronomia</span>
-             </div>
-           </motion.div>
-           
-           <motion.div 
-             animate={{ y: [0, 10, 0] }} 
-             transition={{ duration: 5, repeat: Infinity, delay: 1 }}
-             className="absolute top-[40%] right-[20%] bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-2xl shadow-2xl"
-           >
-             <div className="flex items-center gap-2 px-2 py-1">
-               <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-               <span className="text-[10px] font-black text-white uppercase tracking-widest">Saúde & Bem-estar</span>
-             </div>
-           </motion.div>
+        <div className="max-w-7xl mx-auto px-6 relative z-20 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-8">
+            <Sparkles className="h-3.5 w-3.5" />
+            Guia Comercial {config.platform_city}
+          </div>
 
-           <motion.div 
-             animate={{ y: [0, -15, 0] }} 
-             transition={{ duration: 6, repeat: Infinity, delay: 0.5 }}
-             className="absolute bottom-[30%] left-[30%] bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-2xl shadow-2xl"
-           >
-             <div className="flex items-center gap-2 px-2 py-1">
-               <div className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-               <span className="text-[10px] font-black text-white uppercase tracking-widest">Serviços Locais</span>
-             </div>
-           </motion.div>
-        </div>
+          <h1 className="text-5xl md:text-7xl font-[900] text-white tracking-tighter leading-[0.85] mb-8">
+            {selectedCity || config.platform_city} <br />
+            <span className="text-primary italic">sempre conectada.</span>
+          </h1>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-20 grid lg:grid-cols-2 gap-12 items-center">
-          <motion.div 
-            style={{ opacity: heroOpacity, scale: heroScale }}
-            className="text-left"
-          >
-            <motion.div 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 backdrop-blur-md border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-8"
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-              Guia Elite {config.platform_city}
-            </motion.div>
-
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-[900] text-white tracking-tighter leading-[0.85] mb-8">
-              {selectedCity || "Sua cidade"} <br />
-              <span className="text-primary italic">bem conectada.</span>
-            </h1>
-
-            <p className="text-lg text-slate-300 font-medium max-w-lg mb-10 leading-relaxed">
-              Descubra estabelecimentos de elite, serviços exclusivos e oportunidades únicas na palma da sua mão através do guia mais tecnológico da região.
-            </p>
-
-            <div className="flex flex-wrap gap-4">
-               <Button size="lg" className="rounded-full h-14 px-10 bg-white text-slate-950 hover:bg-slate-100 font-black uppercase text-xs tracking-widest gap-2 group shadow-2xl">
-                 Ver Destaques <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <div className="flex justify-center flex-wrap gap-4 mt-12">
+             <Button size="lg" onClick={() => navigate('/buscar')} className="rounded-full h-14 px-10 bg-primary text-white hover:bg-primary/90 font-black uppercase text-xs tracking-widest gap-2 shadow-xl shadow-primary/20 border border-primary/50">
+               Explorar Cidade
+             </Button>
+             <Link to="/auth?mode=register">
+               <Button size="lg" variant="outline" className="rounded-full h-14 px-10 border-white/20 text-white hover:bg-white/5 font-black uppercase text-xs tracking-widest gap-2">
+                 Cadastrar Empresa
                </Button>
-               <Link to="/auth?mode=register">
-                 <Button size="lg" className="rounded-full h-14 px-10 bg-primary text-white hover:bg-primary/90 font-black uppercase text-xs tracking-widest gap-2 shadow-xl shadow-primary/20 border border-primary/50">
-                   Cadastrar Empresa
-                 </Button>
-               </Link>
-            </div>
-          </motion.div>
-
-          {/* Floating Search Widget (Refined for Commercial Guide) */}
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-100 relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 p-6 opacity-5">
-              <Building2 className="h-24 w-24 text-primary" />
-            </div>
-            
-            <div className="space-y-6 relative z-10">
-               <div className="flex gap-4 border-b border-slate-100 pb-4">
-                  <button 
-                    onClick={() => setActiveTab("businesses")}
-                    className={cn(
-                      "text-[10px] font-black uppercase tracking-widest pb-2 transition-all",
-                      activeTab === "businesses" ? "text-primary border-b-2 border-primary" : "text-slate-400 hover:text-slate-600"
-                    )}
-                  >
-                    Empresas e Serviços
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab("promotions")}
-                    className={cn(
-                      "text-[10px] font-black uppercase tracking-widest pb-2 transition-all",
-                      activeTab === "promotions" ? "text-primary border-b-2 border-primary" : "text-slate-400 hover:text-slate-600"
-                    )}
-                  >
-                    Promoções Locais
-                  </button>
-               </div>
-
-              <div className="space-y-4">
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 group focus-within:border-primary/50 transition-all">
-                  <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block">O que você busca?</Label>
-                  <div className="flex items-center gap-3">
-                    <SearchIcon className="h-5 w-5 text-primary" />
-                    <Input 
-                      className="border-none bg-transparent h-8 text-lg focus-visible:ring-0 p-0 font-bold placeholder:text-slate-300" 
-                      placeholder="Ex: Pizzaria, Advogado, Academia..."
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                 <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 group focus-within:border-primary/50 transition-all">
-                   <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 block">Localização</Label>
-                   <div className="flex items-center gap-3">
-                     <MapPin className="h-5 w-5 text-primary" />
-                     <select 
-                       className="bg-transparent border-none text-lg font-bold text-slate-900 focus:ring-0 cursor-pointer w-full"
-                       value={selectedCity}
-                       onChange={(e) => setSelectedCity(e.target.value)}
-                     >
-                        {config.platform_city && <option value={config.platform_city}>{config.platform_city}</option>}
-                        {config.platform_cities?.split(',')
-                          .map(c => c.trim())
-                          .filter(c => c && c !== config.platform_city)
-                          .map((city, i) => (
-                            <option key={i} value={city}>{city}</option>
-                          ))
-                        }
-                     </select>
-                   </div>
-                 </div>
-              </div>
-
-              <Button onClick={handleSearch} className="w-full h-16 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black text-lg shadow-xl shadow-primary/20 active:scale-95 transition-all">
-                Encontrar Agora
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Stats - Compact */}
-      <section className="bg-white py-12 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { label: 'Empresas', value: '4.8k+', color: 'text-primary' },
-              { label: 'Categorias', value: '50+', color: 'text-emerald-500' },
-              { label: 'Visitas', value: '25k+', color: 'text-indigo-500' },
-              { label: 'Satisfação', value: '100%', color: 'text-amber-500' },
-            ].map((stat, i) => (
-              <div key={i} className="text-center">
-                <div className={cn("text-3xl font-[900] tracking-tighter mb-1", stat.color)}>{stat.value}</div>
-                <div className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">{stat.label}</div>
-              </div>
-            ))}
+             </Link>
           </div>
         </div>
       </section>
 
-      {/* Categories - Compact Grid */}
-      <section className="py-20 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6 text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-black text-slate-950 tracking-tighter mb-4">Destaques por Segmento</h2>
-          <p className="text-slate-500 text-lg font-medium max-w-xl mx-auto">Explore as melhores opções cuidadosamente selecionadas.</p>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6">
-          {catLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="h-40 rounded-[1.5rem] bg-slate-200 animate-pulse"></div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {(categories.length > 0 ? categories : DUMMY_CATEGORIES).map((cat: any, i) => {
-                const Icon = ICON_MAP[cat.icon] || Building2;
-                const colors = COLOR_MAP[cat.color] || "text-primary bg-primary/5 border-primary/10";
-                
-                return (
-                  <motion.div 
-                    key={cat.id}
-                    whileHover={{ y: -5 }}
-                    onClick={() => navigate(`/buscar?categoria=${cat.slug}`)}
-                    className="group bg-white border border-slate-100 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:shadow-primary/5 transition-all duration-500"
-                  >
-                    <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 border", colors)}>
-                      <Icon className="h-7 w-7 transition-transform group-hover:scale-110" />
-                    </div>
-                    <span className="font-black text-slate-900 text-sm mb-1">{cat.name}</span>
-                    <div className="h-0.5 w-4 bg-slate-100 group-hover:w-8 group-hover:bg-primary transition-all rounded-full"></div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          )}
-
-          <div className="mt-12 text-center">
-            <Link to="/categorias">
-              <Button variant="outline" className="h-12 px-10 rounded-2xl border-2 border-slate-200 font-black text-slate-900 gap-2 hover:bg-slate-100 transition-all">
-                Ver Todas as Categorias <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-6 mt-12">
-          <SmartAdSlot type="hero_banner" />
-        </div>
-      </section>
-
-      {/* Featured Businesses - Compact */}
+      {/* Featured Businesses - Simplificado */}
       <section id="destaques" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-end justify-between mb-12 gap-4">
             <div className="text-left">
-              <span className="text-primary font-black text-[9px] uppercase tracking-[0.3em] mb-2 block">Premium Selection</span>
+              <span className="text-primary font-black text-[9px] uppercase tracking-[0.3em] mb-2 block">Destaques Locais</span>
               <h2 className="text-3xl md:text-5xl font-[900] text-slate-950 tracking-tighter">O Melhor da Região</h2>
             </div>
-            <Link to="/buscar">
-              <Button variant="ghost" className="h-10 px-6 rounded-xl font-black text-primary hover:bg-primary/5 transition-all text-xs">
-                Ver Tudo <ArrowUpRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {bizLoading ? (
               [1, 2, 3, 4].map((i) => <div key={i} className="aspect-[3/4] rounded-[2rem] bg-slate-100 animate-pulse"></div>)
             ) : (
-              (businesses.length > 0 ? businesses : DUMMY_BUSINESSES).map((biz: any, i) => (
-                <motion.div 
-                  key={biz.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
+              (businesses.length > 0 ? businesses : DUMMY_BUSINESSES).slice(0, 4).map((biz: any, i) => (
+                <div key={biz.id}>
                   <BusinessCard 
                     {...biz} 
-                    imageUrl={biz.image_url} // Fix for image fallback
+                    imageUrl={biz.image_url}
                     categoryName={biz.categories?.name || biz.categoryName} 
                   />
-                </motion.div>
+                </div>
               ))
             )}
           </div>
