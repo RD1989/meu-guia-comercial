@@ -15,6 +15,7 @@ interface PlatformConfig {
   platform_footer_text: string;
   openrouter_api_key: string;
   default_model: string;
+  banner_interval: number;
 }
 
 const defaultConfig: PlatformConfig = {
@@ -31,6 +32,7 @@ const defaultConfig: PlatformConfig = {
   platform_footer_text: "© 2026 Meu Guia Comercial. Todos os direitos reservados.",
   openrouter_api_key: "",
   default_model: "openai/gpt-4o-mini",
+  banner_interval: 5,
 };
 
 interface PlatformContextType {

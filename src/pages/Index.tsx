@@ -40,8 +40,8 @@ import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router-dom";
 import { usePlatform } from "@/contexts/PlatformContext";
 import { Input } from "@/components/ui/input";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { DUMMY_TESTIMONIALS, DUMMY_CATEGORIES, DUMMY_BUSINESSES } from "@/data/dummy-data";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { DUMMY_TESTIMONIALS, DUMMY_CATEGORIES, DUMMY_BUSINESSES, DUMMY_BANNERS } from "@/data/dummy-data";
 
 const ICON_MAP: Record<string, any> = {
   UtensilsCrossed,
@@ -111,6 +111,32 @@ const Index = () => {
     },
   });
 
+  const { data: banners = [] } = useQuery({
+    queryKey: ["banners"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("banners")
+        .select("*")
+        .eq("active", true)
+        .order("sort_order");
+      
+      if (error || !data || data.length === 0) return DUMMY_BANNERS;
+      return data;
+    },
+  });
+
+  const [currentBanner, setCurrentBanner] = useState(0);
+
+  useEffect(() => {
+    if (banners.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % banners.length);
+    }, (config.banner_interval || 5) * 1000);
+
+    return () => clearInterval(interval);
+  }, [banners.length, config.banner_interval]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (search.trim()) {
@@ -123,32 +149,53 @@ const Index = () => {
       <Header />
 
       {/* Elite Compact Hero Section */}
-      <section ref={heroRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden pt-20 bg-[#F8FAFC]">
+      <section ref={heroRef} className="relative min-h-[75vh] flex items-center justify-center overflow-hidden pt-20">
+        {/* Banner Slider Background */}
+        <div className="absolute inset-0 z-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentBanner}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              className="absolute inset-0"
+            >
+              <div className="absolute inset-0 bg-slate-950/40 z-10" /> {/* Contrast Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-transparent to-white z-10" />
+              <img 
+                src={banners[currentBanner]?.image_url} 
+                alt={banners[currentBanner]?.title}
+                className="w-full h-full object-cover scale-105 animate-slow-zoom"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
         {/* Soft Background Accents */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-primary/5 blur-[80px] rounded-full"></div>
-          <div className="absolute bottom-0 right-0 w-[30%] h-[30%] bg-emerald-50/20 blur-[60px] rounded-full"></div>
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
+          <div className="absolute top-0 left-0 w-[40%] h-[40%] bg-primary/20 blur-[100px] rounded-full"></div>
         </div>
 
         <motion.div 
           style={{ opacity: heroOpacity, scale: heroScale }}
-          className="max-w-5xl mx-auto px-6 relative z-10 text-center"
+          className="max-w-5xl mx-auto px-6 relative z-20 text-center"
         >
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 text-slate-800 text-[10px] font-black uppercase tracking-[0.2em] mb-8 shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.2em] mb-8 shadow-xl"
           >
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
+            <Sparkles className="h-3.5 w-3.5 text-amber-400" />
             Guia Premium {config.platform_city}
           </motion.div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-[900] text-slate-950 tracking-tighter leading-[0.9] mb-6">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-[900] text-white tracking-tighter leading-[0.9] mb-6 drop-shadow-2xl">
             Sua cidade <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-500">bem conectada.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-emerald-400">bem conectada.</span>
           </h1>
 
-          <p className="text-base md:text-xl text-slate-500 font-medium max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-base md:text-xl text-slate-100 font-medium max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-lg">
             Descubra estabelecimentos de elite, serviços exclusivos e oportunidades únicas na palma da sua mão.
           </p>
 

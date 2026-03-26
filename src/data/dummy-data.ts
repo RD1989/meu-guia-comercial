@@ -248,3 +248,30 @@ export const DUMMY_POSTS = [
     date: new Date().toISOString() 
   }
 ];
+
+export const DUMMY_BANNERS = [
+  {
+    id: 'banner-1',
+    image_url: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1600',
+    title: 'As Melhores Academias da Região',
+    link_url: '/buscar?categoria=academia',
+    active: true,
+    sort_order: 1
+  },
+  {
+    id: 'banner-2',
+    image_url: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1600',
+    title: 'Gastronomia de Elite em Sua Cidade',
+    link_url: '/buscar?categoria=gastronomia',
+    active: true,
+    sort_order: 2
+  },
+  {
+    id: 'banner-3',
+    image_url: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=1600',
+    title: 'Compre do Comércio Local',
+    link_url: '/buscar',
+    active: true,
+    sort_order: 3
+  }
+];

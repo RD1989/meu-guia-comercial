@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles } from "lucide-react";
+import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles, Image as ImageIcon, Plus, Trash2, ArrowUp, ArrowDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -15,6 +15,22 @@ export default function AdminConfig() {
   const { config, refetch } = usePlatform();
   const [formData, setFormData] = useState(config);
   const [saving, setSaving] = useState(false);
+  const [banners, setBanners] = useState<any[]>([]);
+  const [bannersLoading, setBannersLoading] = useState(false);
+
+  useEffect(() => {
+    fetchBanners();
+  }, []);
+
+  const fetchBanners = async () => {
+    setBannersLoading(true);
+    const { data } = await supabase
+      .from("banners")
+      .select("*")
+      .order("sort_order");
+    if (data) setBanners(data);
+    setBannersLoading(false);
+  };
 
   useEffect(() => {
     setFormData(config);
@@ -94,6 +110,7 @@ export default function AdminConfig() {
             <TabsTrigger value="geral" className="gap-2"><Globe className="h-4 w-4" /> Geral</TabsTrigger>
             <TabsTrigger value="aparencia" className="gap-2"><Palette className="h-4 w-4" /> Aparência</TabsTrigger>
             <TabsTrigger value="social" className="gap-2"><Share2 className="h-4 w-4" /> Redes Sociais</TabsTrigger>
+            <TabsTrigger value="banners" className="gap-2"><ImageIcon className="h-4 w-4" /> Banners Hero</TabsTrigger>
             <TabsTrigger value="ia" className="gap-2"><Sparkles className="h-4 w-4" /> Inteligência Artificial</TabsTrigger>
           </TabsList>
 
@@ -221,6 +238,195 @@ export default function AdminConfig() {
               </CardContent>
             </Card>
           </TabsContent>
+          <TabsContent value="banners">
+            <div className="space-y-6">
+              <Card className="border-none shadow-sm bg-white">
+                <CardHeader>
+                  <CardTitle>Configurações do Slider</CardTitle>
+                  <CardDescription>Ajuste o comportamento do carrossel na página inicial.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="max-w-xs space-y-2">
+                    <Label htmlFor="banner_interval">Tempo de Transição (segundos)</Label>
+                    <div className="flex gap-4 items-center">
+                      <Input 
+                        id="banner_interval" 
+                        type="number" 
+                        value={formData.banner_interval} 
+                        onChange={handleChange} 
+                        min={2} 
+                        max={30} 
+                      />
+                      <span className="text-slate-400 text-sm whitespace-nowrap">segundos</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-sm bg-white">
+                <CardHeader className="flex flex-row items-center justify-between">
+                  <div>
+                    <CardTitle>Gerenciar Banners</CardTitle>
+                    <CardDescription>Adicione ou remova banners do topo da página inicial.</CardDescription>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="gap-2"
+                    onClick={() => {
+                      const newBanner = {
+                        id: Math.random().toString(36).substr(2, 9),
+                        image_url: "",
+                        title: "Novo Banner",
+                        active: true,
+                        sort_order: banners.length + 1,
+                        isNew: true
+                      };
+                      setBanners([...banners, newBanner]);
+                    }}
+                  >
+                    <Plus className="h-4 w-4" /> Adicionar Banner
+                  </Button>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {banners.length === 0 && !bannersLoading && (
+                      <div className="p-12 text-center border-2 border-dashed rounded-xl bg-slate-50 text-slate-400">
+                        Nenhum banner cadastrado. Clique em Adicionar acima.
+                      </div>
+                    )}
+                    
+                    {banners.map((banner, index) => (
+                      <div key={banner.id} className="flex flex-col md:flex-row gap-6 p-6 border rounded-2xl bg-slate-50/50 hover:bg-white hover:shadow-md transition-all">
+                        <div className="w-full md:w-64 h-36 rounded-xl overflow-hidden bg-slate-200 shrink-0">
+                          {banner.image_url ? (
+                            <img src={banner.image_url} alt="Preview" className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-slate-400">
+                              <ImageIcon className="h-10 w-10" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 space-y-4">
+                          <div className="grid gap-4 md:grid-cols-2">
+                            <div className="space-y-2">
+                              <Label>URL da Imagem</Label>
+                              <Input 
+                                value={banner.image_url} 
+                                onChange={(e) => {
+                                  const updated = [...banners];
+                                  updated[index].image_url = e.target.value;
+                                  setBanners(updated);
+                                }} 
+                                placeholder="https://unsplash.com/..."
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label>Título (Opcional)</Label>
+                              <Input 
+                                value={banner.title} 
+                                onChange={(e) => {
+                                  const updated = [...banners];
+                                  updated[index].title = e.target.value;
+                                  setBanners(updated);
+                                }} 
+                                placeholder="Ex: Melhores Academias"
+                              />
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center justify-between pt-2">
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                disabled={index === 0}
+                                onClick={() => {
+                                  const updated = [...banners];
+                                  [updated[index], updated[index-1]] = [updated[index-1], updated[index]];
+                                  setBanners(updated);
+                                }}
+                              >
+                                <ArrowUp className="h-4 w-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                disabled={index === banners.length - 1}
+                                onClick={() => {
+                                  const updated = [...banners];
+                                  [updated[index], updated[index+1]] = [updated[index+1], updated[index]];
+                                  setBanners(updated);
+                                }}
+                              >
+                                <ArrowDown className="h-4 w-4" />
+                              </Button>
+                            </div>
+                            
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="text-rose-500 hover:text-rose-600 hover:bg-rose-50 gap-2"
+                              onClick={async () => {
+                                if (banner.isNew) {
+                                  setBanners(banners.filter(b => b.id !== banner.id));
+                                } else {
+                                  toast.info("Removendo banner...");
+                                  await supabase.from("banners").delete().eq("id", banner.id);
+                                  fetchBanners();
+                                }
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" /> Remover
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {banners.length > 0 && (
+                    <div className="mt-8 flex justify-end">
+                      <Button 
+                        onClick={async () => {
+                          setSaving(true);
+                          try {
+                            for (let i = 0; i < banners.length; i++) {
+                              const banner = banners[i];
+                              const dataToSave = {
+                                image_url: banner.image_url,
+                                title: banner.title,
+                                sort_order: i + 1,
+                                active: true
+                              };
+                              
+                              if (banner.isNew) {
+                                await supabase.from("banners").insert([dataToSave]);
+                              } else {
+                                await supabase.from("banners").update(dataToSave).eq("id", banner.id);
+                              }
+                            }
+                            toast.success("Banners salvos com sucesso!");
+                            fetchBanners();
+                          } catch (err: any) {
+                            toast.error("Erro ao salvar banners: " + err.message);
+                          } finally {
+                            setSaving(false);
+                          }
+                        }}
+                        disabled={saving}
+                        className="bg-emerald-600 hover:bg-emerald-700"
+                      >
+                        Sincronizar Banners
+                      </Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
           <TabsContent value="ia">
             <div className="grid gap-6 md:grid-cols-2">
               <Card className="border-none shadow-sm bg-white">
