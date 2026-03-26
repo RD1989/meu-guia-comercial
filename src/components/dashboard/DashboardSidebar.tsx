@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Store, BarChart3, Settings, LogOut, Briefcase, ExternalLink, Zap } from "lucide-react";
+import { LayoutDashboard, Package, Store, BarChart3, Settings, LogOut, Briefcase, ExternalLink, Zap, Sparkles } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
