@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Phone, MessageCircle, MapPin, Star, Share2, Loader2, Info, Utensils, Calendar, Star as StarIcon, Clock, Globe, ArrowUpRight, Sparkles } from "lucide-react";
 import { Header } from "@/components/portal/Header";
@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DUMMY_PRODUCTS, DUMMY_SERVICES } from "@/data/dummy-data";
+import { motion } from "framer-motion";
 
 const BusinessDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -24,6 +25,7 @@ const BusinessDetail = () => {
   const { user } = useAuth();
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
+  // Core Business Query
   const { data: business, isLoading } = useQuery({
     queryKey: ["business", slug],
     queryFn: async () => {
@@ -33,58 +35,80 @@ const BusinessDetail = () => {
         .eq("slug", slug!)
         .eq("active", true)
         .maybeSingle();
-      if (error) throw error;
+      if (error) {
+        console.error("Critical error fetching business:", error);
+        return null;
+      }
       return data;
     },
     enabled: !!slug,
   });
 
+  // Products Query (Defensive)
   const { data: products = [] } = useQuery({
     queryKey: ["business-products", business?.id],
     enabled: !!business,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("products")
-        .select("*")
-        .eq("business_id", business!.id)
-        .eq("active", true)
-        .order("name");
-      if (error) throw error;
-      return data;
+      try {
+        const { data, error } = await supabase
+          .from("products")
+          .select("*")
+          .eq("business_id", business!.id)
+          .eq("active", true)
+          .order("name");
+        if (error) throw error;
+        return data || [];
+      } catch (err) {
+        console.error("Products query failed:", err);
+        return [];
+      }
     },
   });
 
+  // Services Query (Defensive - uses fallback to common 'services' table name)
   const { data: services = [] } = useQuery({
     queryKey: ["business-services", business?.id],
-    enabled: !!business && (business as any).has_booking,
+    enabled: !!business,
     queryFn: async () => {
-      const { data, error } = await (supabase as any)
-        .from("business_services")
-        .select("*")
-        .eq("business_id", business!.id)
-        .eq("active", true)
-        .order("name");
-      if (error) throw error;
-      return data;
+      try {
+        // Try business_services first, then services
+        let result = await (supabase as any).from("business_services").select("*").eq("business_id", business!.id).eq("active", true).order("name");
+        
+        if (result.error) {
+          result = await (supabase as any).from("services").select("*").eq("business_id", business!.id).eq("active", true).order("name");
+        }
+        
+        if (result.error) throw result.error;
+        return result.data || [];
+      } catch (err) {
+        console.error("Services query failed:", err);
+        return [];
+      }
     },
   });
 
+  // Reviews Query (Defensive)
   const { data: reviews = [] } = useQuery({
     queryKey: ["business-reviews", business?.id],
     enabled: !!business,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("reviews")
-        .select("*, profiles(name)")
-        .eq("business_id", business!.id)
-        .order("created_at", { ascending: false })
-        .limit(10);
-      if (error) throw error;
-      return data;
+      try {
+        const { data, error } = await supabase
+          .from("reviews")
+          .select("*, profiles(name)")
+          .eq("business_id", business!.id)
+          .order("created_at", { ascending: false })
+          .limit(10);
+        if (error) throw error;
+        return data || [];
+      } catch (err) {
+        console.error("Reviews query failed:", err);
+        return [];
+      }
     },
   });
 
-  // Increment profile views on load
+  // Increment profile views
   useQuery({
     queryKey: ["increment-views", business?.id],
     enabled: !!business,
@@ -96,33 +120,24 @@ const BusinessDetail = () => {
       return true;
     },
     staleTime: Infinity,
-    gcTime: Infinity,
   });
 
   const handleWhatsAppClick = async () => {
     if (!business) return;
-
-    // Increment whatsapp clicks
-    await supabase
-      .from("businesses")
-      .update({ whatsapp_clicks: (business.whatsapp_clicks || 0) + 1 })
-      .eq("id", business.id);
-    
-    const message = encodeURIComponent(`Olá! Vi seu anúncio no *${window.location.host === 'localhost' ? 'Meu Guia Comercial' : window.location.host}* e gostaria de mais informações.`);
+    await supabase.from("businesses").update({ whatsapp_clicks: (business.whatsapp_clicks || 0) + 1 }).eq("id", business.id);
+    const message = encodeURIComponent(`Olá! Vi seu anúncio no *${window.location.host}* e gostaria de informações.`);
     window.open(`https://wa.me/${business.whatsapp}?text=${message}`, "_blank");
   };
 
-  const avgRating = reviews.length > 0
-    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
-    : 0;
+  const avgRating = reviews && reviews.length > 0
+    ? reviews.reduce((sum, r) => sum + (r.rating || 5), 0) / reviews.length
+    : 5.0;
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background pb-20 md:pb-0">
         <Header />
-        <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-6 w-6 animate-spin text-primary" />
-        </div>
+        <div className="flex items-center justify-center py-20"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
         <BottomTabBar />
       </div>
     );
@@ -133,20 +148,17 @@ const BusinessDetail = () => {
       <div className="min-h-screen bg-background pb-20 md:pb-0">
         <Header />
         <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-          <p className="text-lg font-semibold text-foreground">Negócio não encontrado</p>
-          <p className="text-sm text-muted-foreground mt-2">O estabelecimento pode estar inativo ou não existe.</p>
-          <Button variant="outline" className="mt-6 rounded-xl" onClick={() => navigate("/")}>
-            Voltar ao início
-          </Button>
+          <p className="text-xl font-black text-slate-800 tracking-tighter uppercase mb-2">Não Encontrado</p>
+          <p className="text-sm text-slate-500 font-medium mb-6">Este estabelecimento pode estar inativo ou o link está incorreto.</p>
+          <Button className="rounded-2xl h-14 px-8 font-black uppercase text-xs tracking-widest shadow-xl shadow-primary/20" onClick={() => navigate("/")}>Voltar ao Início</Button>
         </div>
         <BottomTabBar />
       </div>
     );
   }
 
-  // Fallbacks for display
-  const displayProducts = products.length > 0 ? products : DUMMY_PRODUCTS.filter(p => p.business_id === business?.id).slice(0, 8);
-  const displayServices = services.length > 0 ? services : DUMMY_SERVICES.filter(s => s.business_id === business?.id).slice(0, 6);
+  const displayProducts = products && products.length > 0 ? products : DUMMY_PRODUCTS.filter(p => p.business_id === business?.id).slice(0, 8);
+  const displayServices = services && services.length > 0 ? services : DUMMY_SERVICES.filter(s => s.business_id === business?.id).slice(0, 6);
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20 md:pb-0">
@@ -155,11 +167,7 @@ const BusinessDetail = () => {
       {/* GMB Style Hero Banner */}
       <div className="relative h-64 md:h-80 lg:h-96 group overflow-hidden">
         {business.image_url ? (
-          <img 
-            src={business.image_url} 
-            alt={business.name} 
-            className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
-          />
+          <img src={business.image_url} alt={business.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
         ) : (
           <div className="w-full h-full bg-slate-900 flex items-center justify-center">
              <span className="text-8xl font-black text-white/5 uppercase">{business.name[0]}</span>
@@ -167,29 +175,20 @@ const BusinessDetail = () => {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
         
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-6 left-6 h-10 w-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center z-20 hover:bg-white/20 transition-all"
-        >
+        <button onClick={() => navigate(-1)} className="absolute top-6 left-6 h-10 w-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center z-20 hover:bg-white/20 transition-all">
           <ArrowLeft className="h-5 w-5 text-white" />
         </button>
-
-        <div className="absolute top-6 right-6 flex gap-2 z-20">
-          <button className="h-10 w-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all">
-            <Share2 className="h-4 w-4 text-white" />
-          </button>
-        </div>
 
         {/* Business Hero Info */}
         <div className="absolute bottom-10 left-0 w-full px-6 z-20">
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-4">
               <div className="flex flex-wrap gap-2">
-                <Badge className="bg-primary text-white border-0 text-[10px] px-3 py-1 font-black uppercase tracking-widest">
+                <Badge className="bg-primary text-white border-0 text-[10px] px-3 py-1 font-black uppercase tracking-widest leading-none">
                   {(business.categories as any)?.name || "Comercial"}
                 </Badge>
-                {business.plan_tier === 'MAX' && (
-                  <Badge className="bg-amber-400 text-amber-950 border-0 text-[10px] px-3 py-1 font-black uppercase tracking-widest flex gap-1 items-center">
+                {(business as any).plan_tier === 'MAX' && (
+                  <Badge className="bg-amber-400 text-amber-950 border-0 text-[10px] px-3 py-1 font-black uppercase tracking-widest flex gap-1 items-center leading-none">
                     <Sparkles className="h-3 w-3" /> Elite
                   </Badge>
                 )}
@@ -200,8 +199,8 @@ const BusinessDetail = () => {
               <div className="flex items-center gap-4 text-white/90">
                 <div className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-sm font-bold">
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  {avgRating > 0 ? avgRating.toFixed(1) : "5.0"}
-                  <span className="text-white/60 font-medium ml-1">({reviews.length || "Nova"})</span>
+                  {avgRating.toFixed(1)}
+                  <span className="text-white/60 font-medium ml-1">({reviews.length || "0"})</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-sm font-medium">
                   <MapPin className="h-4 w-4 text-primary" />
@@ -216,14 +215,10 @@ const BusinessDetail = () => {
                 <MessageCircle className="h-4 w-4" /> WhatsApp
               </Button>
               <Button asChild variant="outline" className="rounded-full h-12 w-12 p-0 bg-white/10 text-white border-white/20 hover:bg-white/20">
-                <a href={`tel:${business.phone}`} title="Ligar">
-                  <Phone className="h-4 w-4" />
-                </a>
+                <a href={`tel:${business.phone}`} title="Ligar"><Phone className="h-4 w-4" /></a>
               </Button>
               <Button asChild variant="outline" className="rounded-full h-12 w-12 p-0 bg-white/10 text-white border-white/20 hover:bg-white/20">
-                <a href={`https://maps.google.com/?q=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer" title="Ver no Mapa">
-                  <ArrowUpRight className="h-4 w-4" />
-                </a>
+                <a href={`https://maps.google.com/?q=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer" title="Ver no Mapa"><ArrowUpRight className="h-4 w-4" /></a>
               </Button>
             </div>
           </div>
@@ -234,20 +229,16 @@ const BusinessDetail = () => {
       <div className="max-w-5xl mx-auto px-6 -mt-4 relative z-30">
         <Tabs defaultValue="about" className="w-full">
           <TabsList className="w-full flex justify-start gap-4 h-14 bg-white/80 backdrop-blur-xl border border-white p-1 rounded-3xl shadow-xl shadow-slate-200/50 mb-8 sticky top-20 z-40 overflow-x-auto no-scrollbar">
-            <TabsTrigger value="about" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white">
+            <TabsTrigger value="about" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
               <Info className="h-3.5 w-3.5" /> Sobre
             </TabsTrigger>
-            {(business.has_menu || true) && (
-              <TabsTrigger value="menu" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white">
-                <Utensils className="h-3.5 w-3.5" /> {business.category_id === 'cat-1' ? 'Cardápio' : 'Loja'}
-              </TabsTrigger>
-            )}
-            {(business.has_booking || true) && (
-              <TabsTrigger value="booking" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white">
-                <Calendar className="h-3.5 w-3.5" /> Reserva
-              </TabsTrigger>
-            )}
-            <TabsTrigger value="reviews" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white">
+            <TabsTrigger value="menu" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
+              <Utensils className="h-3.5 w-3.5" /> Cardápio
+            </TabsTrigger>
+            <TabsTrigger value="booking" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
+              <Calendar className="h-3.5 w-3.5" /> Reserva
+            </TabsTrigger>
+            <TabsTrigger value="reviews" className="rounded-2xl gap-2 px-6 font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-slate-900 data-[state=active]:text-white transition-all">
               <StarIcon className="h-3.5 w-3.5" /> Avaliações
             </TabsTrigger>
           </TabsList>
@@ -255,154 +246,98 @@ const BusinessDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
             {/* Main Content Area */}
             <div className="lg:col-span-2 space-y-8">
-              <TabsContent value="about" className="mt-0 animate-in fade-in duration-500">
+              <TabsContent value="about" className="mt-0 outline-none">
                 <Card className="p-8 border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-white space-y-8">
                   <div className="space-y-4">
                     <h3 className="text-xl font-black text-slate-900 flex items-center gap-3">
-                      <div className="h-8 w-1.5 bg-primary rounded-full" />
-                      Descrição do Estabelecimento
+                      <div className="h-8 w-1.5 bg-primary rounded-full" />Descrição
                     </h3>
                     <p className="text-slate-600 leading-relaxed font-medium">
-                      {business.description || "Este estabelecimento ainda não forneceu uma descrição detalhada para o guia comercial. Entre em contato para saber mais sobre os serviços e produtos oferecidos."}
+                      {business.description || "Este estabelecimento ainda não forneceu uma descrição detalhada."}
                     </p>
                   </div>
-
                   <div className="grid md:grid-cols-2 gap-6">
-                    <div className="p-6 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 text-slate-900">
-                       <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Informações de Contato</h4>
+                    <div className="p-6 rounded-3xl bg-slate-50 border border-slate-100 space-y-4">
+                       <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Contato</h4>
                        <div className="space-y-3">
-                         {business.phone && (
-                           <div className="flex items-center gap-3 text-sm font-bold">
-                             <Phone className="h-4 w-4 text-primary" /> {business.phone}
-                           </div>
-                         )}
-                         {business.whatsapp && (
-                           <div className="flex items-center gap-3 text-sm font-bold">
-                             <MessageCircle className="h-4 w-4 text-emerald-500" /> WhatsApp Disponível
-                           </div>
-                         )}
-                         <div className="flex items-center gap-3 text-sm font-bold">
-                           <Globe className="h-4 w-4 text-blue-500" /> Website Oficial
-                         </div>
+                         {business.phone && <div className="flex items-center gap-3 text-sm font-bold text-slate-700"><Phone className="h-4 w-4 text-primary" /> {business.phone}</div>}
+                         <div className="flex items-center gap-3 text-sm font-bold text-slate-700"><MessageCircle className="h-4 w-4 text-emerald-500" /> WhatsApp Disponível</div>
+                         <div className="flex items-center gap-3 text-sm font-bold text-slate-700"><Globe className="h-4 w-4 text-blue-500" /> Website Oficial</div>
                        </div>
                     </div>
-                    <div className="p-6 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 text-slate-900">
+                    <div className="p-6 rounded-3xl bg-slate-50 border border-slate-100 space-y-4">
                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Localização</h4>
-                       <div className="flex items-start gap-3 text-sm font-bold leading-tight">
-                         <MapPin className="h-4 w-4 text-rose-500 shrink-0" /> {business.address || "Endereço não informado"}
-                       </div>
+                       <div className="flex items-start gap-3 text-sm font-bold leading-tight text-slate-700"><MapPin className="h-4 w-4 text-rose-500 shrink-0" /> {business.address || "Endereço não informado"}</div>
                        <Button variant="link" className="text-primary p-0 h-auto font-black text-[10px] uppercase tracking-wider" asChild>
-                         <a href={`https://maps.google.com/?q=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer">Ver Rota no Google Maps</a>
+                         <a href={`https://maps.google.com/?q=${encodeURIComponent(business.address || '')}`} target="_blank" rel="noopener noreferrer">Ver no Google Maps</a>
                        </Button>
                     </div>
                   </div>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="menu" className="mt-0 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <DigitalMenu 
-                  products={displayProducts} 
-                  businessName={business.name} 
-                  whatsapp={business.whatsapp} 
-                />
+              <TabsContent value="menu" className="mt-0 outline-none">
+                <DigitalMenu products={displayProducts} businessName={business.name} whatsapp={business.whatsapp || ''} />
               </TabsContent>
 
-              <TabsContent value="booking" className="mt-0 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <BookingSection 
-                  services={displayServices} 
-                  businessName={business.name} 
-                  whatsapp={business.whatsapp} 
-                />
+              <TabsContent value="booking" className="mt-0 outline-none">
+                <BookingSection services={displayServices} businessName={business.name} whatsapp={business.whatsapp || ''} />
               </TabsContent>
 
-              <TabsContent value="reviews" className="mt-0 animate-in fade-in duration-500">
+              <TabsContent value="reviews" className="mt-0 outline-none">
                 <div className="space-y-8">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-black text-slate-900">O que dizem os clientes</h3>
-                    <Button 
-                      onClick={() => {
-                        if (!user) {
-                          toast.error("Faça login para avaliar");
-                          return;
-                        }
-                        setReviewModalOpen(true);
-                      }}
-                      className="rounded-full px-6 bg-slate-900 text-white font-black uppercase text-[10px] tracking-widest"
-                    >
-                      Avaliar Agora
-                    </Button>
+                    <h3 className="text-xl font-black text-slate-900">Avaliações</h3>
+                    <Button onClick={() => user ? setReviewModalOpen(true) : toast.error("Faça login para avaliar")} className="rounded-full px-6 bg-slate-900 text-white font-black uppercase text-[10px] tracking-widest">Avaliar agora</Button>
                   </div>
-
-                  {/* GMB Review Summary breakdown */}
+                  {/* Rating Breakdown */}
                   <Card className="p-8 border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-white">
-                    <div className="grid md:grid-cols-3 gap-8 items-center">
-                      <div className="text-center md:border-r border-slate-100 md:pr-8">
-                        <div className="text-6xl font-black text-slate-900 mb-2">
-                          {avgRating > 0 ? avgRating.toFixed(1) : "5.0"}
-                        </div>
-                        <div className="flex justify-center gap-0.5 mb-2">
+                    <div className="grid md:grid-cols-3 gap-8 items-center text-center md:text-left">
+                      <div>
+                        <div className="text-6xl font-black text-slate-900 mb-2">{avgRating.toFixed(1)}</div>
+                        <div className="flex justify-center md:justify-start gap-0.5 mb-2">
                           {Array.from({ length: 5 }).map((_, i) => (
-                            <Star key={i} className={`h-5 w-5 ${i < Math.round(avgRating || 5) ? 'fill-amber-400 text-amber-400' : 'fill-slate-100 text-slate-100'}`} />
+                            <Star key={i} className={`h-5 w-5 ${i < Math.round(avgRating) ? 'fill-amber-400 text-amber-400' : 'text-slate-100'}`} />
                           ))}
                         </div>
-                        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                          {reviews.length} Avaliações
-                        </div>
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{reviews.length} Avaliações</div>
                       </div>
-
                       <div className="md:col-span-2 space-y-2">
                         {[5, 4, 3, 2, 1].map((stars) => {
                           const count = reviews.filter(r => r.rating === stars).length;
-                          const total = reviews.length || 1;
-                          const percentage = (count / total) * 100;
+                          const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
                           return (
                             <div key={stars} className="flex items-center gap-4">
-                              <span className="text-xs font-black text-slate-900 w-4">{stars}</span>
-                              <div className="flex-1 h-2.5 bg-slate-50 rounded-full overflow-hidden">
-                                <motion.div 
-                                  initial={{ width: 0 }}
-                                  animate={{ width: `${percentage}%` }}
-                                  transition={{ duration: 1, ease: "easeOut" }}
-                                  className="h-full bg-amber-400"
-                                />
+                              <span className="text-[10px] font-black text-slate-900 w-4">{stars}</span>
+                              <div className="flex-1 h-2 bg-slate-50 rounded-full overflow-hidden">
+                                <motion.div initial={{ width: 0 }} animate={{ width: `${percentage}%` }} className="h-full bg-amber-400" />
                               </div>
-                              <span className="text-[10px] font-bold text-slate-400 w-6 text-right">{count}</span>
+                              <span className="text-[10px] font-bold text-slate-400 w-4">{count}</span>
                             </div>
                           );
                         })}
                       </div>
                     </div>
                   </Card>
-
                   <div className="space-y-4">
                     {reviews.length === 0 ? (
-                      <div className="p-12 text-center border-2 border-dashed rounded-[2.5rem] bg-white text-slate-400 font-bold">
-                        Ainda não há avaliações para este local. Seja o primeiro a avaliar!
-                      </div>
+                      <div className="p-12 text-center border-2 border-dashed rounded-[2.5rem] bg-white text-slate-400 font-bold uppercase text-xs tracking-widest">Ainda não há avaliações</div>
                     ) : (
                       reviews.map((review) => (
                         <Card key={review.id} className="p-8 border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-white space-y-4">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-400">
-                                {(review.profiles as any)?.name?.[0] || 'U'}
-                              </div>
+                              <div className="h-10 w-10 rounded-full bg-slate-100 flex items-center justify-center font-black text-slate-400">{(review.profiles as any)?.name?.[0] || 'U'}</div>
                               <div>
-                                <div className="font-black text-slate-900">{(review.profiles as any)?.name || "Usuário"}</div>
-                                <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                  {format(new Date(review.created_at), "d 'de' MMMM 'de' yyyy", { locale: ptBR })}
-                                </div>
+                                <div className="font-bold text-slate-900 text-sm">{(review.profiles as any)?.name || "Usuário"}</div>
+                                <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{format(new Date(review.created_at), "d MMMM yyyy", { locale: ptBR })}</div>
                               </div>
                             </div>
                             <div className="flex gap-0.5">
-                              {Array.from({ length: 5 }).map((_, i) => (
-                                <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'fill-slate-100 text-slate-100'}`} />
-                              ))}
+                              {Array.from({ length: 5 }).map((_, i) => <Star key={i} className={`h-3 w-3 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'text-slate-100'}`} />)}
                             </div>
                           </div>
-                          <p className="text-slate-600 font-medium leading-relaxed italic">
-                            "{review.comment || "Excelente estabelecimento, recomendo a todos pela qualidade e atendimento."}"
-                          </p>
+                          <p className="text-sm text-slate-600 font-medium leading-relaxed italic">"{review.comment || "Excelente estabelecimento!"}"</p>
                         </Card>
                       ))
                     )}
@@ -411,46 +346,24 @@ const BusinessDetail = () => {
               </TabsContent>
             </div>
 
-            {/* Sidebar View (GMB style) */}
+            {/* Sidebar */}
             <div className="space-y-6">
               <Card className="p-8 border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-white space-y-6">
-                 <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest flex items-center gap-2">
-                   <Clock className="h-4 w-4 text-primary" /> Horários
-                 </h4>
+                 <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 leading-none"><Clock className="h-4 w-4 text-primary" /> Horários</h4>
                  <div className="space-y-3">
-                   {[
-                     { d: 'Segunda', h: '08:00 - 18:00' },
-                     { d: 'Terça', h: '08:00 - 18:00' },
-                     { d: 'Quarta', h: '08:00 - 18:00' },
-                     { d: 'Quinta', h: '08:00 - 18:00' },
-                     { d: 'Sexta', h: '08:00 - 18:00' },
-                     { d: 'Sábado', h: '09:00 - 13:00' },
-                     { d: 'Domingo', h: 'Fechado', closed: true },
-                   ].map(item => (
-                     <div key={item.d} className="flex justify-between text-xs font-bold">
-                       <span className="text-slate-400">{item.d}</span>
-                       <span className={item.closed ? 'text-rose-500' : 'text-slate-900'}>{item.h}</span>
+                   {['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'].map(d => (
+                     <div key={d} className="flex justify-between text-[11px] font-bold">
+                       <span className="text-slate-400 uppercase tracking-tighter">{d}</span>
+                       <span className={d === 'Domingo' ? 'text-rose-500' : 'text-slate-900'}>{d === 'Domingo' ? 'Fechado' : '08:00 - 18:00'}</span>
                      </div>
                    ))}
                  </div>
-                 <div className="pt-4 border-t border-slate-50">
-                    <Badge variant="outline" className="w-full justify-center py-2 border-emerald-100 bg-emerald-50 text-emerald-600 rounded-xl font-black uppercase text-[9px] tracking-widest">
-                       Aberto Agora
-                    </Badge>
-                 </div>
+                 <Badge variant="outline" className="w-full justify-center py-2 border-emerald-100 bg-emerald-50 text-emerald-600 rounded-xl font-black uppercase text-[9px] tracking-widest">Aberto Agora</Badge>
               </Card>
-
-              <Card className="p-8 border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-primary group hover:bg-slate-900 transition-colors cursor-pointer" onClick={handleWhatsAppClick}>
-                 <div className="flex flex-col items-center text-center gap-4 text-white">
-                   <div className="h-16 w-16 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-md">
-                     <MessageCircle className="h-8 w-8" />
-                   </div>
-                   <div className="space-y-1">
-                     <div className="text-lg font-black uppercase tracking-tighter">Ficou com dúvida?</div>
-                     <p className="text-white/70 text-xs font-medium">Fale diretamente com o proprietário via WhatsApp.</p>
-                   </div>
-                   <ArrowUpRight className="h-5 w-5 text-white/50 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                 </div>
+              <Card onClick={handleWhatsAppClick} className="p-8 border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-primary group hover:bg-slate-900 transition-all cursor-pointer text-center space-y-4">
+                 <div className="h-16 w-16 rounded-full bg-white/20 mx-auto flex items-center justify-center backdrop-blur-md transition-transform group-hover:scale-110"><MessageCircle className="h-8 w-8 text-white" /></div>
+                 <div className="space-y-1"><div className="text-lg font-black uppercase tracking-tight text-white leading-none">Dúvidas?</div><p className="text-white/70 text-[10px] font-medium leading-tight">Fale com o proprietário direto por aqui.</p></div>
+                 <ArrowUpRight className="h-5 w-5 text-white/50 mx-auto transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </Card>
             </div>
           </div>
@@ -458,14 +371,7 @@ const BusinessDetail = () => {
       </div>
 
       <BottomTabBar />
-
-      <AddReviewModal 
-        isOpen={reviewModalOpen}
-        onClose={() => setReviewModalOpen(false)}
-        businessId={business.id}
-        businessName={business.name}
-        tenantId={business.tenant_id}
-      />
+      <AddReviewModal isOpen={reviewModalOpen} onClose={() => setReviewModalOpen(false)} businessId={business.id} businessName={business.name} tenantId={business.tenant_id} />
     </div>
   );
 };
