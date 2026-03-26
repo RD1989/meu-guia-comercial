@@ -84,7 +84,7 @@ export function Header() {
                 </Button>
               </Link>
               <Link to="/auth?mode=register">
-                <Button className="bg-primary hover:bg-primary/90 text-white rounded-xl px-7 font-black text-sm h-11 shadow-lg shadow-primary/10 border-none transition-all active:scale-95">
+                <Button className="bg-[#F59E0B] hover:bg-[#D97706] text-white rounded-xl px-7 font-black text-sm h-11 shadow-lg shadow-amber-500/20 border-none transition-all active:scale-95">
                   Anunciar Grátis
                 </Button>
               </Link>
@@ -137,7 +137,7 @@ export function Header() {
                       </Button>
                     </Link>
                     <Link to="/auth?mode=register">
-                      <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white rounded-xl h-12 font-bold text-sm shadow-none">
+                      <Button className="w-full bg-[#F59E0B] hover:bg-[#D97706] text-white rounded-xl h-12 font-bold text-sm shadow-none">
                         Anunciar Grátis
                       </Button>
                     </Link>
