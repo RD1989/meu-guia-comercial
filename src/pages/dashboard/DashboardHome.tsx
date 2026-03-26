@@ -125,11 +125,10 @@ const DashboardHome = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
         </div>
       </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <Card className="border-none shadow-xl shadow-slate-200/40 rounded-[2.5rem] bg-white overflow-hidden">
             <CardHeader className="pb-4 p-8">
               <CardTitle className="text-lg font-black text-slate-900 tracking-tight">Ações Rápidas</CardTitle>
