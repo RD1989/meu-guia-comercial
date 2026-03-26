@@ -193,7 +193,7 @@ const Index = () => {
                Explorar Cidade
              </Button>
              <Link to="/auth?mode=register">
-               <Button size="lg" variant="outline" className="rounded-full h-14 px-10 border-white/20 text-white hover:bg-white/5 font-black uppercase text-xs tracking-widest gap-2">
+               <Button size="lg" variant="outline" className="rounded-full h-14 px-10 border-white/20 text-white hover:bg-white/10 bg-transparent backdrop-blur-sm font-black uppercase text-xs tracking-widest gap-2 transition-all">
                  Cadastrar Empresa
                </Button>
              </Link>
@@ -510,7 +510,7 @@ const Index = () => {
 
           <div className="pt-8">
              <Link to="/auth?mode=register">
-                <Button size="lg" className="h-14 px-12 rounded-2xl bg-white text-primary font-black text-lg hover:bg-slate-100 shadow-2xl active:scale-95 transition-all">
+                <Button size="lg" className="h-14 px-12 rounded-2xl bg-white text-primary hover:bg-slate-100 shadow-2xl active:scale-95 transition-all font-black text-lg">
                   Cadastrar Agora
                 </Button>
              </Link>
