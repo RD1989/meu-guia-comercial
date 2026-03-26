@@ -90,7 +90,6 @@ const App = () => (
                 </HydrationGuard>
                 <Routes>
                   <Route path="/" element={<Index />} />
-                  {/* ... outras rotas ... */}
                   <Route path="/buscar" element={<Search />} />
                   <Route path="/negocio/:slug" element={<BusinessDetail />} />
                   <Route path="/comunidade" element={<Community />} />
