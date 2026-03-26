@@ -9,23 +9,23 @@ import { cn } from "@/lib/utils";
 
 const PLAN_FEATURES = [
   { name: "Perfil de Negócio", free: "Básico", basic: "Profissional", pro: "Elite" },
-  { name: "Fotos na Galeria", free: "1 foto", basic: "Até 10 fotos", pro: "Ilimitado" },
-  { name: "Botão WhatsApp Direto", free: true, basic: true, pro: true },
-  { name: "Horário de Funcionamento", free: true, basic: true, pro: true },
-  { name: "Cardápio Digital / Produtos", free: false, basic: true, pro: true },
+  { name: "Fotos na Galeria", free: "1 foto", basic: "Máximo 20", pro: "Ilimitado" },
+  { name: "Vídeos na Galeria", free: false, basic: "1 Vídeo", pro: "Ilimitado" },
   { name: "Selo de Verificação", free: false, basic: "Bronze", pro: "Diamante" },
   { name: "Prioridade na Busca", free: "Padrão", basic: "Alta", pro: "Máxima" },
-  { name: "Sistema de Agendamento", free: false, basic: false, pro: true },
-  { name: "Estatísticas (Analytics)", free: false, basic: "Simplificado", pro: "Avançado" },
-  { name: "Destaque na Home/Blog", free: false, basic: false, pro: true },
-  { name: "Inteligência Artificial (IA)", free: false, basic: false, pro: "Full Access" },
+  { name: "Geolocalização Customizada", free: false, basic: "20km", pro: "Ilimitado" },
+  { name: "Comunidade Elite", free: "Leitura", basic: "Interação", pro: "Moderação & Full" },
+  { name: "IA Recrutadora (Vagas)", free: false, basic: "Triagem Básica", pro: "Análise Total" },
+  { name: "Inteligência Artificial (IA)", free: false, basic: "Assistente", pro: "Elite Creator" },
+  { name: "Cardápio / Reservas", free: false, basic: true, pro: true },
+  { name: "Estatísticas (Analytics)", free: false, basic: "Básico", pro: "Avançado" },
 ];
 
 const Plans = () => {
   return (
     <div className="min-h-screen bg-white pb-24">
            {/* High-Fidelity Hero */}
-      <section className="bg-slate-950 pt-32 pb-40 relative overflow-hidden">
+      <section className="bg-slate-950 pt-32 pb-32 relative overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-20">
            <img 
              src="/world_map_abstract_bg_1774527556200.png" 
@@ -56,7 +56,7 @@ const Plans = () => {
       </section>
 
       {/* Pricing Cards - Modern High-Fidelity Grid */}
-      <section className="max-w-7xl mx-auto px-6 -mt-24 relative z-20">
+      <section className="max-w-7xl mx-auto px-6 py-16 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           
           {/* Plan: Gratuito */}
@@ -64,34 +64,34 @@ const Plans = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-2xl flex flex-col h-full group hover:border-primary/20 transition-all duration-700"
+            className="bg-white rounded-[2.5rem] p-8 border-2 border-slate-100 shadow-xl flex flex-col h-full group hover:border-primary/20 transition-all duration-700"
           >
-            <div className="mb-8">
-              <div className="h-16 w-16 rounded-[1.5rem] bg-slate-50 flex items-center justify-center text-slate-400 mb-8 overflow-hidden relative shadow-inner">
-                <Rocket className="h-8 w-8 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+            <div className="mb-6">
+              <div className="h-14 w-14 rounded-[1.2rem] bg-slate-50 flex items-center justify-center text-slate-400 mb-6 overflow-hidden relative shadow-inner">
+                <Rocket className="h-7 w-7 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </div>
-              <h3 className="text-3xl font-black text-slate-950 tracking-tight mb-2">Gratuito</h3>
-              <p className="text-xs text-slate-400 font-black uppercase tracking-widest">Ideal para começar</p>
+              <h3 className="text-2xl font-black text-slate-950 tracking-tight mb-1">Gratuito</h3>
+              <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">Presença Básica</p>
             </div>
             
-            <div className="mb-10 flex items-baseline gap-1">
-              <span className="text-5xl font-black text-slate-950 tracking-tighter">R$ 0</span>
+            <div className="mb-8 flex items-baseline gap-1">
+              <span className="text-4xl font-black text-slate-950 tracking-tighter">R$ 0</span>
               <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">/mês</span>
             </div>
 
-            <div className="space-y-4 mb-10 flex-1">
-               {PLAN_FEATURES.slice(0, 4).map((f, i) => (
+            <div className="space-y-3 mb-10 flex-1">
+               {PLAN_FEATURES.slice(0, 5).map((f, i) => (
                  <div key={i} className="flex items-center gap-3">
-                   <div className="h-6 w-6 rounded-xl bg-orange-100 flex items-center justify-center">
-                     <Check className="h-3.5 w-3.5 text-primary" />
+                   <div className="h-5 w-5 rounded-lg bg-orange-100 flex items-center justify-center">
+                     <Check className="h-3 w-3 text-primary" />
                    </div>
-                   <span className="text-sm font-bold text-slate-600">{f.name}</span>
+                   <span className="text-xs font-bold text-slate-600">{f.name}</span>
                  </div>
                ))}
             </div>
 
             <Link to="/auth?mode=register">
-              <Button variant="outline" className="w-full h-16 rounded-2xl border-2 border-slate-100 font-black uppercase text-xs tracking-widest text-slate-950 hover:bg-slate-100 transition-all shadow-xl shadow-slate-200/20">
+              <Button variant="outline" className="w-full h-14 rounded-2xl border-2 border-slate-100 font-black uppercase text-[10px] tracking-widest text-slate-950 hover:bg-slate-100 transition-all shadow-lg shadow-slate-200/20">
                 Começar Agora
               </Button>
             </Link>
@@ -101,35 +101,35 @@ const Plans = () => {
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-slate-950 rounded-[3.5rem] p-12 border border-white/10 shadow-[0_30px_60px_-15px_rgba(255,107,44,0.3)] flex flex-col h-full relative overflow-hidden group"
+            className="bg-slate-950 rounded-[3rem] p-10 border-2 border-white/5 shadow-[0_40px_80px_-15px_rgba(255,107,44,0.4)] flex flex-col h-full relative overflow-hidden group"
           >
             {/* Background Glow */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 blur-[100px] -mr-32 -mt-32 rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
 
-            <div className="absolute top-10 right-10">
-               <div className="bg-primary text-white text-[10px] font-black uppercase tracking-[0.2em] px-6 py-2 rounded-full shadow-2xl shadow-primary/40 animate-pulse">Recomendado</div>
+            <div className="absolute top-8 right-8">
+               <div className="bg-primary text-white text-[9px] font-black uppercase tracking-[0.2em] px-5 py-2 rounded-full shadow-2xl shadow-primary/40 animate-pulse">Recomendado</div>
             </div>
 
-            <div className="mb-8 relative z-10">
-              <div className="h-20 w-20 rounded-[1.8rem] bg-primary flex items-center justify-center text-white mb-8 shadow-2xl shadow-primary/30 ring-4 ring-primary/20">
-                <Zap className="h-10 w-10 fill-white" />
+            <div className="mb-6 relative z-10">
+              <div className="h-16 w-16 rounded-[1.4rem] bg-primary flex items-center justify-center text-white mb-6 shadow-2xl shadow-primary/30 ring-4 ring-primary/20">
+                <Zap className="h-8 w-8 fill-white" />
               </div>
-              <h3 className="text-4xl font-black text-white tracking-tight mb-2">Profissional</h3>
-              <p className="text-xs text-primary font-black uppercase tracking-widest">Domínio Regional</p>
+              <h3 className="text-3xl font-black text-white tracking-tight mb-1">Profissional</h3>
+              <p className="text-[10px] text-primary font-black uppercase tracking-widest">Elite Local</p>
             </div>
             
-            <div className="mb-10 flex items-baseline gap-1 relative z-10">
-              <span className="text-6xl font-black text-white tracking-tighter">R$ 49</span>
+            <div className="mb-8 flex items-baseline gap-1 relative z-10">
+              <span className="text-5xl font-black text-white tracking-tighter">R$ 49</span>
               <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">/mês</span>
             </div>
 
-            <div className="space-y-4 mb-10 flex-1 relative z-10">
+            <div className="space-y-3 mb-10 flex-1 relative z-10">
                {PLAN_FEATURES.map((f, i) => (
                  <div key={i} className={cn("flex items-center gap-3", !f.basic && "opacity-20")}>
-                   <div className={cn("h-7 w-7 rounded-xl flex items-center justify-center", f.basic ? "bg-white/10" : "bg-white/5")}>
-                     {f.basic ? <Check className="h-4 w-4 text-primary" /> : <X className="h-4 w-4 text-white/40" />}
+                   <div className={cn("h-6 w-6 rounded-lg flex items-center justify-center", f.basic ? "bg-white/10" : "bg-white/5")}>
+                     {f.basic ? <Check className="h-3.5 w-3.5 text-primary" /> : <X className="h-3.5 w-3.5 text-white/40" />}
                    </div>
-                   <span className="text-sm font-bold text-white/90">
+                   <span className="text-[11px] font-bold text-white/90">
                      {typeof f.basic === 'string' ? `${f.name}: ${f.basic}` : f.name}
                    </span>
                  </div>
@@ -137,8 +137,8 @@ const Plans = () => {
             </div>
 
             <Link to="/auth?mode=register" className="relative z-10">
-              <Button className="w-full h-18 py-6 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase text-sm tracking-widest shadow-[0_15px_30px_-5px_var(--tw-shadow-color)] shadow-primary/40 transition-all active:scale-95">
-                Ativar Plano Elite
+              <Button className="w-full h-16 py-6 rounded-2xl bg-primary hover:bg-primary/90 text-white font-black uppercase text-xs tracking-widest shadow-xl shadow-primary/40 transition-all active:scale-95">
+                Ativar Plano Pro
               </Button>
             </Link>
           </motion.div>
@@ -148,37 +148,37 @@ const Plans = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white rounded-[3rem] p-10 border border-slate-100 shadow-2xl flex flex-col h-full group hover:border-emerald-500/20 transition-all duration-700"
+            className="bg-white rounded-[2.5rem] p-8 border-2 border-slate-100 shadow-xl flex flex-col h-full group hover:border-emerald-500/20 transition-all duration-700"
           >
-            <div className="mb-8">
-              <div className="h-16 w-16 rounded-[1.5rem] bg-emerald-50 flex items-center justify-center text-emerald-500 mb-8 shadow-inner overflow-hidden relative">
-                <Crown className="h-8 w-8 transition-transform group-hover:scale-110" />
+            <div className="mb-6">
+              <div className="h-14 w-14 rounded-[1.2rem] bg-emerald-50 flex items-center justify-center text-emerald-500 mb-6 shadow-inner overflow-hidden relative">
+                <Crown className="h-7 w-7 transition-transform group-hover:scale-110" />
               </div>
-              <h3 className="text-3xl font-black text-slate-950 tracking-tight mb-2">Enterprise</h3>
-              <p className="text-xs text-emerald-500 font-black uppercase tracking-widest">Autoridade Máxima</p>
+              <h3 className="text-2xl font-black text-slate-950 tracking-tight mb-1">Elite Max</h3>
+              <p className="text-[10px] text-emerald-500 font-black uppercase tracking-widest">Autoridade Regional</p>
             </div>
             
-            <div className="mb-10 flex items-baseline gap-1">
-              <span className="text-5xl font-black text-slate-950 tracking-tighter">R$ 149</span>
+            <div className="mb-8 flex items-baseline gap-1">
+              <span className="text-4xl font-black text-slate-950 tracking-tighter">R$ 149</span>
               <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">/mês</span>
             </div>
 
-            <div className="space-y-4 mb-10 flex-1">
+            <div className="space-y-3 mb-10 flex-1">
                {PLAN_FEATURES.map((f, i) => (
                  <div key={i} className="flex items-center gap-3">
-                   <div className="h-6 w-6 rounded-xl bg-emerald-100 flex items-center justify-center">
-                     <Check className="h-3.5 w-3.5 text-emerald-500" />
+                   <div className="h-5 w-5 rounded-lg bg-emerald-100 flex items-center justify-center">
+                     <Check className="h-3 w-3 text-emerald-500" />
                    </div>
-                   <span className="text-sm font-bold text-slate-600">
-                     {typeof f.pro === 'string' ? f.pro + ' ' + f.name : f.name}
+                   <span className="text-xs font-bold text-slate-600">
+                     {typeof f.pro === 'string' ? `${f.name}: ${f.pro}` : f.name}
                    </span>
                  </div>
                ))}
             </div>
 
             <Link to="/auth?mode=register">
-              <Button variant="outline" className="w-full h-16 rounded-2xl border-2 border-emerald-500/20 font-black uppercase text-xs tracking-widest text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all shadow-xl shadow-emerald-500/10">
-                Expandir Negócio
+              <Button variant="outline" className="w-full h-14 rounded-2xl border-2 border-emerald-500/20 font-black uppercase text-[10px] tracking-widest text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10">
+                Domination Regional
               </Button>
             </Link>
           </motion.div>

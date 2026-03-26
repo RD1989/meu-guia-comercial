@@ -34,6 +34,7 @@ const DashboardBusiness = () => {
     tiktok_url: "",
     has_menu: false,
     has_booking: false,
+    gallery: [] as { url: string; type: "image" | "video" }[],
   });
 
   useEffect(() => {
@@ -56,11 +57,12 @@ const DashboardBusiness = () => {
         tiktok_url: (business as any).tiktok_url || "",
         has_menu: (business as any).has_menu || false,
         has_booking: (business as any).has_booking || false,
+        gallery: (business as any).gallery || [],
       });
     }
   }, [business]);
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: any) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -85,6 +87,7 @@ const DashboardBusiness = () => {
         tiktok_url: form.tiktok_url,
         has_menu: form.has_menu,
         has_booking: form.has_booking,
+        gallery: form.gallery,
       } as any)
     });
   };
@@ -102,10 +105,15 @@ const DashboardBusiness = () => {
   if (!business) {
     return (
       <DashboardLayout title="Meu Negócio">
-        <Card className="p-12 text-center">
-          <p className="text-sm text-muted-foreground">
-            Nenhum negócio vinculado à sua conta. Peça ao administrador para cadastrá-lo.
+        <Card className="p-12 text-center shadow-xl border-none rounded-[40px]">
+          <div className="h-20 w-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Search className="h-10 w-10 text-slate-300" />
+          </div>
+          <h3 className="text-xl font-black text-slate-900 mb-2">Nenhum Negócio Encontrado</h3>
+          <p className="text-sm text-muted-foreground max-w-xs mx-auto mb-8">
+            Você ainda não possui um estabelecimento vinculado à sua conta de lojista.
           </p>
+          <Button className="rounded-2xl font-black h-12 px-8">Criar Meu Perfil</Button>
         </Card>
       </DashboardLayout>
     );
@@ -114,9 +122,32 @@ const DashboardBusiness = () => {
   return (
     <DashboardLayout title="Meu Negócio">
       <div className="max-w-2xl space-y-6">
-        <Card>
+        <Card className="border-none shadow-xl rounded-[32px] overflow-hidden">
           <CardHeader>
-            <CardTitle className="text-base">Foto de Capa</CardTitle>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Camera className="h-4 w-4 text-primary" />
+              Galeria de Mídia (Fotos e Vídeos)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <BusinessGallery 
+              items={form.gallery}
+              onChange={(items) => handleChange("gallery", items)}
+              maxPhotos={20}
+              maxVideos={5}
+            />
+            <p className="text-[10px] text-muted-foreground mt-4">
+              Dica: Perfis com vídeos convertem até **3x mais**. Max: 5MB (foto) / 20MB (vídeo).
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-none shadow-xl rounded-[32px] overflow-hidden">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <ImageIcon className="h-4 w-4 text-primary" />
+              Foto de Capa Principal
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <ImageUpload
