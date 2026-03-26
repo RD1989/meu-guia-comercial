@@ -157,7 +157,7 @@ export const DUMMY_BUSINESSES = [
     address: 'Empresarial Faria Lima, 10º Andar',
     phone: '(11) 3300-4400',
     whatsapp: '551133004400',
-    image_url: 'https://images.unsplash.com/photo-1454165833267-033f23b730d9?q=80&w=800',
+    image_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=800',
     active: true,
     featured: true,
     average_rating: 4.9,
