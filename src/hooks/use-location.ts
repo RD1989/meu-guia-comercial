@@ -20,11 +20,11 @@ export function useLocation() {
   useEffect(() => {
     const fetchLocation = async () => {
       try {
-        // Tentativa 1: IP-API (Gratuito, sem chave, mas HTTP por padrão - pode precisar de proxy ou https://ipapi.co)
         const response = await fetch("https://ipapi.co/json/");
+        if (!response.ok) throw new Error("Falha na resposta da API de geolocalização");
+        
         const data = await response.json();
-
-        if (data.latitude && data.longitude) {
+        if (data && data.latitude && data.longitude) {
           setLocation({
             lat: data.latitude,
             lng: data.longitude,
@@ -34,11 +34,15 @@ export function useLocation() {
             error: null,
           });
         } else {
-          throw new Error("Não foi possível detectar a localização pelo IP.");
+          throw new Error("Dados de localização incompletos");
         }
       } catch (err) {
         console.error("Erro na geolocalização por IP:", err);
-        setLocation(prev => ({ ...prev, loading: false, error: "Falha ao obter localização." }));
+        setLocation(prev => ({ 
+          ...prev, 
+          loading: false, 
+          error: "Não foi possível detectar sua localização automaticamente." 
+        }));
       }
     };
 

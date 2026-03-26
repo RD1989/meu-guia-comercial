@@ -45,7 +45,7 @@ import AdminConfig from "./pages/admin/AdminConfig";
 import AdminIAConfig from "./pages/admin/AdminIAConfig";
 import AdminReferences from "./pages/admin/AdminReferences";
 import AdminMediaLibrary from "./pages/admin/AdminMediaLibrary";
-import AdminJobs from "@/pages/admin/AdminJobs";
+import AdminJobs from "./pages/admin/AdminJobs";
 import AdminPendentes from "./pages/admin/AdminPendentes";
 import AdminPlanos from "./pages/admin/AdminPlanos";
 import AdminBusinessEditor from "./pages/admin/AdminBusinessEditor";
@@ -82,7 +82,9 @@ const App = () => (
         <CartProvider>
           <BrowserRouter>
             <AuthProvider>
-              <LocalConciergeWidget />
+              <HydrationGuard>
+                <LocalConciergeWidget />
+              </HydrationGuard>
               <Routes>
               {/* Public Portal */}
               <Route path="/" element={<Index />} />
@@ -139,5 +141,12 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
+
+const HydrationGuard = ({ children }: { children: React.ReactNode }) => {
+  const [mounted, setMounted] = React.useState(false);
+  React.useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+  return <>{children}</>;
+};
 
 export default App;
