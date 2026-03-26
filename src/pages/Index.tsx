@@ -78,6 +78,7 @@ const Index = () => {
   const { user, isLojista, isAdmin, isSuperAdmin } = useAuth();
   const navigate = useNavigate();
   const { config } = usePlatform();
+  const userLocation = useLocation();
   const [search, setSearch] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [activeTab, setActiveTab] = useState<"businesses" | "promotions">("businesses");
@@ -145,6 +146,13 @@ const Index = () => {
       setSelectedCity(config.platform_city);
     }
   }, [config.platform_city, selectedCity]);
+
+  // Atualiza a cidade selecionada se o usuário for detectado em outra cidade
+  useEffect(() => {
+    if (userLocation.city && !selectedCity) {
+      setSelectedCity(userLocation.city);
+    }
+  }, [userLocation.city, selectedCity]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -725,7 +733,21 @@ const Index = () => {
         </div>
 
         <div className="max-w-7xl mx-auto px-6">
-          <div className="w-full h-[500px] rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 bg-slate-100 relative">
+          <div className="w-full h-[500px] rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 bg-slate-100 relative group">
+             {/* Floating Location Notice */}
+             {userLocation.city && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="absolute top-6 left-6 z-20 bg-white/90 backdrop-blur-md px-6 py-3 rounded-2xl shadow-xl border border-primary/20 flex items-center gap-3"
+                >
+                   <div className="h-2 w-2 rounded-full bg-primary animate-ping" />
+                   <div className="text-xs font-black text-slate-900 uppercase tracking-widest">
+                      Você está em <span className="text-primary underline decoration-2 underline-offset-4">{userLocation.city}</span>
+                   </div>
+                </motion.div>
+             )}
+
              <iframe 
                width="100%" 
                height="100%" 
