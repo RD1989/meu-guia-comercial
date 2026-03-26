@@ -11,11 +11,13 @@ import { ImageUpload } from "@/components/dashboard/ImageUpload";
 import { BusinessGallery } from "@/components/dashboard/BusinessGallery";
 import { AICompanyOptimizer } from "@/components/admin/AICompanyOptimizer";
 import { AISeoOptimizer } from "@/components/admin/AISeoOptimizer";
+import { usePlanLimits } from "@/hooks/use-plan-limits";
 
 import { Link } from "react-router-dom";
 
 const DashboardBusiness = () => {
   const { business, isLoading, updateBusiness } = useBusiness();
+  const { limits } = usePlanLimits();
   const [form, setForm] = useState({
     name: "",
     description: "",
@@ -134,11 +136,11 @@ const DashboardBusiness = () => {
             <BusinessGallery 
               items={form.gallery}
               onChange={(items) => handleChange("gallery", items)}
-              maxPhotos={20}
-              maxVideos={5}
+              maxPhotos={limits.maxPhotos}
+              maxVideos={limits.maxVideos}
             />
             <p className="text-[10px] text-muted-foreground mt-4">
-              Dica: Perfis com vídeos convertem até **3x mais**. Max: 5MB (foto) / 20MB (vídeo).
+              Dica: Perfis com vídeos convertem até **3x mais**. Seu plano ({limits.tier}) permite {limits.maxPhotos} fotos e {limits.maxVideos} vídeos.
             </p>
           </CardContent>
         </Card>
@@ -182,11 +184,20 @@ const DashboardBusiness = () => {
                 placeholder="Conte um pouco sobre sua empresa, produtos e diferenciais..."
               />
               <div className="mt-3">
-                <AICompanyOptimizer 
-                  businessName={form.name} 
-                  currentDescription={form.description}
-                  onSelect={(txt) => handleChange("description", txt)}
-                />
+                {limits.hasIA ? (
+                  <AICompanyOptimizer 
+                    businessName={form.name} 
+                    currentDescription={form.description}
+                    onSelect={(txt) => handleChange("description", txt)}
+                  />
+                ) : (
+                  <div className="p-4 bg-slate-50 border border-dashed border-slate-200 rounded-xl text-center">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">IA Otimizadora Bloqueada</p>
+                    <Link to="/planos">
+                      <Button variant="link" className="text-[10px] h-auto p-0 text-primary font-bold decoration-primary">Fazer upgrade para ativar IA</Button>
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </CardContent>
@@ -253,22 +264,28 @@ const DashboardBusiness = () => {
 
         <Card className="border-primary/20 bg-primary/5">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Search className="h-4 w-4 text-primary" />
-              SEO & Google (IA)
-            </CardTitle>
-            <AISeoOptimizer 
-              businessName={form.name} 
-              businessDescription={form.description}
-              onSelect={(seo) => {
-                setForm(prev => ({
-                  ...prev,
-                  seo_title: seo.title,
-                  seo_description: seo.description,
-                  meta_keywords: seo.keywords
-                }));
-              }}
-            />
+            <div className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Search className="h-4 w-4 text-primary" />
+                SEO & Google (IA)
+              </CardTitle>
+              {limits.hasIA ? (
+                <AISeoOptimizer 
+                  businessName={form.name} 
+                  businessDescription={form.description}
+                  onSelect={(seo) => {
+                    setForm(prev => ({
+                      ...prev,
+                      seo_title: seo.title,
+                      seo_description: seo.description,
+                      meta_keywords: seo.keywords
+                    }));
+                  }}
+                />
+              ) : (
+                <Badge variant="outline" className="text-[8px] border-primary/20 text-primary">Plano Pro</Badge>
+              )}
+            </div>
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-[10px] text-slate-500 mb-2">
@@ -299,15 +316,23 @@ const DashboardBusiness = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="p-4 bg-white rounded-2xl border border-primary/10">
+            <div className="p-4 bg-white rounded-2xl border border-primary/10 relative overflow-hidden group">
+              {!limits.hasMenu && (
+                <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex items-center justify-center">
+                  <Link to="/planos">
+                    <Button variant="outline" size="sm" className="rounded-full text-[9px] font-black uppercase tracking-widest border-primary text-primary hover:bg-primary hover:text-white transition-all">Ativar no Pro</Button>
+                  </Link>
+                </div>
+              )}
               <div className="flex items-center justify-between mb-4">
                 <div className="space-y-0.5">
                   <Label className="text-sm font-bold">Cardápio Digital & Pedido</Label>
                   <p className="text-[10px] text-muted-foreground">Permitir que clientes montem pedidos para o WhatsApp.</p>
                 </div>
                 <button 
-                  onClick={() => setForm(prev => ({ ...prev, has_menu: !prev.has_menu }))}
-                  className={`h-6 w-11 rounded-full p-1 transition-colors ${form.has_menu ? 'bg-primary' : 'bg-slate-200'}`}
+                  onClick={() => limits.hasMenu && setForm(prev => ({ ...prev, has_menu: !prev.has_menu }))}
+                  disabled={!limits.hasMenu}
+                  className={`h-6 w-11 rounded-full p-1 transition-colors ${form.has_menu ? 'bg-primary' : 'bg-slate-200'} ${!limits.hasMenu ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <div className={`h-4 w-4 rounded-full bg-white transition-transform ${form.has_menu ? 'translate-x-5' : 'translate-x-0'}`} />
                 </button>
@@ -321,15 +346,23 @@ const DashboardBusiness = () => {
               )}
             </div>
 
-            <div className="p-4 bg-white rounded-2xl border border-primary/10">
+            <div className="p-4 bg-white rounded-2xl border border-primary/10 relative overflow-hidden">
+              {!limits.hasBooking && (
+                <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] z-10 flex items-center justify-center">
+                  <Link to="/planos">
+                    <Button variant="outline" size="sm" className="rounded-full text-[9px] font-black uppercase tracking-widest border-primary text-primary hover:bg-primary hover:text-white transition-all">Ativar no Elite</Button>
+                  </Link>
+                </div>
+              )}
               <div className="flex items-center justify-between mb-4">
                 <div className="space-y-0.5">
                   <Label className="text-sm font-bold">Agendamento de Horários</Label>
                   <p className="text-[10px] text-muted-foreground">Permitir reservas de serviços direto na sua página.</p>
                 </div>
                 <button 
-                  onClick={() => setForm(prev => ({ ...prev, has_booking: !prev.has_booking }))}
-                  className={`h-6 w-11 rounded-full p-1 transition-colors ${form.has_booking ? 'bg-primary' : 'bg-slate-200'}`}
+                  onClick={() => limits.hasBooking && setForm(prev => ({ ...prev, has_booking: !prev.has_booking }))}
+                  disabled={!limits.hasBooking}
+                  className={`h-6 w-11 rounded-full p-1 transition-colors ${form.has_booking ? 'bg-primary' : 'bg-slate-200'} ${!limits.hasBooking ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
                   <div className={`h-4 w-4 rounded-full bg-white transition-transform ${form.has_booking ? 'translate-x-5' : 'translate-x-0'}`} />
                 </button>

@@ -10,16 +10,24 @@ import { Plus, Pencil, Trash2, Package, Loader2 } from "lucide-react";
 import { useProducts, type Product } from "@/hooks/use-products";
 import { useBusiness } from "@/hooks/use-business";
 import { ImageUpload } from "@/components/dashboard/ImageUpload";
+import { usePlanLimits } from "@/hooks/use-plan-limits";
+import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const DashboardProducts = () => {
   const { business, isLoading: bizLoading } = useBusiness();
   const { products, isLoading, addProduct, updateProduct, deleteProduct } = useProducts();
+  const { limits } = usePlanLimits();
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [form, setForm] = useState({ name: "", description: "", price: "", image_url: "", category: "" });
 
   const openNew = () => {
+    if (products.length >= limits.maxProducts) {
+      toast.error(`Limite do catálogo atingido! Seu plano (${limits.tier}) permite até ${limits.maxProducts} produtos.`);
+      return;
+    }
     setEditingProduct(null);
     setForm({ name: "", description: "", price: "", image_url: "", category: "" });
     setDialogOpen(true);
@@ -90,12 +98,27 @@ const DashboardProducts = () => {
     <DashboardLayout title="Produtos">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">{products.length} produtos cadastrados</p>
-          <Button onClick={openNew} className="h-10 rounded-xl gap-2">
+          <p className="text-sm text-muted-foreground">{products.length} de {limits.maxProducts} produtos permitidos no Plano {limits.tier}</p>
+          <Button 
+            onClick={openNew} 
+            className={`h-10 rounded-xl gap-2 ${products.length >= limits.maxProducts ? 'opacity-50 grayscale' : ''}`}
+          >
             <Plus className="h-4 w-4" />
             Novo Produto
           </Button>
         </div>
+
+        {products.length >= limits.maxProducts && (
+          <div className="p-4 bg-amber-50 border border-amber-100 rounded-2xl flex items-center justify-between gap-4">
+             <div className="space-y-1">
+               <p className="text-xs font-black text-amber-900 uppercase tracking-widest leading-none">Limite do Plano Atingido</p>
+               <p className="text-[10px] text-amber-700 font-medium">Você já cadastrou {products.length} produtos. Faça upgrade para o plano Pro para cadastrar até 50.</p>
+             </div>
+             <Link to="/planos">
+               <Button size="sm" className="bg-amber-600 hover:bg-amber-700 text-white font-black text-[9px] uppercase tracking-widest rounded-full h-8 px-4">Upgrade Já</Button>
+             </Link>
+          </div>
+        )}
 
         {products.length === 0 ? (
           <Card className="p-12 text-center border-dashed border-2 rounded-[2rem] bg-slate-50/50">

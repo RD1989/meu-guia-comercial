@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles, Image as ImageIcon, Plus, Trash2, ArrowUp, ArrowDown, MapPin, CreditCard, Layout, ShieldCheck } from "lucide-react";
+import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles, Image as ImageIcon, Plus, Trash2, ArrowUp, ArrowDown, MapPin, CreditCard, Layout, ShieldCheck, Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { paymentService, PaymentGateway } from "@/services/payment";
@@ -21,6 +21,8 @@ export default function AdminConfig() {
   const [gateways, setGateways] = useState<any[]>([]);
   const [checkoutSettings, setCheckoutSettings] = useState<any>(null);
   const [gatewaysLoading, setGatewaysLoading] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingBanner, setUploadingBanner] = useState<string | null>(null);
 
   useEffect(() => {
     fetchBanners();
@@ -63,6 +65,55 @@ export default function AdminConfig() {
   const handleChange = (e: any) => {
     const { id, value } = e.target;
     setFormData(prev => ({ ...prev, [id]: value }));
+  };
+
+  const handleFileUpload = async (file: File, bucket: string, path: string) => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${path}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError, data } = await supabase.storage
+        .from(bucket)
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from(bucket)
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error: any) {
+      toast.error("Erro no upload: " + error.message);
+      return null;
+    }
+  };
+
+  const onLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    setUploadingLogo(true);
+    const file = e.target.files[0];
+    const url = await handleFileUpload(file, 'platform-assets', 'logo');
+    if (url) {
+      setFormData(prev => ({ ...prev, platform_logo_url: url }));
+      toast.success("Logotipo carregado com sucesso!");
+    }
+    setUploadingLogo(false);
+  };
+
+  const onBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>, bannerId: string, index: number) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    setUploadingBanner(bannerId);
+    const file = e.target.files[0];
+    const url = await handleFileUpload(file, 'platform-assets', 'banner');
+    if (url) {
+      const updated = [...banners];
+      updated[index].image_url = url;
+      setBanners(updated);
+      toast.success("Imagem do banner carregada!");
+    }
+    setUploadingBanner(null);
   };
 
   const handleSave = async () => {
@@ -175,14 +226,50 @@ export default function AdminConfig() {
                   <CardDescription>Upload de imagens para a marca.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="platform_logo_url">URL do Logotipo</Label>
-                    <div className="flex gap-2">
-                      <Input id="platform_logo_url" value={formData.platform_logo_url} onChange={handleChange} placeholder="https://..." />
-                      <Button variant="outline" size="icon" title="Upload em breve"><Upload className="h-4 w-4" /></Button>
+                  <div className="space-y-4">
+                    <Label htmlFor="platform_logo_url">Logotipo da Plataforma</Label>
+                    <div className="flex flex-col gap-4">
+                      <div className="flex gap-2">
+                        <Input 
+                          id="platform_logo_url" 
+                          value={formData.platform_logo_url} 
+                          onChange={handleChange} 
+                          placeholder="https://..." 
+                          className="flex-1"
+                        />
+                        <div className="relative">
+                          <input 
+                            type="file" 
+                            id="logo-upload" 
+                            className="hidden" 
+                            accept="image/*"
+                            onChange={onLogoUpload}
+                            disabled={uploadingLogo}
+                          />
+                          <Button 
+                            variant="outline" 
+                            size="icon" 
+                            asChild
+                            disabled={uploadingLogo}
+                          >
+                            <label htmlFor="logo-upload" className="cursor-pointer">
+                              {uploadingLogo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                            </label>
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                        <HelpCircle className="h-4 w-4 text-primary mt-0.5" />
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Guia de Tamanho (Logo)</p>
+                          <p className="text-xs text-slate-500">O tamanho ideal é **512x512px** (Proporção 1:1). Use fundos transparentes (PNG ou SVG).</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="h-40 w-full border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center bg-slate-50 overflow-hidden">
+
+                  <div className="h-40 w-full border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center bg-slate-50 overflow-hidden relative group">
                     {formData.platform_logo_url ? (
                       <img src={formData.platform_logo_url} alt="Preview Logo" className="max-h-32 object-contain" />
                     ) : (
@@ -372,17 +459,42 @@ export default function AdminConfig() {
                         
                         <div className="flex-1 space-y-4">
                           <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
-                              <Label>URL da Imagem</Label>
-                              <Input 
-                                value={banner.image_url} 
-                                onChange={(e) => {
-                                  const updated = [...banners];
-                                  updated[index].image_url = e.target.value;
-                                  setBanners(updated);
-                                }} 
-                                placeholder="https://unsplash.com/..."
-                              />
+                            <div className="space-y-4">
+                              <Label>Imagem do Banner</Label>
+                              <div className="flex gap-2">
+                                <Input 
+                                  value={banner.image_url} 
+                                  onChange={(e) => {
+                                    const updated = [...banners];
+                                    updated[index].image_url = e.target.value;
+                                    setBanners(updated);
+                                  }} 
+                                  placeholder="https://..."
+                                />
+                                <div className="relative">
+                                  <input 
+                                    type="file" 
+                                    id={`banner-upload-${banner.id}`} 
+                                    className="hidden" 
+                                    accept="image/*"
+                                    onChange={(e) => onBannerUpload(e, banner.id, index)}
+                                    disabled={uploadingBanner === banner.id}
+                                  />
+                                  <Button 
+                                    variant="outline" 
+                                    size="icon" 
+                                    asChild
+                                    disabled={uploadingBanner === banner.id}
+                                  >
+                                    <label htmlFor={`banner-upload-${banner.id}`} className="cursor-pointer">
+                                      {uploadingBanner === banner.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                                    </label>
+                                  </Button>
+                                </div>
+                              </div>
+                              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                                <HelpCircle className="h-3 w-3" /> Tamanho ideal: 1920x1080px (Wide)
+                              </p>
                             </div>
                             <div className="space-y-2">
                               <Label>Título (Opcional)</Label>
@@ -711,8 +823,11 @@ export default function AdminConfig() {
                       onClick={async () => {
                         toast.info("Testando conexão...");
                         try {
-                          const { data, error } = await supabase.functions.invoke("test-openrouter", {
-                            body: { key: formData.openrouter_api_key }
+                          const { data, error } = await supabase.functions.invoke("autopilot-engine", {
+                            body: { 
+                              test: true,
+                              key: formData.openrouter_api_key 
+                            }
                           });
                           if (error) throw error;
                           toast.success("Conexão estabelecida com sucesso!");

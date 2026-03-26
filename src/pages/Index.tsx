@@ -43,6 +43,7 @@ import { SmartAdSlot } from "@/components/portal/SmartAdSlot";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { SEO } from "@/components/SEO";
 import { DUMMY_TESTIMONIALS, DUMMY_CATEGORIES, DUMMY_BUSINESSES, DUMMY_BANNERS } from "@/data/dummy-data";
 
 const ICON_MAP: Record<string, any> = {

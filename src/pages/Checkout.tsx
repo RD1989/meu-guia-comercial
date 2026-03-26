@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ShieldCheck, CreditCard, CheckCircle2, QrCode, ArrowLeft, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Checkout() {
   const [searchParams] = useSearchParams();
@@ -35,11 +36,57 @@ export default function Checkout() {
   }, []);
 
   const handlePayment = async () => {
+    if (!planId) {
+      toast.error("Plano inválido");
+      return;
+    }
+
     setStatus('processing');
-    setTimeout(() => {
-      setStatus('success');
-      toast.success("Pagamento confirmado com sucesso!");
-    }, 2000);
+    
+    try {
+      // 1. Buscar o tenant do usuário logado
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Usuário não autenticado");
+
+      const { data: business } = await supabase
+        .from('businesses')
+        .select('tenant_id')
+        .eq('owner_id', user.id)
+        .single();
+
+      if (!business) throw new Error("Negócio não encontrado para este usuário");
+
+      // 2. Mapear o planId para o Enum do banco
+      const tierMap: Record<string, any> = {
+        'prof': 'PRO',
+        'elite': 'MAX',
+        'free': 'FREE'
+      };
+
+      const newTier = tierMap[planId as string] || 'PRO';
+
+      // 3. Atualizar o tenant
+      const { error: updateError } = await supabase
+        .from('tenants')
+        .update({ 
+          plan_tier: newTier,
+          plan_status: 'ACTIVE'
+        })
+        .eq('id', business.tenant_id);
+
+      if (updateError) throw updateError;
+
+      // Sucesso simulado (delay de rede)
+      setTimeout(() => {
+        setStatus('success');
+        toast.success("Plano ativado com sucesso!");
+      }, 1500);
+
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Erro ao ativar plano: " + err.message);
+      setStatus('idle');
+    }
   };
 
   if (loading) return <div className="h-screen flex items-center justify-center font-black animate-pulse">CARREGANDO CHECKOUT ELITE...</div>;

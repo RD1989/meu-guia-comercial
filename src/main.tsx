@@ -16,8 +16,13 @@ async function bootstrap() {
       throw new Error("❌ [ERRO CRITICO] Elemento #root não encontrado no DOM!");
     }
 
+    const { HelmetProvider } = await import("react-helmet-async");
     const root = createRoot(container);
-    root.render(<App />);
+    root.render(
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
+    );
     console.log("✨ [DIAGNOSTICO] Renderização do React disparada.");
   } catch (error) {
     console.error("🔥 [ERRO FATAL] Falha durante o carregamento ou renderização:", error);
