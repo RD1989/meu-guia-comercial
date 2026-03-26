@@ -1,10 +1,11 @@
-import { Home, Search, Newspaper, User } from "lucide-react";
+import { Home, Search, Newspaper, User, Grid } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
 const tabs = [
   { icon: Home, label: "Início", path: "/" },
   { icon: Search, label: "Buscar", path: "/buscar" },
+  { icon: Grid, label: "Categorias", path: "/categorias" },
   { icon: Newspaper, label: "Notícias", path: "/noticias" },
   { icon: User, label: "Perfil", path: "/perfil" },
 ];

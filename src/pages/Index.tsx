@@ -281,6 +281,14 @@ const Index = () => {
               })}
             </div>
           )}
+
+          <div className="mt-12 text-center">
+            <Link to="/categorias">
+              <Button variant="outline" className="h-12 px-10 rounded-2xl border-2 border-slate-200 font-black text-slate-900 gap-2 hover:bg-slate-100 transition-all">
+                Ver Todas as Categorias <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 

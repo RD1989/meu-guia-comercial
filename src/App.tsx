@@ -18,6 +18,8 @@ import Profile from "./pages/Profile";
 import Blog from "./pages/portal/Blog";
 import BlogPost from "./pages/portal/BlogPost";
 import JobApplicationsPage from "./pages/portal/JobApplications";
+import Categories from "./pages/Categories";
+import Plans from "./pages/Plans";
 import NotFound from "./pages/NotFound";
 
 // Lojista Dashboard
@@ -85,6 +87,8 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/vagas" element={<JobApplicationsPage />} />
+              <Route path="/categorias" element={<Categories />} />
+              <Route path="/planos" element={<Plans />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
