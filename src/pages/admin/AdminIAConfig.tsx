@@ -116,9 +116,26 @@ export default function AdminIAConfig() {
             </h1>
             <p className="text-slate-500 mt-1">Gerencie o cérebro autônomo do seu portal comercial.</p>
           </div>
-          <Button onClick={() => saveMutation.mutate(formData)} disabled={saving} className="gap-2 px-8 h-12 bg-primary hover:bg-primary/90 text-white font-bold shadow-lg shadow-primary/20 transition-all active:scale-95">
-            <Save className="h-5 w-5" /> {saving ? "Processando..." : "Salvar Configurações"}
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              variant="outline"
+              onClick={async () => {
+                const { data, error } = await supabase.functions.invoke('autopilot-engine');
+                if (error) {
+                  toast.error("Erro ao acionar robô: " + error.message);
+                } else {
+                  toast.success(`Sucesso! Missão: ${data.mission}. Artigo: ${data.result?.title}`);
+                  queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+                }
+              }}
+              className="gap-2 px-6 h-12 border-primary/20 bg-primary/5 text-primary font-bold hover:bg-primary/10 transition-all active:scale-95"
+            >
+              <Zap className="h-4 w-4" /> Acionar Robô Agora
+            </Button>
+            <Button onClick={() => saveMutation.mutate(formData)} disabled={saving} className="gap-2 px-8 h-12 bg-primary hover:bg-primary/90 text-white font-bold shadow-lg shadow-primary/20 transition-all active:scale-95">
+              <Save className="h-5 w-5" /> {saving ? "Processando..." : "Salvar Configurações"}
+            </Button>
+          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">

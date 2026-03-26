@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Plus, ExternalLink, MoreVertical, Edit, Trash } from "lucide-react";
+import { Search, Plus, ExternalLink, MoreVertical, Edit, Trash, Store } from "lucide-react";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -20,9 +20,11 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminEmpresas() {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const { data: businesses, isLoading } = useQuery({
     queryKey: ["admin-businesses", searchTerm],
@@ -49,7 +51,7 @@ export default function AdminEmpresas() {
             <h1 className="text-2xl font-bold text-slate-800">Gerenciar Empresas</h1>
             <p className="text-slate-500">Visualize e administre todos os estabelecimentos da plataforma.</p>
           </div>
-          <Button className="bg-primary hover:bg-primary/90">
+          <Button className="bg-primary hover:bg-primary/90" onClick={() => navigate("/admin/empresas/novo")}>
             <Plus className="h-4 w-4 mr-2" /> Nova Empresa
           </Button>
         </div>
@@ -143,10 +145,10 @@ export default function AdminEmpresas() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem className="gap-2">
+                        <DropdownMenuItem className="gap-2" onClick={() => navigate(`/admin/empresas/editar/${biz.slug}`)}>
                           <Edit className="h-4 w-4" /> Editar
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2">
+                        <DropdownMenuItem className="gap-2" onClick={() => window.open(`/negocio/${biz.slug}`, '_blank')}>
                           <ExternalLink className="h-4 w-4" /> Ver no Guia
                         </DropdownMenuItem>
                         <DropdownMenuItem className="gap-2 text-destructive">

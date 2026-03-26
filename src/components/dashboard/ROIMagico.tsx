@@ -52,14 +52,12 @@ export function ROIMagico({ profileViews, whatsappClicks, averageTicket }: ROIMa
         value={profileViews.toLocaleString("pt-BR")}
         description="total de acessos"
         icon={Eye}
-        trend="+12%"
       />
       <MetricCard
         title="Cliques no WhatsApp"
         value={whatsappClicks.toLocaleString("pt-BR")}
         description={`${clickRate}% de conversão`}
         icon={MousePointerClick}
-        trend="+8%"
       />
       <MetricCard
         title="Ticket Médio"
@@ -72,7 +70,6 @@ export function ROIMagico({ profileViews, whatsappClicks, averageTicket }: ROIMa
         value={`R$ ${estimatedRevenue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
         description="valor gerado estimado"
         icon={TrendingUp}
-        trend="+15%"
       />
     </div>
   );

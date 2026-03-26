@@ -40,6 +40,9 @@ import AdminIAConfig from "./pages/admin/AdminIAConfig";
 import AdminReferences from "./pages/admin/AdminReferences";
 import AdminMediaLibrary from "./pages/admin/AdminMediaLibrary";
 import AdminJobs from "@/pages/admin/AdminJobs";
+import AdminPendentes from "./pages/admin/AdminPendentes";
+import AdminPlanos from "./pages/admin/AdminPlanos";
+import AdminBusinessEditor from "./pages/admin/AdminBusinessEditor";
 import { LocalConciergeWidget } from "./components/LocalConciergeWidget";
 
 const queryClient = new QueryClient();
@@ -97,6 +100,8 @@ const App = () => (
               {/* Super Admin Dashboard */}
               <Route path="/admin" element={<ProtectedRoute role="SUPERADMIN"><AdminDashboard /></ProtectedRoute>} />
               <Route path="/admin/empresas" element={<ProtectedRoute role="SUPERADMIN"><AdminEmpresas /></ProtectedRoute>} />
+              <Route path="/admin/empresas/novo" element={<ProtectedRoute role="SUPERADMIN"><AdminBusinessEditor /></ProtectedRoute>} />
+              <Route path="/admin/empresas/editar/:slug" element={<ProtectedRoute role="SUPERADMIN"><AdminBusinessEditor /></ProtectedRoute>} />
               <Route path="/admin/usuarios" element={<ProtectedRoute role="SUPERADMIN"><AdminUsuarios /></ProtectedRoute>} />
               <Route path="/admin/categorias" element={<ProtectedRoute role="SUPERADMIN"><AdminCategorias /></ProtectedRoute>} />
               <Route path="/admin/blog" element={<ProtectedRoute role="SUPERADMIN"><AdminBlog /></ProtectedRoute>} />
@@ -107,6 +112,8 @@ const App = () => (
               <Route path="/admin/referencias" element={<ProtectedRoute role="SUPERADMIN"><AdminReferences /></ProtectedRoute>} />
               <Route path="/admin/midias" element={<ProtectedRoute role="SUPERADMIN"><AdminMediaLibrary /></ProtectedRoute>} />
               <Route path="/admin/vagas" element={<ProtectedRoute role="SUPERADMIN"><AdminJobs /></ProtectedRoute>} />
+              <Route path="/admin/pendentes" element={<ProtectedRoute role="SUPERADMIN"><AdminPendentes /></ProtectedRoute>} />
+              <Route path="/admin/planos" element={<ProtectedRoute role="SUPERADMIN"><AdminPlanos /></ProtectedRoute>} />
 
               {/* Catch-all */}
               <Route path="*" element={<NotFound />} />

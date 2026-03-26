@@ -77,14 +77,14 @@ export default function AdminBlog() {
             <p className="text-slate-500">Crie conteúdo relevante para atrair tráfego e ajudar sua cidade.</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="gap-2 border-slate-200 text-slate-600">
+            <Button variant="outline" className="gap-2 border-slate-200 text-slate-600" onClick={() => navigate("/admin/blog/novo")}>
               <Plus className="h-4 w-4" /> Criar Manualmente
             </Button>
-            <Button variant="outline" className="gap-2 border-primary/20 text-primary hover:bg-primary/5" onClick={() => navigate("/admin/ia/references")}>
+            <Button variant="outline" className="gap-2 border-primary/20 text-primary hover:bg-primary/5" onClick={() => navigate("/admin/referencias")}>
               <Link className="h-4 w-4" /> Usar Referência
             </Button>
             <Button className="gap-2 bg-primary hover:bg-primary/90 shadow-sm" onClick={() => navigate("/admin/ia")}>
-              <Sparkles className="h-4 w-4" /> Configurar IA
+              <Sparkles className="h-4 w-4" /> Começar com IA
             </Button>
           </div>
         </div>
@@ -208,10 +208,10 @@ export default function AdminBlog() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => navigate(`/admin/blog/editor/${post.slug}`)} className="gap-2">
+                          <DropdownMenuItem onClick={() => navigate(`/admin/blog/editar/${post.slug}`)} className="gap-2">
                             <FileEdit className="h-4 w-4" /> Editar
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="gap-2">
+                          <DropdownMenuItem className="gap-2" onClick={() => window.open(`/artigo/${post.slug}`, '_blank')}>
                             <ExternalLink className="h-4 w-4" /> Ver no Portal
                           </DropdownMenuItem>
                           <DropdownMenuItem className="gap-2 text-destructive">

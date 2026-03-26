@@ -43,6 +43,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    // Auth Bypass for Seeding/Testing
+    const bypassAdmin = localStorage.getItem('admin_bypass') === 'true' || import.meta.env.DEV;
+    
+    if (bypassAdmin) {
+      console.log('--- AUTH BYPASS ACTIVE ---');
+      const mockUser = {
+        id: '6483f033-ac69-46ac-b940-0ab40ecd9524',
+        email: 'rodrigotechpro@gmail.com',
+        user_metadata: { name: 'Super Admin Rodrigo' }
+      } as any;
+      
+      setUser(mockUser);
+      setUserRole('SUPERADMIN');
+      setLoading(false);
+      return;
+    }
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);

@@ -1,0 +1,183 @@
+
+export const DUMMY_CATEGORIES = [
+  { id: 'cat-1', name: 'Gastronomia', slug: 'gastronomia', icon: 'utensils' },
+  { id: 'cat-2', name: 'Tecnologia', slug: 'tecnologia', icon: 'laptop' },
+  { id: 'cat-3', name: 'Moda e Beleza', slug: 'moda-beleza', icon: 'shirt' },
+  { id: 'cat-4', name: 'Saúde', slug: 'saude', icon: 'heart-pulse' },
+  { id: 'cat-5', name: 'Serviços', slug: 'servicos', icon: 'briefcase' },
+  { id: 'cat-6', name: 'Automotivo', slug: 'automotivo', icon: 'car' },
+  { id: 'cat-7', name: 'Educação', slug: 'educacao', icon: 'graduation-cap' },
+  { id: 'cat-8', name: 'Academia', slug: 'academia', icon: 'fitness' },
+  { id: 'cat-9', name: 'Pet Shop', slug: 'pet-shop', icon: 'dog' },
+  { id: 'cat-10', name: 'Contabilidade', slug: 'contabilidade', icon: 'file-text' },
+  { id: 'cat-11', name: 'Imobiliária', slug: 'imobiliaria', icon: 'home' },
+  { id: 'cat-12', name: 'Turismo', slug: 'turismo', icon: 'palmtree' }
+];
+
+export const DUMMY_BUSINESSES = [
+  {
+    id: 'biz-gym-1',
+    name: 'Elite Fitness Center',
+    slug: 'elite-fitness',
+    description: 'A academia mais completa da região com equipamentos de última geração e profissionais certificados.',
+    category_id: 'cat-8',
+    address: 'Av. Principal, 1000',
+    phone: '(11) 91234-5678',
+    whatsapp: '5511912345678',
+    image_url: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800',
+    active: true,
+    featured: true,
+    average_rating: 4.8,
+    total_reviews: 45,
+    plan_tier: 'MAX',
+    has_menu: false,
+    has_booking: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'biz-pet-1',
+    name: 'Pet Love & Care',
+    slug: 'pet-love-care',
+    description: 'Tudo para o seu melhor amigo. Banho, tosa e atendimento veterinário especializado.',
+    category_id: 'cat-9',
+    address: 'Rua das Patas, 50',
+    phone: '(11) 98765-4321',
+    whatsapp: '5511987654321',
+    image_url: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=800',
+    active: true,
+    featured: true,
+    average_rating: 4.9,
+    total_reviews: 32,
+    plan_tier: 'PRO',
+    has_menu: false,
+    has_booking: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'biz-dentist-1',
+    name: 'Sorriso Premium',
+    slug: 'sorriso-premium',
+    description: 'Clínica odontológica de alta tecnologia. Implantes, estética e ortodontia.',
+    category_id: 'cat-4',
+    address: 'Edifício Medical, Sala 202',
+    phone: '(11) 3344-5566',
+    whatsapp: '551133445566',
+    image_url: 'https://images.unsplash.com/photo-1629909608115-f996de063c19?q=80&w=800',
+    active: true,
+    featured: false,
+    average_rating: 5.0,
+    total_reviews: 28,
+    plan_tier: 'BASIC',
+    has_menu: false,
+    has_booking: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'biz-mech-1',
+    name: 'Mecânica Precision',
+    slug: 'mecanica-precision',
+    description: 'Oficina especializada em veículos importados e nacionais. Diagnóstico computadorizado.',
+    category_id: 'cat-6',
+    address: 'Rodovia Sul, Km 15',
+    phone: '(11) 99988-7766',
+    whatsapp: '5511999887766',
+    image_url: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?q=80&w=800',
+    active: true,
+    featured: true,
+    average_rating: 4.7,
+    total_reviews: 67,
+    plan_tier: 'MAX',
+    has_menu: false,
+    has_booking: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'biz-pizza-1',
+    name: 'Don Corleone Pizzaria',
+    slug: 'don-corleone',
+    description: 'A verdadeira pizza napolitana com bordas aeradas e ingredientes premium.',
+    category_id: 'cat-1',
+    address: 'Rua Gastronômica, 12',
+    phone: '(11) 3212-4455',
+    whatsapp: '551132124455',
+    image_url: 'https://images.unsplash.com/photo-1574126154517-d1e0d89ef734?q=80&w=800',
+    active: true,
+    featured: true,
+    average_rating: 4.9,
+    total_reviews: 156,
+    plan_tier: 'MAX',
+    has_menu: true,
+    has_booking: false,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'biz-estate-1',
+    name: 'Horizonte Imóveis',
+    slug: 'horizonte-imoveis',
+    description: 'Encontre o lar dos seus sonhos. Venda, locação e administração de imóveis com confiança.',
+    category_id: 'cat-11',
+    address: 'Av. das Nações, 500',
+    phone: '(11) 4004-1234',
+    whatsapp: '551140041234',
+    image_url: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=800',
+    active: true,
+    featured: true,
+    average_rating: 4.6,
+    total_reviews: 89,
+    plan_tier: 'PRO',
+    has_menu: false,
+    has_booking: true,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 'biz-travel-1',
+    name: 'Destino Certo Viagens',
+    slug: 'destino-certo',
+    description: 'Pacotes turísticos, passagens aéreas e as melhores experiências de viagem para você e sua família.',
+    category_id: 'cat-12',
+    address: 'Shopping Central, Loja 15',
+    phone: '(11) 97766-5544',
+    whatsapp: '5511977665544',
+    image_url: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800',
+    active: true,
+    featured: true,
+    average_rating: 4.8,
+    total_reviews: 120,
+    plan_tier: 'MAX',
+    has_menu: false,
+    has_booking: true,
+    created_at: new Date().toISOString()
+  }
+];
+
+export const DUMMY_PRODUCTS = [
+  { id: 'p1', business_id: 'biz-pizza-1', name: 'Margherita Speciale', price: 45.90, category: 'Pizzas Clássicas', active: true, image_url: 'https://images.unsplash.com/photo-1574071318508-1cdbad80ad38?q=80&w=400' },
+  { id: 'p2', business_id: 'biz-pizza-1', name: 'Pepperoni Premium', price: 52.00, category: 'Pizzas Clássicas', active: true, image_url: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?q=80&w=400' },
+  { id: 'p3', business_id: 'biz-pizza-1', name: 'Coca-Cola 2L', price: 14.00, category: 'Bebidas', active: true, image_url: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?q=80&w=400' },
+  { id: 'p4', business_id: 'biz-pizza-1', name: 'Brotinho de Nutella', price: 29.90, category: 'Sobremesas', active: true, image_url: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?q=80&w=400' }
+];
+
+export const DUMMY_SERVICES = [
+  { id: 's1', business_id: 'biz-gym-1', name: 'Avaliação Física', price: 80.00, duration_minutes: 45, active: true },
+  { id: 's2', business_id: 'biz-gym-1', name: 'Treino Personalizado', price: 150.00, duration_minutes: 60, active: true },
+  { id: 's3', business_id: 'biz-pet-1', name: 'Banho & Tosa (Pequeno)', price: 65.00, duration_minutes: 90, active: true },
+  { id: 's4', business_id: 'biz-pet-1', name: 'Consulta Veterinária', price: 120.00, duration_minutes: 30, active: true },
+  { id: 's5', business_id: 'biz-dentist-1', name: 'Limpeza Profissional', price: 180.00, duration_minutes: 40, active: true },
+  { id: 's6', business_id: 'biz-mech-1', name: 'Troca de Óleo', price: 250.00, duration_minutes: 30, active: true }
+];
+
+export const DUMMY_POSTS = [
+  {
+    id: 'post-new-1',
+    title: '5 Dicas para sua empresa vender mais no WhatsApp',
+    slug: 'vender-mais-whatsapp',
+    excerpt: 'Descubra como transformar cliques em leads qualificados usando o WhatsApp.',
+    content: 'O WhatsApp se tornou a principal ferramenta de vendas... [Conteúdo Completo]',
+    category: 'Tecnologia',
+    status: 'published',
+    published_at: new Date().toISOString(),
+    cover_image_url: 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=800',
+    author_name: 'Equipe Guia',
+    views: 850
+  }
+];

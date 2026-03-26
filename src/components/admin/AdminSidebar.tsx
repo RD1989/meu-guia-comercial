@@ -19,10 +19,10 @@ import { Link } from "react-router-dom";
 
 const adminMenuItems = [
   { title: "Dashboard", url: "/admin", icon: LayoutDashboard },
-  { title: "Anúncios Pendentes", url: "/admin/pendentes", icon: Sparkles }, // Mock
+  { title: "Anúncios Pendentes", url: "/admin/pendentes", icon: Sparkles },
   { title: "Empresas", url: "/admin/empresas", icon: Store },
   { title: "Categorias", url: "/admin/categorias", icon: Tags },
-  { title: "Planos", url: "/admin/planos", icon: CreditCard }, // Mock
+  { title: "Planos", url: "/admin/planos", icon: CreditCard },
   { title: "Blog / Artigos", url: "/admin/blog", icon: FileText },
   { title: "Vagas de Emprego", url: "/admin/vagas", icon: Briefcase },
   { title: "Biblioteca de Mídias", url: "/admin/midias", icon: ImageIcon },

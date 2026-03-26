@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Save, Palette, Globe, HelpCircle, Share2, Upload } from "lucide-react";
+import { Save, Palette, Globe, HelpCircle, Share2, Upload, Sparkles } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -28,15 +28,43 @@ export default function AdminConfig() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const updates = Object.entries(formData).map(([key, value]) => ({
-        key,
-        value: String(value)
-      }));
+      const platformUpdates = Object.entries(formData)
+        .filter(([key]) => !['openrouter_api_key', 'default_model'].includes(key))
+        .map(([key, value]) => ({
+          key,
+          value: String(value)
+        }));
 
-      for (const update of updates) {
+      // Salva configurações da plataforma
+      for (const update of platformUpdates) {
         await supabase
           .from("platform_config")
           .upsert({ key: update.key, value: update.value }, { onConflict: "key" });
+      }
+
+      // Salva configurações de IA (OpenRouter)
+      if (formData.openrouter_api_key || formData.default_model) {
+        const { data: aiSettings } = await (supabase as any)
+          .from("ai_settings")
+          .select("id")
+          .limit(1)
+          .maybeSingle();
+
+        const aiData = {
+          openrouter_api_key: formData.openrouter_api_key,
+          default_model: formData.default_model
+        };
+
+        if (aiSettings) {
+          await (supabase as any)
+            .from("ai_settings")
+            .update(aiData)
+            .eq("id", aiSettings.id);
+        } else {
+          await (supabase as any)
+            .from("ai_settings")
+            .insert([aiData]);
+        }
       }
 
       toast.success("Configurações salvas com sucesso!");
@@ -66,6 +94,7 @@ export default function AdminConfig() {
             <TabsTrigger value="geral" className="gap-2"><Globe className="h-4 w-4" /> Geral</TabsTrigger>
             <TabsTrigger value="aparencia" className="gap-2"><Palette className="h-4 w-4" /> Aparência</TabsTrigger>
             <TabsTrigger value="social" className="gap-2"><Share2 className="h-4 w-4" /> Redes Sociais</TabsTrigger>
+            <TabsTrigger value="ia" className="gap-2"><Sparkles className="h-4 w-4" /> Inteligência Artificial</TabsTrigger>
           </TabsList>
 
           <TabsContent value="geral">
@@ -191,6 +220,92 @@ export default function AdminConfig() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+          <TabsContent value="ia">
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card className="border-none shadow-sm bg-white">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-primary" /> Coração de IA (OpenRouter)
+                  </CardTitle>
+                  <CardDescription>Configure a inteligência que processa o blog, concierge e automações.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="openrouter_api_key">Chave de API OpenRouter</Label>
+                    <Input 
+                      id="openrouter_api_key" 
+                      type="password"
+                      value={formData.openrouter_api_key} 
+                      onChange={handleChange} 
+                      placeholder="sk-or-v1-..." 
+                      className="bg-slate-50 border-none"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="default_model">Modelo Cognitivo Padrão</Label>
+                    <Input 
+                      id="default_model" 
+                      value={formData.default_model || "openai/gpt-4o-mini"} 
+                      onChange={handleChange} 
+                      placeholder="Ex: openai/gpt-4o-mini"
+                      className="bg-slate-50 border-none"
+                    />
+                  </div>
+                  <div className="p-4 bg-primary/5 rounded-lg border border-primary/10 flex items-start gap-3 mt-4">
+                    <HelpCircle className="h-4 w-4 text-primary mt-0.5" />
+                    <p className="text-[11px] text-slate-500 leading-relaxed">
+                      Esta chave é utilizada em todo o ecossistema. Certifique-se de ter saldo no OpenRouter para garantir o funcionamento do Concierge e da Automação de Blog.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-sm bg-white">
+                <CardHeader>
+                  <CardTitle>Status da Inteligência</CardTitle>
+                  <CardDescription>Verifique se os serviços de IA estão operacionais.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className={`h-3 w-3 rounded-full ${formData.openrouter_api_key ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
+                      <span className="text-sm font-bold text-slate-700">OpenRouter API</span>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-[10px] h-8 font-bold uppercase tracking-wider" 
+                      disabled={!formData.openrouter_api_key || saving}
+                      onClick={async () => {
+                        toast.info("Testando conexão...");
+                        try {
+                          const { data, error } = await supabase.functions.invoke("test-openrouter", {
+                            body: { key: formData.openrouter_api_key }
+                          });
+                          if (error) throw error;
+                          toast.success("Conexão estabelecida com sucesso!");
+                        } catch (err: any) {
+                          toast.error("Falha na conexão: " + err.message);
+                        }
+                      }}
+                    >
+                      Testar Conexão
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold text-slate-400 uppercase">Aplicações Ativas</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {['Blog Autônomo', 'Concierge IA', 'Otimizador SEO', 'Classificador'].map(feature => (
+                        <div key={feature} className="p-2 border border-slate-100 rounded-lg text-[10px] flex items-center gap-2 text-slate-500">
+                          <div className="h-1.5 w-1.5 rounded-full bg-primary" /> {feature}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
         </Tabs>
       </div>

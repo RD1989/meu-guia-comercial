@@ -13,7 +13,9 @@ import {
   Bot,
   MapPin,
   Clock,
-  ChevronRight
+  ChevronRight,
+  Tags,
+  ExternalLink
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,30 +42,69 @@ export default function AdminDashboard() {
   const { data: stats, isLoading } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: async () => {
-      const [businesses, users, posts, views] = await Promise.all([
+      const [businesses, users, posts, views, categories] = await Promise.all([
         supabase.from("businesses").select("*", { count: "exact", head: true }),
         supabase.from("profiles").select("*", { count: "exact", head: true }),
-        (supabase as any).from("blog_posts").select("*", { count: "exact", head: true }),
-        supabase.from("businesses").select("profile_views").returns<{profile_views: number}[]>()
+        supabase.from("posts").select("*", { count: "exact", head: true }),
+        supabase.from("businesses").select("profile_views"),
+        supabase.from("categories").select("*", { count: "exact", head: true })
       ]);
 
       const totalViews = (views.data || []).reduce((acc, curr) => acc + (curr.profile_views || 0), 0);
 
-      const latestBusinesses = await supabase
-        .from("businesses")
-        .select("id, name, created_at, active, slug")
-        .order("created_at", { ascending: false })
-        .limit(5);
+      const [latestBusinesses, latestReviews, latestPosts] = await Promise.all([
+        supabase.from("businesses").select("id, name, created_at, active, slug").order("created_at", { ascending: false }).limit(3),
+        supabase.from("reviews")
+          .select("id, rating, created_at, businesses(name), profiles(name)")
+          .order("created_at", { ascending: false })
+          .limit(3),
+        supabase.from("posts").select("id, title, created_at").order("created_at", { ascending: false }).limit(2)
+      ]);
+
+      const recentActivity: any[] = [
+        ...(latestBusinesses.data || []).map(b => ({
+          text: `Nova empresa: '${b.name}'`,
+          time: new Date(b.created_at),
+          icon: Store,
+          type: "primary"
+        })),
+        ...(latestReviews.data || []).map((r: any) => ({
+          text: `${r.profiles?.name || 'Um usuário'} avaliou '${r.businesses?.name}' com ${r.rating} estrelas`,
+          time: new Date(r.created_at),
+          icon: Sparkles,
+          type: "amber"
+        })),
+        ...(latestPosts.data || []).map(p => ({
+          text: `Post publicado: '${p.title}'`,
+          time: new Date(p.created_at),
+          icon: FileText,
+          type: "blue"
+        }))
+      ].sort((a, b) => b.time.getTime() - a.time.getTime()).slice(0, 5);
 
       return {
         businesses: businesses.count || 0,
         users: users.count || 0,
         posts: posts.count || 0,
         views: totalViews,
-        latestBusinesses: latestBusinesses.data || []
+        categories: categories.count || 0,
+        latestBusinesses: latestBusinesses.data || [],
+        recentActivity
       };
     }
   });
+
+  const formatTime = (date: Date) => {
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 60) return `${minutes} min atrás`;
+    if (hours < 24) return `${hours}h atrás`;
+    return `${days}d atrás`;
+  };
 
   return (
     <AdminLayout>
@@ -83,21 +124,21 @@ export default function AdminDashboard() {
             />
             <StatCard 
               title="Categorias Ativas" 
-              value="12" 
-              icon={TagsMockIcon} 
+              value={stats?.categories || 0} 
+              icon={Tags} 
               description="Segmentos registrados" 
             />
             <StatCard 
-              title="Acessos Hoje" 
-              value={Math.round((stats?.views || 0) * 0.05) + 1} 
+              title="Visualizações Totais" 
+              value={stats?.views || 0} 
               icon={Eye} 
-              description="Tráfego orgânico" 
+              description="Tráfego orgânico acumulado" 
             />
             <StatCard 
-              title="Cidades Cobertas" 
-              value="1" 
-              icon={MapPin} 
-              description="Regiões de atuação" 
+              title="Usuários Ativos" 
+              value={stats?.users || 0} 
+              icon={Users} 
+              description="Perfis registrados" 
             />
           </div>
 
@@ -140,7 +181,7 @@ export default function AdminDashboard() {
                            </span>
                            <Link to={`/negocio/${biz.slug}`} target="_blank">
                              <Button variant="outline" size="icon" className="h-8 w-8 text-slate-400 hover:text-primary">
-                               <ExternalLinkMockIcon className="h-4 w-4" />
+                               <ExternalLink className="h-4 w-4" />
                              </Button>
                            </Link>
                         </div>
@@ -160,27 +201,26 @@ export default function AdminDashboard() {
               </CardHeader>
               <CardContent className="p-0">
                 <div className="divide-y divide-slate-100">
-                  {[
-                    { text: "Nova empresa registrada: 'Padaria Modelo'", time: "Hoje, 10:45", icon: Store, type: "primary" },
-                    { text: "Usuário 'João' atualizou o plano PREMIUM", time: "Hoje, 09:30", icon: TrendingUp, type: "emerald" },
-                    { text: "3 novas avaliações recebidas.", time: "Ontem, 18:20", icon: Sparkles, type: "amber" },
-                    { text: "Novo Artigo publicado no Blog.", time: "Ontem, 14:00", icon: FileText, type: "blue" },
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-4 p-4 hover:bg-slate-50 transition-colors">
-                      <div className={`mt-0.5 h-8 w-8 rounded-full flex items-center justify-center ${
-                          item.type === 'primary' ? 'bg-primary/10 text-primary' : 
-                          item.type === 'emerald' ? 'bg-emerald-100 text-emerald-600' : 
-                          item.type === 'amber' ? 'bg-amber-100 text-amber-600' : 
-                          'bg-blue-100 text-blue-600'
-                      }`}>
-                        <item.icon className="h-4 w-4" />
+                  {stats?.recentActivity?.length === 0 ? (
+                    <div className="p-8 text-center text-slate-500 text-sm">Nenhuma atividade recente.</div>
+                  ) : (
+                    stats?.recentActivity?.map((item: any, idx: number) => (
+                      <div key={idx} className="flex items-start gap-4 p-4 hover:bg-slate-50 transition-colors">
+                        <div className={`mt-0.5 h-8 w-8 rounded-full flex items-center justify-center ${
+                            item.type === 'primary' ? 'bg-primary/10 text-primary' : 
+                            item.type === 'emerald' ? 'bg-emerald-100 text-emerald-600' : 
+                            item.type === 'amber' ? 'bg-amber-100 text-amber-600' : 
+                            'bg-blue-100 text-blue-600'
+                        }`}>
+                          <item.icon className="h-4 w-4" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm text-slate-700 font-semibold">{item.text}</p>
+                          <p className="text-xs text-slate-400 mt-1">{formatTime(item.time)}</p>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-sm text-slate-700 font-semibold">{item.text}</p>
-                        <p className="text-xs text-slate-400 mt-1">{item.time}</p>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -192,11 +232,3 @@ export default function AdminDashboard() {
   );
 }
 
-// Icons fallbacks
-const TagsMockIcon = ({ className }: any) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M9 5H2v7l6.29 6.29c.94.94 2.48.94 3.42 0l3.58-3.58c.94-.94.94-2.48 0-3.42L9 5Z"/><path d="M6 9h.01"/><path d="m11 14 5.29-5.29c.94-.94.94-2.48 0-3.42l-3.58-3.58a2.41 2.41 0 0 0-3.42 0L3 11"/></svg>
-);
-
-const ExternalLinkMockIcon = ({ className }: any) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-);

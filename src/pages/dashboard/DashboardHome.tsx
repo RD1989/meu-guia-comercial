@@ -89,7 +89,7 @@ const DashboardHome = () => {
                 <div className="pt-2 flex flex-col gap-2 relative z-10">
                    <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
                       <Star className="h-4 w-4 text-amber-500 fill-amber-500" />
-                      <span>{((business as any).rating_average || 0).toFixed(1)} Avaliação Média</span>
+                      <span>{(Number((business as any).rating_average) || 0).toFixed(1)} Avaliação Média</span>
                    </div>
                    <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 mt-2">
                       <p className="text-[10px] text-slate-500 leading-tight">

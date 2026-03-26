@@ -11,11 +11,17 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { DigitalMenu } from "@/components/portal/DigitalMenu";
 import { BookingSection } from "@/components/portal/BookingSection";
+import { AddReviewModal } from "@/components/portal/AddReviewModal";
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const BusinessDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const [reviewModalOpen, setReviewModalOpen] = useState(false);
 
   const { data: business, isLoading } = useQuery({
     queryKey: ["business", slug],
@@ -94,13 +100,24 @@ const BusinessDetail = () => {
 
   const handleWhatsAppClick = async () => {
     if (!business) return;
+
+    // Se houver módulo de agendamento ou cardápio, rolar até ele em vez de mensagem genérica
+    if ((business as any).has_booking || (business as any).has_menu) {
+      const sectionId = (business as any).has_booking ? "booking-section" : "menu-section";
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+    }
+
     // Increment whatsapp clicks
     await supabase
       .from("businesses")
       .update({ whatsapp_clicks: (business.whatsapp_clicks || 0) + 1 })
       .eq("id", business.id);
     
-    const message = encodeURIComponent(`Olá! Vi seu anúncio no *${window.location.host === 'localhost' ? 'Meu Guia Comercial' : window.location.host}* e gostaria de mais informações sobre seus produtos/serviços.`);
+    const message = encodeURIComponent(`Olá! Vi seu anúncio no *${window.location.host === 'localhost' ? 'Meu Guia Comercial' : window.location.host}* e gostaria de mais informações.`);
     window.open(`https://wa.me/${business.whatsapp}?text=${message}`, "_blank");
   };
 
@@ -222,19 +239,23 @@ const BusinessDetail = () => {
 
         {/* Módulos de Conversão Estratégica */}
         {(business as any).has_booking && services.length > 0 && (
-          <BookingSection 
-            services={services} 
-            businessName={business.name} 
-            whatsapp={business.whatsapp} 
-          />
+          <div id="booking-section">
+            <BookingSection 
+              services={services} 
+              businessName={business.name} 
+              whatsapp={business.whatsapp} 
+            />
+          </div>
         )}
 
         {(business as any).has_menu && products.length > 0 ? (
-          <DigitalMenu 
-            products={products} 
-            businessName={business.name} 
-            whatsapp={business.whatsapp} 
-          />
+          <div id="menu-section">
+            <DigitalMenu 
+              products={products} 
+              businessName={business.name} 
+              whatsapp={business.whatsapp} 
+            />
+          </div>
         ) : (
           /* Só mostra a lista simples de produtos se não houver NENHUM módulo de conversão ativo */
           !(business as any).has_menu && !(business as any).has_booking && products.length > 0 && (
@@ -264,13 +285,37 @@ const BusinessDetail = () => {
         )}
 
         {/* Reviews */}
-        {reviews.length > 0 && (
-          <section className="mt-6 pb-8">
-            <h2 className="text-base font-bold text-foreground mb-3">Avaliações</h2>
-            <div className="space-y-3">
+        <section className="mt-6 pb-8">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-base font-bold text-foreground">Avaliações</h2>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="rounded-lg h-8 text-[10px] font-bold gap-1 border-primary/20 text-primary hover:bg-primary/5"
+              onClick={() => {
+                if (!user) {
+                  toast.error("Você precisa estar logado para avaliar.");
+                  navigate("/auth");
+                  return;
+                }
+                setReviewModalOpen(true);
+              }}
+            >
+              <Star className="h-3 w-3 fill-primary" /> Fazer Avaliação
+            </Button>
+          </div>
+          <div className="space-y-3">
               {reviews.map((review) => (
                 <Card key={review.id} className="p-4">
                   <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      <span>{(business as any).categories?.name || 'Comércio'}</span>
+                      <span>•</span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {business.address}
+                      </span>
+                    </div>
                     <span className="text-sm font-semibold text-foreground">
                       {(review.profiles as any)?.name || "Usuário"}
                     </span>
@@ -290,10 +335,17 @@ const BusinessDetail = () => {
               ))}
             </div>
           </section>
-        )}
-      </div>
+        </div>
 
       <BottomTabBar />
+
+      <AddReviewModal 
+        isOpen={reviewModalOpen}
+        onClose={() => setReviewModalOpen(false)}
+        businessId={business.id}
+        businessName={business.name}
+        tenantId={business.tenant_id}
+      />
     </div>
   );
 };

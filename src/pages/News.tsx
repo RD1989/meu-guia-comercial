@@ -52,7 +52,7 @@ const News = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-[10px] text-muted-foreground">
-                        {format(new Date(post.created_at), "d 'de' MMM", { locale: ptBR })}
+                        {post.created_at ? format(new Date(post.created_at), "d 'de' MMM", { locale: ptBR }) : "Recentemente"}
                       </span>
                     </div>
                     <h3 className="text-sm font-semibold text-foreground line-clamp-2">{post.title}</h3>

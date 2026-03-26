@@ -1,21 +1,45 @@
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { ROIMagico } from "@/components/dashboard/ROIMagico";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useBusiness } from "@/hooks/use-business";
+import { Loader2 } from "lucide-react";
 
 const DashboardMetrics = () => {
-  const mockMetrics = {
-    profileViews: 1247,
-    whatsappClicks: 89,
-    averageTicket: 75.0,
+  const { business, isLoading } = useBusiness();
+
+  if (isLoading) {
+    return (
+      <DashboardLayout title="Métricas">
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (!business) {
+    return (
+      <DashboardLayout title="Métricas">
+        <Card className="p-12 text-center text-muted-foreground">
+          Nenhum negócio vinculado.
+        </Card>
+      </DashboardLayout>
+    );
+  }
+
+  const metrics = {
+    profileViews: business.profile_views || 0,
+    whatsappClicks: business.whatsapp_clicks || 0,
+    averageTicket: (business as any).average_ticket || 0,
   };
 
   const conversionRate = 0.20;
-  const estimatedRevenue = mockMetrics.whatsappClicks * conversionRate * mockMetrics.averageTicket;
+  const estimatedRevenue = metrics.whatsappClicks * conversionRate * metrics.averageTicket;
 
   return (
     <DashboardLayout title="Métricas">
       <div className="space-y-6">
-        <ROIMagico {...mockMetrics} />
+        <ROIMagico {...metrics} />
 
         <Card>
           <CardHeader>
@@ -25,7 +49,7 @@ const DashboardMetrics = () => {
             <div className="space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center justify-between py-2 border-b border-border">
                 <span>Cliques no WhatsApp</span>
-                <span className="font-semibold text-foreground">{mockMetrics.whatsappClicks}</span>
+                <span className="font-semibold text-foreground">{metrics.whatsappClicks}</span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-border">
                 <span>Taxa de conversão estimada</span>
@@ -33,7 +57,7 @@ const DashboardMetrics = () => {
               </div>
               <div className="flex items-center justify-between py-2 border-b border-border">
                 <span>Ticket médio</span>
-                <span className="font-semibold text-foreground">R$ {mockMetrics.averageTicket.toFixed(2)}</span>
+                <span className="font-semibold text-foreground">R$ {metrics.averageTicket.toFixed(2)}</span>
               </div>
               <div className="flex items-center justify-between py-2 bg-primary/5 rounded-lg px-3 -mx-3">
                 <span className="font-semibold text-foreground">Valor gerado estimado</span>

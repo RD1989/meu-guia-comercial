@@ -13,6 +13,8 @@ interface PlatformConfig {
   platform_facebook: string;
   platform_email: string;
   platform_footer_text: string;
+  openrouter_api_key: string;
+  default_model: string;
 }
 
 const defaultConfig: PlatformConfig = {
@@ -27,6 +29,8 @@ const defaultConfig: PlatformConfig = {
   platform_facebook: "",
   platform_email: "",
   platform_footer_text: "© 2026 Meu Guia Comercial. Todos os direitos reservados.",
+  openrouter_api_key: "",
+  default_model: "openai/gpt-4o-mini",
 };
 
 interface PlatformContextType {
@@ -48,16 +52,33 @@ export function PlatformProvider({ children }: { children: ReactNode }) {
       .select("key, value");
 
     if (data && data.length > 0) {
-      const configObj = data.reduce((acc, { key, value }) => {
-        acc[key as keyof PlatformConfig] = value || "";
-        return acc;
-      }, {} as Partial<PlatformConfig>);
+      const configObj: any = {};
+      data.forEach(({ key, value }) => {
+        configObj[key] = value || "";
+      });
 
       setConfig({ ...defaultConfig, ...configObj });
 
       // Apply primary color as CSS variable
       const color = configObj.platform_primary_color || defaultConfig.platform_primary_color;
       document.documentElement.style.setProperty("--platform-primary", color);
+
+      // Fetch AI settings
+      const { data: aiData } = await (supabase as any)
+        .from("ai_settings")
+        .select("openrouter_api_key, default_model")
+        .maybeSingle();
+      
+      if (aiData) {
+        setConfig(prev => ({ 
+          ...prev, 
+          ...configObj,
+          openrouter_api_key: aiData.openrouter_api_key || "",
+          default_model: aiData.default_model || "openai/gpt-4o-mini"
+        }));
+      } else {
+        setConfig({ ...defaultConfig, ...configObj });
+      }
     }
     setLoading(false);
   };
