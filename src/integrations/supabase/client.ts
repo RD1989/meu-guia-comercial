@@ -21,6 +21,8 @@ const baseSupabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_K
     storage: typeof window !== 'undefined' ? localStorage : undefined,
     persistSession: true,
     autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: 'pkce',
   },
 });
 
