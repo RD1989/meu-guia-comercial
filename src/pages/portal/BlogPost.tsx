@@ -8,6 +8,7 @@ import { Loader2, Calendar, User, ArrowLeft, Share2, Sparkles, Clock, AlertCircl
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from 'react-markdown';
+import { DUMMY_POSTS } from "@/data/dummy-data";
 
 interface BlogPost {
   id: string;
@@ -35,7 +36,24 @@ export default function BlogPost() {
         .select("*")
         .eq("slug", slug)
         .single();
-      if (error) throw error;
+      
+      if (error) {
+        // Fallback para Dummy Data se não encontrar no banco
+        const dummyPost = DUMMY_POSTS.find(p => p.slug === slug);
+        if (dummyPost) {
+          return {
+            ...dummyPost,
+            cover_image_url: (dummyPost as any).cover_image_url || null,
+            excerpt: (dummyPost as any).excerpt || null,
+            category: (dummyPost as any).category || 'Geral',
+            status: 'published',
+            created_at: dummyPost.date,
+            updated_at: dummyPost.date,
+            ai_generated: true
+          } as BlogPost;
+        }
+        throw error;
+      }
       return data as BlogPost;
     },
     retry: 1

@@ -1,17 +1,17 @@
 
 export const DUMMY_CATEGORIES = [
-  { id: 'cat-1', name: 'Gastronomia', slug: 'gastronomia', icon: 'utensils' },
-  { id: 'cat-2', name: 'Tecnologia', slug: 'tecnologia', icon: 'laptop' },
-  { id: 'cat-3', name: 'Moda e Beleza', slug: 'moda-beleza', icon: 'shirt' },
-  { id: 'cat-4', name: 'Saúde', slug: 'saude', icon: 'heart-pulse' },
-  { id: 'cat-5', name: 'Serviços', slug: 'servicos', icon: 'briefcase' },
-  { id: 'cat-6', name: 'Automotivo', slug: 'automotivo', icon: 'car' },
-  { id: 'cat-7', name: 'Educação', slug: 'educacao', icon: 'graduation-cap' },
-  { id: 'cat-8', name: 'Academia', slug: 'academia', icon: 'fitness' },
-  { id: 'cat-9', name: 'Pet Shop', slug: 'pet-shop', icon: 'dog' },
-  { id: 'cat-10', name: 'Contabilidade', slug: 'contabilidade', icon: 'file-text' },
-  { id: 'cat-11', name: 'Imobiliária', slug: 'imobiliaria', icon: 'home' },
-  { id: 'cat-12', name: 'Turismo', slug: 'turismo', icon: 'palmtree' }
+  { id: 'cat-1', name: 'Gastronomia', slug: 'gastronomia', icon: 'UtensilsCrossed', color: 'rose' },
+  { id: 'cat-2', name: 'Tecnologia', slug: 'tecnologia', icon: 'Laptop', color: 'blue' },
+  { id: 'cat-3', name: 'Moda e Beleza', slug: 'moda-beleza', icon: 'Shirt', color: 'pink' },
+  { id: 'cat-4', name: 'Saúde', slug: 'saude', icon: 'HeartPulse', color: 'emerald' },
+  { id: 'cat-5', name: 'Serviços', slug: 'servicos', icon: 'Briefcase', color: 'slate' },
+  { id: 'cat-6', name: 'Automotivo', slug: 'automotivo', icon: 'CarFront', color: 'zinc' },
+  { id: 'cat-7', name: 'Educação', slug: 'educacao', icon: 'GraduationCap', color: 'indigo' },
+  { id: 'cat-8', name: 'Academia', slug: 'academia', icon: 'Dumbbell', color: 'amber' },
+  { id: 'cat-9', name: 'Pet Shop', slug: 'pet-shop', icon: 'Dog', color: 'orange' },
+  { id: 'cat-10', name: 'Contabilidade', slug: 'contabilidade', icon: 'FileText', color: 'cyan' },
+  { id: 'cat-11', name: 'Imobiliária', slug: 'imobiliaria', icon: 'Building2', color: 'violet' },
+  { id: 'cat-12', name: 'Turismo', slug: 'turismo', icon: 'Palmtree', color: 'teal' }
 ];
 
 export const DUMMY_BUSINESSES = [
@@ -43,7 +43,7 @@ export const DUMMY_BUSINESSES = [
     address: 'Rua das Patas, 50',
     phone: '(11) 98765-4321',
     whatsapp: '5511987654321',
-    image_url: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=800',
+    image_url: 'https://images.unsplash.com/photo-1541781752044-84d4367ef882?q=80&w=800',
     active: true,
     featured: true,
     average_rating: 4.9,
@@ -62,7 +62,7 @@ export const DUMMY_BUSINESSES = [
     address: 'Edifício Medical, Sala 202',
     phone: '(11) 3344-5566',
     whatsapp: '551133445566',
-    image_url: 'https://images.unsplash.com/photo-1629909608115-f996de063c19?q=80&w=800',
+    image_url: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?q=80&w=800',
     active: true,
     featured: false,
     average_rating: 5.0,
@@ -100,7 +100,7 @@ export const DUMMY_BUSINESSES = [
     address: 'Rua Gastronômica, 12',
     phone: '(11) 3212-4455',
     whatsapp: '551132124455',
-    image_url: 'https://images.unsplash.com/photo-1574126154517-d1e0d89ef734?q=80&w=800',
+    image_url: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=800',
     active: true,
     featured: true,
     average_rating: 4.9,
@@ -138,7 +138,7 @@ export const DUMMY_BUSINESSES = [
     address: 'Shopping Central, Loja 15',
     phone: '(11) 97766-5544',
     whatsapp: '5511977665544',
-    image_url: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=800',
+    image_url: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=800',
     active: true,
     featured: true,
     average_rating: 4.8,
@@ -206,6 +206,26 @@ export const DUMMY_TESTIMONIALS = [
 ];
 
 export const DUMMY_POSTS = [
-  { id: 'post-1', title: 'Como aumentar suas vendas locais', content: 'Dicas práticas para lojistas...', author: 'Equipe Guia', date: new Date().toISOString() },
-  { id: 'post-2', title: 'Novidades em Rio de Janeiro', content: 'O que há de novo na cidade...', author: 'Redação', date: new Date().toISOString() }
+  { 
+    id: 'post-1', 
+    slug: 'como-aumentar-suas-vendas-locais', 
+    title: 'Como aumentar suas vendas locais', 
+    excerpt: 'Descubra estratégias práticas para lojistas dominarem o mercado da sua região.',
+    content: '# Estratégias de Venda Local\n\nDicas práticas para lojistas...\n\n1. Use redes sociais...\n2. Mantenha seu cadastro atualizado...', 
+    category: 'Vendas',
+    cover_image_url: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=800',
+    author: 'Equipe Guia', 
+    date: new Date().toISOString() 
+  },
+  { 
+    id: 'post-2', 
+    slug: 'novas-tendencias-comerciais-2026', 
+    title: 'Novas tendências comerciais para 2026', 
+    excerpt: 'O que há de novo no comércio regional e como se preparar para as mudanças tecnológicas.',
+    content: '# Tendências 2026\n\nO que há de novo na cidade...\n\nO mercado está mudando...', 
+    category: 'Tecnologia',
+    cover_image_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800',
+    author: 'Redação', 
+    date: new Date().toISOString() 
+  }
 ];

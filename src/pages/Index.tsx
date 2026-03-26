@@ -13,13 +13,23 @@ import {
   ChevronRight,
   ShieldCheck,
   Building2,
-  Users2,
   CheckCircle2,
   Zap,
   Globe,
   ArrowUpRight,
   Smartphone,
-  Quote
+  Quote,
+  UtensilsCrossed,
+  Laptop,
+  Shirt,
+  HeartPulse,
+  Briefcase,
+  CarFront,
+  GraduationCap,
+  Dumbbell,
+  Dog,
+  FileText,
+  Palmtree
 } from "lucide-react";
 import { Header } from "@/components/portal/Header";
 import { BottomTabBar } from "@/components/portal/BottomTabBar";
@@ -31,7 +41,37 @@ import { Link, useNavigate } from "react-router-dom";
 import { usePlatform } from "@/contexts/PlatformContext";
 import { Input } from "@/components/ui/input";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { DUMMY_TESTIMONIALS } from "@/data/dummy-data";
+import { DUMMY_TESTIMONIALS, DUMMY_CATEGORIES } from "@/data/dummy-data";
+
+const ICON_MAP: Record<string, any> = {
+  UtensilsCrossed,
+  Laptop,
+  Shirt,
+  HeartPulse,
+  Briefcase,
+  CarFront,
+  GraduationCap,
+  Dumbbell,
+  Dog,
+  FileText,
+  Building2,
+  Palmtree
+};
+
+const COLOR_MAP: Record<string, string> = {
+  rose: "text-rose-500 bg-rose-50 border-rose-100",
+  blue: "text-blue-500 bg-blue-50 border-blue-100",
+  pink: "text-pink-500 bg-pink-50 border-pink-100",
+  emerald: "text-emerald-500 bg-emerald-50 border-emerald-100",
+  slate: "text-slate-500 bg-slate-50 border-slate-100",
+  zinc: "text-zinc-500 bg-zinc-50 border-zinc-100",
+  indigo: "text-indigo-500 bg-indigo-50 border-indigo-100",
+  amber: "text-amber-500 bg-amber-50 border-amber-100",
+  orange: "text-orange-500 bg-orange-50 border-orange-100",
+  cyan: "text-cyan-500 bg-cyan-50 border-cyan-100",
+  violet: "text-violet-500 bg-violet-50 border-violet-100",
+  teal: "text-teal-500 bg-teal-50 border-teal-100",
+};
 
 const Index = () => {
   const { user, isLojista, isAdmin, isSuperAdmin } = useAuth();
@@ -173,20 +213,25 @@ const Index = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {categories.map((cat, i) => (
-                <motion.div 
-                  key={cat.id}
-                  whileHover={{ y: -5 }}
-                  onClick={() => navigate(`/buscar?categoria=${cat.slug}`)}
-                  className="group bg-white border border-slate-100 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:shadow-primary/5 transition-all duration-500"
-                >
-                  <div className="h-14 w-14 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
-                    <Building2 className="h-7 w-7 text-slate-200 group-hover:text-primary transition-colors" />
-                  </div>
-                  <span className="font-black text-slate-900 text-sm mb-1">{cat.name}</span>
-                  <div className="h-0.5 w-4 bg-slate-100 group-hover:w-8 group-hover:bg-primary transition-all rounded-full"></div>
-                </motion.div>
-              ))}
+              {(categories.length > 0 ? categories : DUMMY_CATEGORIES).map((cat: any, i) => {
+                const Icon = ICON_MAP[cat.icon] || Building2;
+                const colors = COLOR_MAP[cat.color] || "text-primary bg-primary/5 border-primary/10";
+                
+                return (
+                  <motion.div 
+                    key={cat.id}
+                    whileHover={{ y: -5 }}
+                    onClick={() => navigate(`/buscar?categoria=${cat.slug}`)}
+                    className="group bg-white border border-slate-100 rounded-[2rem] p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-xl hover:shadow-primary/5 transition-all duration-500"
+                  >
+                    <div className={cn("h-14 w-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 border", colors)}>
+                      <Icon className="h-7 w-7 transition-transform group-hover:scale-110" />
+                    </div>
+                    <span className="font-black text-slate-900 text-sm mb-1">{cat.name}</span>
+                    <div className="h-0.5 w-4 bg-slate-100 group-hover:w-8 group-hover:bg-primary transition-all rounded-full"></div>
+                  </motion.div>
+                );
+              })}
             </div>
           )}
         </div>
