@@ -18,8 +18,8 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DUMMY_PRODUCTS, DUMMY_SERVICES } from "@/data/dummy-data";
 import { motion } from "framer-motion";
-import { SEO } from "@/components/SEO";
 
 const BusinessDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -160,8 +160,8 @@ const BusinessDetail = () => {
     );
   }
 
-  const displayProducts = products || [];
-  const displayServices = services || [];
+  const displayProducts = products && products.length > 0 ? products : DUMMY_PRODUCTS.filter(p => p.business_id === business?.id).slice(0, 8);
+  const displayServices = services && services.length > 0 ? services : DUMMY_SERVICES.filter(s => s.business_id === business?.id).slice(0, 6);
 
   // Distance calculation
   let distanceToUser: number | null = null;
@@ -174,11 +174,6 @@ const BusinessDetail = () => {
 
   return (
     <div className="min-h-screen bg-white pb-20 md:pb-0">
-      <SEO 
-        title={`${business.name} | Meu Guia Comercial`} 
-        description={business.description || `Encontre tudo sobre ${business.name} no seu Guia Comercial.`}
-        image={business.image_url || undefined}
-      />
       <Header />
 
       {/* Modern High-Fidelity Hero Banner */}

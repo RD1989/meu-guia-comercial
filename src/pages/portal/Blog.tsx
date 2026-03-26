@@ -7,6 +7,7 @@ import { Loader2, Calendar, User, ArrowRight, Sparkles, AlertCircle } from "luci
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { usePlatform } from "@/contexts/PlatformContext";
+import { DUMMY_POSTS } from "@/data/dummy-data";
 
 interface BlogPost {
   id: string;
@@ -35,7 +36,18 @@ export default function Blog() {
         .order("created_at", { ascending: false });
       if (error) throw error;
       
-      return data as BlogPost[];
+      // Fallback para Dummy Data se o banco estiver vazio
+      const finalData = data && (data as any[]).length > 0 ? data : DUMMY_POSTS.map(p => ({
+        ...p,
+        status: 'published',
+        cover_image_url: (p as any).cover_image_url || null,
+        excerpt: (p as any).excerpt || null,
+        category: (p as any).category || 'Geral',
+        created_at: p.date,
+        ai_generated: true
+      }));
+
+      return finalData as BlogPost[];
     },
     retry: 1
   });

@@ -2,8 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShieldCheck, ArrowUpRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
+import { DUMMY_ADS } from "@/data/dummy-data";
 import { useLocation } from "@/hooks/use-location";
 import { cn, getDistance } from "@/lib/utils";
 import { MapPin, Zap } from "lucide-react";
@@ -20,49 +19,42 @@ export function SmartAdSlot({ type, city, className }: SmartAdSlotProps) {
   const [isVisible, setIsVisible] = useState(type !== 'popup');
   const targetCity = city || userLocation.city || "São Paulo";
 
-  const { data: ads = [], isLoading } = useQuery({
-    queryKey: ["smart-ads", type, targetCity, userLocation.lat, userLocation.lng],
-    queryFn: async () => {
-      let query = (supabase as any)
-        .from('business_ads')
-        .select('*')
-        .eq('status', 'active');
-        
-      const { data, error } = await query;
-      if (error) throw error;
-      
-      let filtered = data || [];
-      
-      filtered = filtered.filter((ad: any) => {
-        const typeMatch = ad.type === type || (type === 'hero_banner' && ad.type === 'destaque_topo') || (type === 'sidebar' && ad.type === 'lateral');
-        if (!typeMatch) return false;
-        
-        const cityMatch = ad.city === targetCity || !ad.city;
-        if (!cityMatch) return false;
-        
-        if (ad.latitude && ad.longitude && !userLocation.loading && userLocation.lat) {
-          const dist = getDistance(userLocation.lat, userLocation.lng, ad.latitude, ad.longitude);
-          if (dist > (ad.radius_meters || 10000) / 1000) return false;
-        }
-        
-        return true;
-      });
-      
-      return filtered;
-    }
-  });
-
   useEffect(() => {
-    if (ads.length > 0) {
-      const randomAd = ads[Math.floor(Math.random() * ads.length)];
+    // Filter ads by type and city
+    const filtered = DUMMY_ADS.filter(ad => {
+      const typeMatch = ad.type === type;
+      const cityMatch = ad.city === targetCity || !ad.city;
+      const statusMatch = ad.status === 'active';
+      
+      let distanceMatch = true;
+      if (ad.latitude && ad.longitude && !userLocation.loading && userLocation.lat) {
+        const dist = getDistance(userLocation.lat, userLocation.lng, ad.latitude, ad.longitude);
+        distanceMatch = dist <= (ad.radius || 10000) / 1000; // radius is in meters, getDistance in km
+      }
+
+      // If it's a popup and a flash deal, distanceMatch is MANDATORY
+      if (type === 'popup' && ad.is_flash_deal) {
+        return typeMatch && statusMatch && distanceMatch;
+      }
+
+      return typeMatch && cityMatch && statusMatch && distanceMatch;
+    });
+    
+    if (filtered.length > 0) {
+      // Pick a random ad from filtered, but priorize flash deals if present
+      const flashDeals = filtered.filter(ad => ad.is_flash_deal);
+      const randomAd = (flashDeals.length > 0 && type === 'popup') 
+        ? flashDeals[0] 
+        : filtered[Math.floor(Math.random() * filtered.length)];
+        
       setCurrentAd(randomAd);
       
       if (type === 'popup') {
-        const timer = setTimeout(() => setIsVisible(true), 2000);
+        const timer = setTimeout(() => setIsVisible(true), 2000); // Show popup after 2s
         return () => clearTimeout(timer);
       }
     }
-  }, [ads, type]);
+  }, [type, targetCity]);
 
   if (!currentAd) return null;
 

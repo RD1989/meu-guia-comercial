@@ -44,6 +44,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { SEO } from "@/components/SEO";
+import { DUMMY_TESTIMONIALS, DUMMY_CATEGORIES, DUMMY_BUSINESSES, DUMMY_BANNERS } from "@/data/dummy-data";
+
 const ICON_MAP: Record<string, any> = {
   UtensilsCrossed,
   Laptop,
@@ -124,7 +126,7 @@ const Index = () => {
         .eq("active", true)
         .order("sort_order");
       
-      if (error || !data) return [];
+      if (error || !data || data.length === 0) return DUMMY_BANNERS;
       return data;
     },
   });
@@ -286,7 +288,7 @@ const Index = () => {
             {bizLoading ? (
               [1, 2, 3, 4].map((i) => <div key={i} className="aspect-[3/4] rounded-[2rem] bg-slate-100 animate-pulse"></div>)
             ) : (
-              businesses.slice(0, 4).map((biz: any, i) => (
+              (businesses.length > 0 ? businesses : DUMMY_BUSINESSES).slice(0, 4).map((biz: any, i) => (
                 <div key={biz.id}>
                   <BusinessCard 
                     {...biz} 
@@ -321,8 +323,8 @@ const Index = () => {
           >
             {[
               { id: 'elite-1', name: 'Elite Fitness Center', address: 'Av. Principal, 1000', rating: '4.8', badge: 'Professional', slug: 'elite-fitness' },
-              ...businesses,
-              ...businesses
+              ...DUMMY_BUSINESSES,
+              ...DUMMY_BUSINESSES
             ].map((biz: any, i) => (
               <motion.div 
                 key={`${biz.id}-${i}`}
