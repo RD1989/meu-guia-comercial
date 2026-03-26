@@ -316,103 +316,192 @@ const Index = () => {
         </div>
         
         <div className="relative flex overflow-x-hidden pt-4 pb-12">
-          <motion.div 
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-            className="flex gap-8 items-center px-4"
-          >
-            {[
-              { id: 'elite-1', name: 'Elite Fitness Center', address: 'Av. Principal, 1000', rating: '4.8', badge: 'Professional', slug: 'elite-fitness' },
-              ...DUMMY_BUSINESSES,
-              ...DUMMY_BUSINESSES
-            ].map((biz: any, i) => (
+          {(() => {
+            const sourceList = businesses.length >= 4 ? businesses : DUMMY_BUSINESSES;
+            // Duplicar a lista 3x para garantir fluxo contínuo mesmo em telas Ultrawide
+            const carouselItems = [...sourceList, ...sourceList, ...sourceList];
+            
+            return (
               <motion.div 
-                key={`${biz.id}-${i}`}
-                className="inline-block w-[320px] bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 relative group cursor-pointer shrink-0"
-                whileHover={{ y: -10 }}
+                animate={{ x: ["0%", "-50%"] }}
+                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                className="flex flex-nowrap gap-8 items-center px-4 w-max"
               >
-                <div className="absolute top-4 right-4 z-10">
-                   <div className="bg-primary text-white text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
-                      <ShieldCheck className="h-3 w-3" /> Certified
-                   </div>
-                </div>
+                {carouselItems.map((biz: any, i) => (
+                  <motion.div 
+                    key={`carousel-item-${i}`}
+                    className="inline-block w-[320px] bg-white p-6 rounded-[2.5rem] shadow-xl border border-slate-100 relative group cursor-pointer shrink-0"
+                    whileHover={{ y: -10 }}
+                  >
+                    <div className="absolute top-4 right-4 z-10">
+                       <div className="bg-primary text-white text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+                          <ShieldCheck className="h-3 w-3" /> Certified
+                       </div>
+                    </div>
 
-                <div className="aspect-[16/9] rounded-[1.5rem] bg-slate-100 mb-4 overflow-hidden shadow-inner">
-                   <img 
-                     src={biz.image_url || `https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&u=${i}`}
-                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                     alt={biz.name} 
-                   />
-                </div>
+                    <div className="aspect-[16/9] rounded-[1.5rem] bg-slate-100 mb-4 overflow-hidden shadow-inner">
+                       <img 
+                         src={biz.image_url || `https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&u=${i}`}
+                         className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                         alt={biz.name} 
+                       />
+                    </div>
 
-                <div className="space-y-2">
-                   <h3 className="text-lg font-[900] text-slate-950 tracking-tight">{biz.name}</h3>
-                   <div className="flex items-center gap-2 text-slate-400">
-                      <MapPin className="h-3 w-3" />
-                      <span className="text-[10px] font-bold truncate">{biz.address || "Endereço em " + (selectedCity || config.platform_city)}</span>
-                   </div>
-                   <div className="flex items-center justify-between pt-2">
-                      <div className="flex items-center gap-1">
-                         <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                         <span className="text-xs font-black text-slate-900">{biz.rating || "5.0"}</span>
-                      </div>
-                      <div className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{biz.badge || "Premium"}</div>
-                   </div>
-                </div>
+                    <div className="space-y-2">
+                       <h3 className="text-lg font-[900] text-slate-950 tracking-tight">{biz.name}</h3>
+                       <div className="flex items-center gap-2 text-slate-400">
+                          <MapPin className="h-3 w-3 shrink-0" />
+                          <span className="text-[10px] font-bold truncate">{biz.address || "Endereço em " + (selectedCity || config.platform_city)}</span>
+                       </div>
+                       <div className="flex items-center justify-between pt-2">
+                          <div className="flex items-center gap-1">
+                             <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                             <span className="text-xs font-black text-slate-900">{biz.rating || biz.average_rating || "5.0"}</span>
+                          </div>
+                          <div className="text-[9px] font-black text-primary uppercase tracking-[0.2em]">{biz.badge || biz.plan_tier || "Premium"}</div>
+                       </div>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
-            ))}
-          </motion.div>
+            );
+          })()}
         </div>
       </section>
 
-      {/* Benefits - Professional Compact */}
-      <section className="py-24 bg-slate-950 text-white overflow-hidden relative">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div>
-              <span className="text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-4 block">Para Negócios</span>
-              <h2 className="text-4xl md:text-5xl font-[900] tracking-tighter mb-8 leading-[0.9]">Escale sua <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-primary">Autoridade Local.</span></h2>
-              <p className="text-lg text-slate-400 font-medium mb-10 leading-relaxed">Conecte-se com clientes de alto valor através de uma presença digital de elite.</p>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                {[
-                  { title: 'IA Local', desc: 'Sugestões inteligentes para o público certo.', icon: Zap },
-                  { title: 'Social Connect', desc: 'Integração WhatsApp e Redes Sociais.', icon: Globe },
-                  { title: 'Booking Pro', desc: 'Reservas e orçamentos simplificados.', icon: CheckCircle2 },
-                  { title: 'Growth Engine', desc: 'Dados reais sobre seu crescimento.', icon: TrendingUp }
-                ].map((item, i) => (
-                  <div key={i} className="flex flex-col gap-2 group">
-                    <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-primary transition-all">
-                      <item.icon className="h-5 w-5 text-white" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-black mb-1">{item.title}</h4>
-                      <p className="text-slate-500 text-xs font-medium">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+      {/* Benefits - Modern Bento Grid Redesign */}
+      <section className="py-32 bg-[#09090b] text-white relative overflow-hidden">
+        {/* Abstract Background Emitters */}
+        <div className="absolute top-1/3 -left-64 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
+        <div className="absolute -bottom-64 -right-64 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
 
-              <div className="mt-12">
-                 <Link to="/auth?mode=register">
-                    <Button size="lg" className="h-12 px-10 rounded-xl bg-white text-slate-950 font-black text-sm hover:bg-slate-200 transition-all">
-                      Anunciar Empresa <ArrowUpRight className="ml-2 h-5 w-5 text-primary" />
-                    </Button>
-                 </Link>
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-left mb-16 md:mb-24">
+            <span className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-6">
+              Para Negócios
+            </span>
+            <h2 className="text-5xl md:text-7xl font-[900] tracking-tighter mb-6 leading-[0.9] text-balance">
+              Escale sua <br className="hidden md:block" />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-300 to-slate-500">
+                Autoridade Local.
+              </span>
+            </h2>
+            <p className="text-xl text-slate-400 font-medium max-w-2xl leading-relaxed">
+              Conecte-se com clientes de alto valor através de uma presença digital de elite. Domine a atenção na sua região.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[340px]">
+            {/* Bento Card 1: IA Local */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="md:col-span-2 bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between relative group overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="relative z-10">
+                <div className="h-12 w-12 rounded-2xl bg-primary/20 flex items-center justify-center mb-6">
+                  <Zap className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-3xl font-[900] tracking-tight mb-2">IA Local</h3>
+                <p className="text-slate-400 font-medium text-lg max-w-sm">
+                  Sugestões inteligentes para o público certo, no momento exato em que buscam.
+                </p>
+              </div>
+              <div className="relative h-24 w-full overflow-hidden rounded-xl border border-white/5 bg-black/20 mt-8 backdrop-blur-sm flex items-center justify-center">
+                 {/* Visual decoration for AI */}
+                 <div className="flex gap-2 items-end opacity-50">
+                    <motion.div animate={{ height: ["20%", "80%", "40%"] }} transition={{ repeat: Infinity, duration: 1.5 }} className="w-4 bg-primary rounded-full" />
+                    <motion.div animate={{ height: ["60%", "30%", "100%"] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.2 }} className="w-4 bg-primary/70 rounded-full" />
+                    <motion.div animate={{ height: ["40%", "90%", "20%"] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.4 }} className="w-4 bg-primary/40 rounded-full" />
+                    <motion.div animate={{ height: ["80%", "40%", "60%"] }} transition={{ repeat: Infinity, duration: 1.5, delay: 0.6 }} className="w-4 bg-primary/20 rounded-full" />
+                 </div>
               </div>
             </motion.div>
-            
+
+            {/* Bento Card 2: Social Connect */}
             <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              className="relative hidden lg:block"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between relative group overflow-hidden"
             >
-              <div className="aspect-square max-w-sm ml-auto rounded-[2rem] bg-indigo-500 overflow-hidden shadow-2xl">
-                <img 
-                  src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800" 
-                  alt="Elite Office" 
-                  className="w-full h-full object-cover grayscale"
-                />
+              <div className="relative z-10">
+                <div className="h-12 w-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center mb-6">
+                  <Globe className="h-6 w-6 text-indigo-400" />
+                </div>
+                <h3 className="text-3xl font-[900] tracking-tight mb-2">Social Connect</h3>
+                <p className="text-slate-400 font-medium text-base">
+                  Integração nativa com WhatsApp e Redes Sociais.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 mt-6">
+                 <div className="h-10 w-full bg-indigo-500/10 rounded-xl border border-indigo-500/20 animate-pulse" />
+                 <div className="h-10 w-3/4 bg-white/5 rounded-xl border border-white/10" />
+              </div>
+            </motion.div>
+
+            {/* Bento Card 3: Booking Pro */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="bg-white/5 border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between relative group overflow-hidden"
+            >
+              <div className="relative z-10">
+                <div className="h-12 w-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center mb-6">
+                  <CheckCircle2 className="h-6 w-6 text-emerald-400" />
+                </div>
+                <h3 className="text-3xl font-[900] tracking-tight mb-2">Booking Pro</h3>
+                <p className="text-slate-400 font-medium text-base">
+                  Reservas e orçamentos simplificados e automáticos.
+                </p>
+              </div>
+              <div className="mt-6 font-mono text-xs text-emerald-400/70 p-4 bg-black/30 rounded-xl border border-emerald-500/10">
+                <div>&gt; Sync calendar...</div>
+                <div className="mt-1 text-emerald-300">Status: Automated</div>
+              </div>
+            </motion.div>
+
+            {/* Bento Card 4: Growth Engine + CTA */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="md:col-span-2 bg-[#121217] border border-white/5 rounded-[2.5rem] p-10 flex flex-col md:flex-row justify-between relative overflow-hidden items-center group"
+            >
+              <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.03)_50%,transparent_75%,transparent_100%)] bg-[length:10px_10px] pointer-events-none" />
+              <div className="relative z-10 max-w-sm mb-8 md:mb-0">
+                <div className="h-12 w-12 rounded-2xl bg-amber-500/20 flex items-center justify-center mb-6">
+                  <TrendingUp className="h-6 w-6 text-amber-400" />
+                </div>
+                <h3 className="text-3xl font-[900] tracking-tight mb-2">Growth Engine</h3>
+                <p className="text-slate-400 font-medium text-lg mb-8">
+                  Dados reais sobre seu crescimento na cidade.
+                </p>
+                
+                <Link to="/auth?mode=register" className="inline-block relative">
+                   <div className="absolute inset-0 bg-primary/40 blur-xl rounded-full mix-blend-screen opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                   <Button size="lg" className="relative h-14 px-10 rounded-2xl bg-white text-slate-950 hover:bg-slate-200 font-black tracking-widest uppercase text-xs shadow-2xl transition-all">
+                     Anunciar Empresa <ArrowUpRight className="ml-2 h-4 w-4 text-primary" />
+                   </Button>
+                </Link>
+              </div>
+
+              {/* Decorative Chart */}
+              <div className="relative flex-1 w-full h-full flex items-end justify-center pt-8 border-l border-white/5 pl-8 hidden md:flex">
+                 <div className="flex items-end gap-3 w-full h-full pb-4">
+                    <motion.div initial={{ height: 0 }} whileInView={{ height: '40%' }} className="flex-1 bg-white/5 rounded-t-lg" />
+                    <motion.div initial={{ height: 0 }} whileInView={{ height: '60%' }} className="flex-1 bg-white/10 rounded-t-lg" />
+                    <motion.div initial={{ height: 0 }} whileInView={{ height: '50%' }} className="flex-1 bg-white/5 rounded-t-lg" />
+                    <motion.div initial={{ height: 0 }} whileInView={{ height: '90%' }} className="flex-1 bg-gradient-to-t from-primary/50 to-primary rounded-t-lg relative">
+                       <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+                    </motion.div>
+                 </div>
               </div>
             </motion.div>
           </div>
