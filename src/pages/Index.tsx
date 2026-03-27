@@ -40,6 +40,7 @@ import {
   MessageCircle,
   Calendar
 } from "lucide-react";
+import { SilentSeeder } from "@/components/portal/SilentSeeder";
 import { Header } from "@/components/portal/Header";
 import { BottomTabBar } from "@/components/portal/BottomTabBar";
 import { BusinessCard } from "@/components/portal/BusinessCard";
@@ -178,7 +179,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pb-20 md:pb-0 font-sans selection:bg-primary/10 selection:text-primary overflow-x-hidden text-slate-900">
+    <div className="min-h-screen bg-background pb-20 md:pb-0 font-sans selection:bg-primary/10 selection:text-primary overflow-x-hidden text-slate-900">
+      <SilentSeeder />
+      <SEO title="Guia Comercial Elite | Melhores Lugares da Cidade" description="Descubra os melhores negócios, ofertas e eventos da sua região em uma plataforma premium e intuitiva." />
       <Header />
 
       {/* Hero Banners Carousel */}
