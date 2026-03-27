@@ -155,8 +155,8 @@ export function BusinessCard({
                 </span>
               )}
             </div>
-            <div className="h-10 w-10 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white group-hover:shadow-[0_10px_20px_-5px_var(--tw-shadow-color)] shadow-primary/40 transition-all duration-300 border border-slate-100 group-hover:border-primary/50 group-hover:scale-110">
-              <ArrowRight className="h-5 w-5 group-hover:animate-pulse" />
+            <div className="h-10 w-10 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white group-hover:shadow-[0_10px_20px_-5px_rgba(255,107,44,0.4)] transition-all duration-300 border border-slate-100 group-hover:border-primary/50 group-hover:scale-110">
+              <ArrowRight className="h-5 w-5 transition-colors group-hover:text-white group-hover:animate-pulse" />
             </div>
           </div>
         </div>
