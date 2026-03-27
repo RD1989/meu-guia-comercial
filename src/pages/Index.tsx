@@ -369,91 +369,73 @@ const Index = () => {
         </div>
       </section>
 
-      {/* High-Performance B2B Section - Minimalist Bento Grid */}
-      <section className="py-24 bg-white relative border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* Highly Creative B2B Section - Expanding Interactive Accordion */}
+      <section className="py-24 bg-[#050505] text-white relative border-y border-white/5 overflow-hidden">
+        {/* Subtle Ambient Background */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[500px] bg-primary/10 rounded-full blur-[150px] pointer-events-none opacity-50" />
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-            <div className="max-w-2xl">
-              <span className="inline-block py-1.5 px-4 rounded-full bg-slate-50 border border-slate-100 text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-4">
+            <div className="max-w-3xl">
+              <span className="inline-block py-1.5 px-4 rounded-full bg-white/5 border border-white/10 text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-4">
                 Para Negócios
               </span>
-              <h2 className="text-4xl md:text-6xl font-[900] tracking-tighter leading-[1.1] text-slate-950">
-                Escale sua <span className="text-primary">Autoridade Local.</span>
+              <h2 className="text-5xl md:text-7xl font-[900] tracking-tighter leading-[1.1] text-white">
+                Escale sua <br className="hidden md:block" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-primary to-indigo-500">Autoridade Local.</span>
               </h2>
-              <p className="text-lg text-slate-500 font-medium mt-6">
-                Conecte-se com clientes de alto valor através de uma presença digital de elite.
+              <p className="text-xl text-slate-400 font-medium mt-6 max-w-xl">
+                Conecte-se com clientes de alto valor através de uma presença digital de elite e fuja da concorrência amadora.
               </p>
             </div>
             <Link to="/auth?mode=register" className="shrink-0 w-full md:w-auto">
-               <Button size="lg" className="w-full md:w-auto h-14 px-8 rounded-2xl bg-slate-950 text-white hover:bg-primary font-black tracking-widest uppercase text-xs shadow-lg transition-colors flex items-center justify-center gap-2">
-                 Anunciar Empresa <ArrowUpRight className="h-4 w-4" />
+               <Button size="lg" className="w-full md:w-auto h-16 px-10 rounded-full bg-white text-slate-950 hover:bg-slate-200 font-black tracking-widest uppercase text-xs shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all flex items-center justify-center gap-3">
+                 Anunciar Empresa <ArrowUpRight className="h-5 w-5" />
                </Button>
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
-            {/* Bento Card 1: IA Local (Span 2) */}
-            <div className="md:col-span-2 bg-slate-50 rounded-[2rem] p-8 md:p-10 border border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-300 flex flex-col justify-between group">
-              <div>
-                <div className="h-14 w-14 rounded-2xl bg-white flex items-center justify-center border border-slate-100 shadow-sm mb-8 group-hover:scale-110 transition-transform">
-                  <Zap className="h-7 w-7 text-primary" />
+          {/* Interactive Expanding Accordion Gallery */}
+          <div className="flex flex-col md:flex-row gap-4 md:h-[500px] w-full mt-12">
+            {[
+              { id: 'ia', title: 'IA Local', desc: 'Sugestões inteligentes em nossa busca otimizada para o público certo, no momento exato.', icon: Zap, color: 'from-amber-500/40 to-orange-600/40', iconColor: 'text-amber-400' },
+              { id: 'social', title: 'Social Connect', desc: 'Integração nativa avançada e instantânea com WhatsApp e Redes Sociais.', icon: Globe, color: 'from-indigo-500/40 to-blue-600/40', iconColor: 'text-indigo-400' },
+              { id: 'booking', title: 'Booking Pro', desc: 'Sistemas de reservas, cardápios e orçamentos simplificados e totalmente automáticos.', icon: CheckCircle2, color: 'from-emerald-500/40 to-teal-600/40', iconColor: 'text-emerald-400' },
+              { id: 'growth', title: 'Growth Engine', desc: 'Acesse nosso painel de administração e tenha dados reais sobre seu crescimento na cidade de atuação.', icon: TrendingUp, color: 'from-primary/40 to-rose-600/40', iconColor: 'text-primary' },
+            ].map((feat, i) => (
+              <div 
+                key={feat.id}
+                className="group relative flex flex-col md:flex-row items-center md:items-end justify-center md:justify-start w-full md:w-auto md:flex-1 md:hover:flex-[3] transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] rounded-3xl md:rounded-[2.5rem] bg-white/[0.03] border border-white/5 hover:border-white/20 overflow-hidden cursor-pointer min-h-[220px] md:min-h-0 p-8 md:p-8 gap-6 isolate"
+              >
+                {/* Hover Gradient Background */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${feat.color} opacity-20 md:opacity-0 md:group-hover:opacity-30 transition-opacity duration-700 -z-10`} />
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 md:opacity-0 md:group-hover:opacity-30 mix-blend-overlay transition-opacity duration-700 -z-10" />
+                
+                {/* Icon Core */}
+                <div className="h-16 w-16 md:h-20 md:w-20 shrink-0 rounded-2xl md:rounded-3xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/20 shadow-2xl md:group-hover:scale-110 transition-transform duration-500 z-10">
+                  <feat.icon className={`h-8 w-8 md:h-10 md:w-10 ${feat.iconColor}`} />
                 </div>
-                <h3 className="text-3xl font-[900] text-slate-950 tracking-tight mb-3">IA Local</h3>
-                <p className="text-slate-500 font-medium text-lg leading-relaxed max-w-sm">
-                  Sugestões inteligentes para o público certo, no momento exato em que buscam.
-                </p>
-              </div>
-            </div>
+                
+                {/* Text Details (Expands smoothly on desktop) */}
+                <div className="flex flex-col text-center md:text-left z-10 w-full opacity-100 md:opacity-0 md:group-hover:opacity-100 md:-translate-x-8 md:group-hover:translate-x-0 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] md:w-[350px] md:min-w-[350px] md:max-w-[350px]">
+                   <h3 className="text-2xl md:text-5xl font-[900] text-white tracking-tighter mb-4 whitespace-nowrap">
+                     {feat.title}
+                   </h3>
+                   <p className="text-slate-300 font-medium text-sm md:text-lg leading-relaxed shadow-slate-900/50 line-clamp-3 md:line-clamp-none whitespace-normal">
+                     {feat.desc}
+                   </p>
+                </div>
 
-            {/* Bento Card 2: Social Connect */}
-            <div className="bg-slate-50 rounded-[2rem] p-8 border border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-300 flex flex-col justify-between group">
-              <div>
-                <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center border border-slate-100 shadow-sm mb-6 group-hover:scale-110 transition-transform">
-                  <Globe className="h-6 w-6 text-indigo-500" />
+                {/* Vertical Text (Visible when collapsed on desktop to show preview of the slice) */}
+                <div className="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none opacity-100 group-hover:opacity-0 transition-all duration-500 z-0">
+                   <span className="text-4xl font-[900] text-white/20 tracking-[0.4em] uppercase origin-center -rotate-90 whitespace-nowrap transition-transform duration-700 group-hover:scale-150">
+                      {feat.title}
+                   </span>
                 </div>
-                <h3 className="text-2xl font-[900] text-slate-950 tracking-tight mb-3">Social Connect</h3>
-                <p className="text-slate-500 font-medium text-base leading-relaxed">
-                  Integração WhatsApp e Redes Sociais.
-                </p>
               </div>
-            </div>
-
-            {/* Bento Card 3: Booking Pro */}
-            <div className="bg-slate-50 rounded-[2rem] p-8 border border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-300 flex flex-col justify-between group">
-              <div>
-                <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center border border-slate-100 shadow-sm mb-6 group-hover:scale-110 transition-transform">
-                  <CheckCircle2 className="h-6 w-6 text-emerald-500" />
-                </div>
-                <h3 className="text-2xl font-[900] text-slate-950 tracking-tight mb-3">Booking Pro</h3>
-                <p className="text-slate-500 font-medium text-base leading-relaxed">
-                  Reservas e orçamentos simplificados e automáticos.
-                </p>
-              </div>
-            </div>
-
-            {/* Bento Card 4: Growth Engine (Span 2) */}
-            <div className="md:col-span-2 bg-slate-950 rounded-[2rem] p-8 md:p-10 border border-slate-800 shadow-2xl hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row items-center justify-between gap-8 group relative overflow-hidden">
-               {/* Minimal abstract accent */}
-               <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-[80px] pointer-events-none" />
-               <div className="flex-1 text-center sm:text-left relative z-10 w-full">
-                <div className="h-14 w-14 rounded-2xl bg-white/10 flex items-center justify-center mx-auto sm:mx-0 mb-8 group-hover:scale-110 transition-transform backdrop-blur-sm border border-white/5">
-                  <TrendingUp className="h-7 w-7 text-amber-400" />
-                </div>
-                <h3 className="text-3xl font-[900] text-white tracking-tight mb-3">Growth Engine</h3>
-                <p className="text-slate-400 font-medium text-lg leading-relaxed">
-                  Dados reais sobre seu crescimento na cidade.
-                </p>
-              </div>
-              <div className="hidden sm:flex relative z-10 opacity-70 group-hover:opacity-100 transition-opacity">
-                 <div className="flex items-end gap-2 h-20">
-                    <div className="w-6 h-[40%] bg-slate-800 rounded-t-md" />
-                    <div className="w-6 h-[60%] bg-slate-700 rounded-t-md" />
-                    <div className="w-6 h-[50%] bg-slate-600 rounded-t-md" />
-                    <div className="w-6 h-[100%] bg-amber-500 rounded-t-md shadow-[0_0_15px_rgba(245,158,11,0.5)]" />
-                 </div>
-              </div>
-            </div>
+            ))}
           </div>
+
         </div>
       </section>
 
