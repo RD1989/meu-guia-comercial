@@ -492,170 +492,121 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Deep Dive 1: Comunidade Local (Animated Floating Canvas) */}
-      <section className="py-32 bg-slate-50 relative overflow-hidden flex items-center justify-center min-h-[700px] border-y border-slate-100">
-         {/* Floating Elements Background */}
-         <div className="absolute inset-0 pointer-events-none w-full h-full max-w-7xl mx-auto hidden lg:block">
-            {/* Floating Post 1 */}
-            <motion.div animate={{ y: [0, -20, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-24 left-10 w-72 bg-white/80 backdrop-blur-md p-5 rounded-3xl shadow-2xl border border-white">
-               <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 shadow-inner">J</div>
-                  <div><p className="text-sm font-bold text-slate-900 leading-tight">João Silva</p><p className="text-[10px] text-slate-400 font-bold">Há 5 min na comunidade</p></div>
-               </div>
-               <p className="text-sm text-slate-600 font-medium leading-relaxed">Achei o melhor hambúrguer artesanal da cidade! Recomendo muito o novo point no centro. Imbatível! 🍔🔥</p>
-            </motion.div>
-
-            {/* Floating Event 2 */}
-            <motion.div animate={{ y: [0, 20, 0] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute bottom-20 left-24 w-80 bg-white/80 backdrop-blur-md p-5 rounded-3xl shadow-2xl border border-white">
-               <div className="aspect-[21/9] w-full rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 mb-4 flex items-center justify-center text-white shadow-inner">
-                 <Calendar className="h-8 w-8 opacity-50" />
-               </div>
-               <p className="text-lg font-black text-slate-900 mb-1 tracking-tight">Festival de Inverno 2026</p>
-               <p className="text-xs text-slate-500 font-medium mb-4">Confirme sua presença no maior evento gastronômico e cultural da região local.</p>
-               <Button size="sm" className="w-full rounded-xl text-xs uppercase font-black tracking-widest text-white bg-indigo-600 shadow-lg shadow-indigo-500/30">Participar Agora</Button>
-            </motion.div>
-
-            {/* Floating Review 3 */}
-            <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 2 }} className="absolute top-40 right-16 w-72 bg-white/80 backdrop-blur-md p-5 rounded-3xl shadow-2xl border border-white">
-               <div className="flex items-center gap-1 mb-3">
-                 <Star className="h-5 w-5 fill-amber-400 text-amber-400" /><Star className="h-5 w-5 fill-amber-400 text-amber-400" /><Star className="h-5 w-5 fill-amber-400 text-amber-400" /><Star className="h-5 w-5 fill-amber-400 text-amber-400" /><Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-               </div>
-               <p className="text-sm text-slate-600 font-medium italic mb-4">"O atendimento foi espetacular e o ambiente super moderno. Recomendo para todos, volto na semana que vem."</p>
-               <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-2xl">
-                 <div className="w-8 h-8 rounded-full bg-rose-100 flex items-center justify-center"><Building2 className="w-4 h-4 text-rose-500" /></div>
-                 <div><p className="text-[10px] font-black text-slate-900 uppercase tracking-wider">Avaliação no Guia</p><p className="text-[10px] text-slate-500">Barbearia Vintage</p></div>
-               </div>
-            </motion.div>
-         </div>
-
-         {/* Central Core */}
-         <div className="relative z-10 text-center max-w-3xl px-6">
-            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} className="w-24 h-24 bg-white rounded-[2rem] shadow-2xl shadow-indigo-500/20 mx-auto flex items-center justify-center mb-8 border border-indigo-50 rotate-3 hover:rotate-0 transition-transform duration-500">
-               <MessageCircle className="h-10 w-10 text-indigo-500" />
-            </motion.div>
-            <motion.h2 initial={{ y: 20, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} className="text-5xl md:text-7xl font-[900] tracking-tighter text-slate-950 mb-6 leading-[1.05] drop-shadow-sm">
-               A <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Pulsação</span><br />
-               da Cidade.
-            </motion.h2>
-            <motion.p initial={{ y: 20, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} className="text-xl text-slate-600 font-medium mb-10 leading-relaxed max-w-2xl mx-auto">
-               Acesse o <strong>Feed da Comunidade</strong>. Um espaço hiper-local em tempo real onde você interage, compartilha dicas de ouro, descobre eventos secretos e conversa diretamente com quem movimenta a economia local.
-            </motion.p>
-            <motion.div initial={{ y: 20, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} className="flex flex-wrap items-center justify-center gap-3 relative z-20">
-               <span className="bg-white px-5 py-2.5 rounded-full text-xs font-black text-slate-600 shadow-sm border border-slate-100 uppercase tracking-widest hover:border-indigo-300 hover:text-indigo-600 cursor-default transition-colors">Voz Local</span>
-               <span className="bg-white px-5 py-2.5 rounded-full text-xs font-black text-slate-600 shadow-sm border border-slate-100 uppercase tracking-widest hover:border-indigo-300 hover:text-indigo-600 cursor-default transition-colors">Avisos e Eventos</span>
-               <span className="bg-white px-5 py-2.5 rounded-full text-xs font-black text-slate-600 shadow-sm border border-slate-100 uppercase tracking-widest hover:border-indigo-300 hover:text-indigo-600 cursor-default transition-colors">Conexão Real</span>
-            </motion.div>
-         </div>
+      {/* Deep Dive 1: Comunidade Local (Clean & Light Mode) */}
+      <section className="py-24 bg-white border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <span className="text-indigo-600 font-bold text-xs uppercase tracking-widest mb-4 block">Comunidade Viva</span>
+            <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+              Voz Local. <br className="hidden lg:block" /> Conexão Real.
+            </h2>
+            <p className="text-lg text-slate-600 mb-8 leading-relaxed max-w-md">
+              Descubra dicas, eventos e atualizações dos seus locais favoritos em tempo real. Um feed social hyper-local desenhado para você.
+            </p>
+            <ul className="space-y-5">
+              <li className="flex items-center gap-4 text-slate-700 font-bold">
+                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><MessageCircle className="w-5 h-5 text-indigo-600" /></div>
+                Compartilhamento Instantâneo
+              </li>
+              <li className="flex items-center gap-4 text-slate-700 font-bold">
+                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><Calendar className="w-5 h-5 text-indigo-600" /></div>
+                Eventos e Novidades Exclusivas
+              </li>
+              <li className="flex items-center gap-4 text-slate-700 font-bold">
+                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><Star className="w-5 h-5 text-indigo-600" /></div>
+                Recomendações Confiáveis
+              </li>
+            </ul>
+          </div>
+          <div className="relative w-full max-w-lg mx-auto lg:mx-0 lg:ml-auto">
+             {/* Clean Organized Feed Graphic - No Overlays */}
+             <div className="bg-slate-50 p-6 sm:p-8 rounded-[2rem] border border-slate-100 shadow-xl space-y-4">
+                {/* Post 1 */}
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 transition-shadow hover:shadow-md">
+                   <div className="flex items-center gap-3 mb-3">
+                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600">J</div>
+                     <div><p className="text-sm font-bold text-slate-900">João Silva</p><p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Há 5 min</p></div>
+                   </div>
+                   <p className="text-sm text-slate-600 font-medium">Achei o melhor hambúrguer da cidade! Recomendo muito o novo point no centro. Imbatível! 🍔🔥</p>
+                </div>
+                {/* Post 2 */}
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 transition-shadow hover:shadow-md">
+                   <div className="flex items-center gap-3 mb-3">
+                     <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-600">A</div>
+                     <div><p className="text-sm font-bold text-slate-900">Ana Clara</p><p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Há 20 min</p></div>
+                   </div>
+                   <p className="text-sm text-slate-600 font-medium">Alguém recomenda uma boa clínica veterinária aberta hoje na região sul? 🐕</p>
+                </div>
+                {/* Fake Input */}
+                <div className="bg-white p-3 rounded-xl border border-slate-200 flex items-center gap-3 mt-4 opacity-50">
+                  <div className="w-8 h-8 rounded-full bg-slate-100 shrink-0" />
+                  <div className="h-4 w-1/2 bg-slate-100 rounded-full" />
+                </div>
+             </div>
+          </div>
+        </div>
       </section>
 
-      {/* Deep Dive 2: Booking & Catalogs (Smart Tools) */}
-      <section className="py-32 bg-[#0a0a0c] text-white relative overflow-hidden perspective-1000">
-         {/* Glow behind */}
-         <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_50%,rgba(16,185,129,0.1),transparent_50%)] pointer-events-none" />
-         <div className="absolute bottom-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_80%,rgba(244,63,94,0.05),transparent_40%)] pointer-events-none" />
-
-         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            {/* Text Side */}
-            <div className="relative z-10">
-               <span className="inline-block py-2 px-6 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-black text-[10px] uppercase tracking-[0.3em] mb-6 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
-                  Suas Ferramentas Diárias
-               </span>
-               <h2 className="text-5xl md:text-7xl font-[900] tracking-tighter text-white mb-6 leading-[1.05]">
-                 Seu Tempo é <br />
-                 <span className="text-emerald-400">Precioso.</span>
-               </h2>
-               <p className="text-xl text-slate-400 font-medium mb-16 max-w-lg leading-relaxed">
-                 Diga adeus à espera telefônica. Com os nossos mini-apps integrados, você agenda serviços e faz pedidos em segundos diretamente na página do estabelecimento.
-               </p>
-
-               <div className="space-y-10">
-                  <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-start gap-5">
-                     <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center shrink-0 border border-emerald-500/20 shadow-inner">
-                        <CalendarCheck className="h-7 w-7 text-emerald-400" />
-                     </div>
-                     <div>
-                        <h4 className="text-2xl font-black text-white mb-2 tracking-tight">Booking Inteligente</h4>
-                        <p className="text-slate-400 font-medium leading-relaxed text-lg">Selecione o serviço, o profissional e o horário. Marque no salão ou clínica de saúde de forma 100% autônoma, 24h por dia.</p>
-                     </div>
-                  </motion.div>
-                  <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-start gap-5">
-                     <div className="w-14 h-14 rounded-2xl bg-rose-500/10 flex items-center justify-center shrink-0 border border-rose-500/20 shadow-inner">
-                        <ShoppingBag className="h-7 w-7 text-rose-400" />
-                     </div>
-                     <div>
-                        <h4 className="text-2xl font-black text-white mb-2 tracking-tight">Catálogo Digital VIP</h4>
-                        <p className="text-slate-400 font-medium leading-relaxed text-lg">Explore cardápios interativos com fotos em alta resolução, adicione itens ao carrinho e envie o pedido estruturado no WhatsApp.</p>
-                     </div>
-                  </motion.div>
-               </div>
-            </div>
-
-            {/* Visual Side: Abstract Phone Mockups */}
-            <div className="relative h-[650px] w-full flex items-center justify-center">
-               
-               {/* Phone 1: Menu Screen (Background Left) */}
-               <motion.div 
-                 initial={{ rotateY: 15, rotateZ: -5, x: 80, scale: 0.9, opacity: 0 }} 
-                 whileInView={{ rotateY: 15, rotateZ: -5, x: 60, scale: 0.9, opacity: 1 }} 
-                 viewport={{ once: true }}
-                 className="absolute w-[300px] h-[600px] bg-[#1a1a1c] rounded-[3rem] border-8 border-[#25252a] shadow-[0_0_80px_rgba(0,0,0,1)] overflow-hidden hidden sm:flex flex-col z-0 transform-gpu"
-               >
-                  <div className="h-56 bg-gradient-to-br from-rose-950/40 to-[#1a1a1c] relative border-b border-white/5">
-                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?q=80&w=400')] bg-cover bg-center opacity-40 mix-blend-overlay" />
-                     <div className="absolute bottom-4 left-4"><div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md shadow-lg border border-white/20 flex items-center justify-center text-white font-black text-2xl">🍕</div></div>
-                  </div>
-                  <div className="p-5 space-y-5 flex-1 bg-[#151517]">
-                     <div className="flex justify-between items-center"><div className="h-6 w-32 bg-white/20 rounded-md" /><div className="h-6 w-16 bg-rose-500/20 text-rose-400 rounded-full flex items-center justify-center text-[10px] font-black uppercase">Menu</div></div>
-                     <div className="space-y-4">
-                        <div className="w-full bg-white/5 rounded-2xl p-3 flex gap-4 border border-white/5"><div className="w-16 h-16 bg-white/10 rounded-xl" /><div className="flex-1 space-y-2 py-1"><div className="h-3 w-4/5 bg-white/30 rounded-full" /><div className="h-2 w-1/2 bg-white/10 rounded-full" /><div className="h-3 w-1/3 bg-rose-400 mt-2 rounded-full" /></div></div>
-                        <div className="w-full bg-white/5 rounded-2xl p-3 flex gap-4 border border-white/5"><div className="w-16 h-16 bg-white/10 rounded-xl" /><div className="flex-1 space-y-2 py-1"><div className="h-3 w-3/4 bg-white/30 rounded-full" /><div className="h-2 w-1/3 bg-white/10 rounded-full" /><div className="h-3 w-1/4 bg-rose-400 mt-2 rounded-full" /></div></div>
-                     </div>
-                  </div>
-                  <div className="h-20 border-t border-white/10 p-5 flex justify-between items-center bg-[#111] shrink-0">
-                     <div className="flex flex-col gap-1"><span className="text-[10px] text-white/50 uppercase font-black">Total</span><span className="text-lg text-white font-black">R$ 89,90</span></div>
-                     <div className="h-10 px-6 bg-rose-600 rounded-xl flex items-center justify-center text-white font-black text-xs uppercase shadow-lg shadow-rose-600/30">Pedir</div>
-                  </div>
-               </motion.div>
-
-               {/* Phone 2: Booking Screen (Foreground Right) */}
-               <motion.div 
-                 initial={{ rotateY: -10, rotateZ: 5, x: -50, scale: 1.05, opacity: 0 }} 
-                 whileInView={{ rotateY: -10, rotateZ: 5, x: -30, scale: 1.05, opacity: 1 }} 
-                 viewport={{ once: true }}
-                 className="absolute w-[320px] h-[630px] bg-white rounded-[3.5rem] border-[10px] border-slate-100 shadow-[20px_20px_60px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col z-10 transform-gpu"
-               >
-                  <div className="h-10 w-full flex items-center justify-center pt-3 bg-white"><div className="w-28 h-6 bg-slate-950 rounded-full flex items-center justify-end px-2"><div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,1)]" /></div></div>
-                  <div className="p-6 space-y-6 bg-white flex-1 overflow-hidden">
-                     <div className="space-y-1"><h3 className="text-3xl font-[900] text-slate-950 tracking-tight">Agendar</h3><p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Escolha o horário</p></div>
-                     
-                     {/* Fake Calendar Widget */}
-                     <div className="w-full bg-slate-50 rounded-[1.5rem] p-5 border border-slate-100 shadow-sm">
-                        <div className="flex justify-between items-center mb-5"><span className="text-base font-black text-slate-900">Outubro</span><span className="text-xs font-black text-slate-400 bg-white px-3 py-1 rounded-full border border-slate-100 shadow-sm">2026</span></div>
-                        <div className="grid grid-cols-7 gap-x-2 gap-y-3">
-                           {Array.from({length: 14}).map((_, i) => (
-                              <div key={i} className={`aspect-square rounded-xl flex items-center justify-center text-xs font-black ${i === 8 ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30 ring-4 ring-emerald-50 scale-110' : 'bg-white text-slate-600 border border-slate-100 shadow-sm'}`}>{i + 1}</div>
-                           ))}
-                        </div>
-                     </div>
-
-                     {/* Fake Slots */}
-                     <div className="space-y-3">
-                        <div className="w-full p-5 bg-emerald-50 rounded-[1.5rem] border-2 border-emerald-400 flex justify-between items-center shadow-md shadow-emerald-500/10 cursor-pointer">
-                           <div className="flex items-center gap-3"><CalendarCheck className="w-5 h-5 text-emerald-600" /><span className="text-base font-[900] text-emerald-800">09:00 AM</span></div>
-                           <div className="w-5 h-5 rounded-full border-[3px] border-emerald-500 flex items-center justify-center bg-white"><div className="w-2 h-2 rounded-full bg-emerald-500" /></div>
-                        </div>
-                        <div className="w-full p-5 bg-white rounded-[1.5rem] border border-slate-100 flex justify-between items-center shadow-sm cursor-pointer opacity-70">
-                           <span className="text-base font-[900] text-slate-400 pl-8">10:00 AM</span>
-                           <div className="w-5 h-5 rounded-full border-2 border-slate-200" />
-                        </div>
-                     </div>
-                  </div>
-                  <div className="mt-auto p-5 bg-gradient-to-t from-white via-white to-white/50 relative z-20">
-                     <Button className="w-full rounded-[1.2rem] h-16 bg-slate-950 text-white font-[900] uppercase tracking-widest text-sm shadow-xl shadow-slate-900/20 hover:bg-emerald-600 transition-colors">Confirmar Agendamento</Button>
-                  </div>
-               </motion.div>
-            </div>
-         </div>
+      {/* Deep Dive 2: Booking e Catálogo (Clean & Light Mode) */}
+      <section className="py-24 bg-slate-50 border-b border-slate-100 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="order-2 lg:order-1 relative w-full lg:w-auto flex justify-center">
+             {/* Clean Phone Mockup - Minimalist Flat UI Representation */}
+             <div className="bg-white w-full max-w-[320px] rounded-[2.5rem] border-[8px] border-slate-200 shadow-2xl relative overflow-hidden flex flex-col">
+                <div className="h-6 w-full bg-white flex justify-center pt-2"><div className="w-16 h-4 bg-slate-100 rounded-b-xl" /></div>
+                <div className="p-6 bg-white text-center pb-8">
+                   <h3 className="text-2xl font-black text-slate-900 tracking-tight">Agendamento</h3>
+                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Escolha o serviço</p>
+                </div>
+                <div className="flex-1 p-5 space-y-3 bg-slate-50 border-t border-slate-100">
+                   <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:border-emerald-300 transition-colors">
+                      <div><p className="text-sm font-bold text-slate-900">Corte Tesoura</p><p className="text-xs font-bold text-slate-400 mt-0.5">R$ 45,00</p></div>
+                      <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200"><ChevronRight className="w-4 h-4 text-slate-400" /></div>
+                   </div>
+                   <div className="bg-emerald-50 p-4 rounded-xl shadow-sm border border-emerald-200 flex justify-between items-center ring-2 ring-emerald-500 ring-offset-2">
+                      <div><p className="text-sm font-black text-emerald-900">Spa Completo</p><p className="text-xs font-bold text-emerald-700 mt-0.5">R$ 90,00</p></div>
+                      <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg"><CheckCircle2 className="w-5 h-5" /></div>
+                   </div>
+                   <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer opacity-50">
+                      <div><p className="text-sm font-bold text-slate-900">Barba Express</p><p className="text-xs font-bold text-slate-400 mt-0.5">R$ 30,00</p></div>
+                   </div>
+                   <div className="pt-6">
+                      <Button className="w-full rounded-xl bg-slate-900 text-white font-black uppercase tracking-widest text-xs h-12 shadow-xl shadow-slate-900/10 hover:bg-emerald-600 transition-all">Confirmar Data</Button>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div className="order-1 lg:order-2">
+             <span className="text-emerald-600 font-bold text-xs uppercase tracking-widest mb-4 block">Praticidade Total</span>
+             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
+               Seu Tempo. <br className="hidden lg:block" /> Suas Regras.
+             </h2>
+             <p className="text-lg text-slate-600 mb-10 leading-relaxed max-w-md">
+               Agende serviços e feche pedidos via Catálogos Digitais em poucos segundos. Sem filas virtuais e sem esperas ao telefone.
+             </p>
+             
+             <div className="space-y-8">
+                <div className="flex items-start gap-5">
+                   <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
+                      <CalendarCheck className="w-7 h-7 text-emerald-600" />
+                   </div>
+                   <div>
+                      <h4 className="text-xl font-bold text-slate-900 tracking-tight">Booking Inteligente</h4>
+                      <p className="text-md text-slate-600 leading-relaxed mt-2 max-w-sm">Selecione o serviço e marque um horário 100% online, com confirmação automática pelo sistema.</p>
+                   </div>
+                </div>
+                <div className="flex items-start gap-5">
+                   <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100">
+                      <ShoppingBag className="w-7 h-7 text-rose-600" />
+                   </div>
+                   <div>
+                      <h4 className="text-xl font-bold text-slate-900 tracking-tight">Catálogo Digital Inovador</h4>
+                      <p className="text-md text-slate-600 leading-relaxed mt-2 max-w-sm">Adicione itens ao carrinho através de links visuais e envie todo o pedido estruturado num clique.</p>
+                   </div>
+                </div>
+             </div>
+          </div>
+        </div>
       </section>
 
       {/* Highly Creative B2B Section - Expanding Interactive Accordion */}
