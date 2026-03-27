@@ -136,8 +136,12 @@ const Index = () => {
         .eq("active", true)
         .order("sort_order");
       
+      // Se não houver dados no banco, usa os DUMMY que já têm as tags {city}
       if (error || !data || data.length === 0) return DUMMY_BANNERS;
-      return data;
+
+      // Se houver dados no banco mas forem poucos, podemos mesclar para garantir volume
+      const finalBanners = data.length > 0 ? data : DUMMY_BANNERS;
+      return finalBanners;
     },
   });
 
@@ -146,8 +150,14 @@ const Index = () => {
   // Função para substituir a tag {city} dinamicamente nos textos do banner
   const formatBannerText = (text: string) => {
     if (!text) return "";
-    const city = selectedCity || config.platform_city || "Sua Cidade";
-    return text.replace(/{city}/g, city);
+    // Prioridade: Cidade selecionada > Cidade detectada > Cidade da plataforma > Placeholder genérico
+    const city = selectedCity || userLocation.city || config.platform_city || "sua região";
+    
+    // Substitui {city} ou [cidade] ou [CITY]
+    return text
+      .replace(/{city}/g, city)
+      .replace(/\[cidade\]/gi, city)
+      .replace(/\[CITY\]/gi, city);
   };
 
   useEffect(() => {
