@@ -407,24 +407,24 @@ const Index = () => {
             {/* Feature 1: Comunidade (Span 2 Cols) */}
             <motion.div 
                initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-               className="lg:col-span-2 bg-gradient-to-br from-indigo-50 to-white rounded-[2.5rem] p-8 md:p-12 border border-indigo-100 shadow-sm relative overflow-hidden group"
+               className="lg:col-span-2 bg-gradient-to-br from-orange-50 to-white rounded-[2.5rem] p-8 md:p-12 border border-orange-100 shadow-sm relative overflow-hidden group"
             >
                <div className="relative z-10 max-w-sm">
-                 <div className="h-14 w-14 rounded-2xl bg-indigo-100 flex items-center justify-center mb-6 text-indigo-600 group-hover:scale-110 transition-transform duration-500 shadow-inner">
+                 <div className="h-14 w-14 rounded-2xl bg-orange-100 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-500 shadow-inner">
                    <Users className="h-7 w-7" />
                  </div>
                  <h3 className="text-3xl font-[900] text-slate-950 tracking-tight mb-3">Comunidade Viva</h3>
                  <p className="text-slate-500 font-medium text-lg leading-relaxed">
-                   Um feed social exclusivo em tempo real. Acompanhe dicas, novidades e os eventos mais quentes da cidade, criado por quem vive aqui.
+                   Um feed social exclusivo em tempo real. Acompanhe dicas, novidades e os eventos mais quentes da cidade.
                  </p>
                </div>
                {/* Abstract UI Mock */}
-               <div className="absolute -right-8 -bottom-12 w-80 h-80 bg-white rounded-t-3xl shadow-[0_0_40px_rgba(79,70,229,0.1)] border border-slate-100 p-6 opacity-90 group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 hidden sm:block">
+               <div className="absolute -right-8 -bottom-12 w-80 h-80 bg-white rounded-t-3xl shadow-[0_0_40px_rgba(249,115,22,0.1)] border border-slate-100 p-6 opacity-90 group-hover:-translate-y-4 group-hover:-translate-x-4 transition-transform duration-700 hidden sm:block">
                   <div className="w-full flex gap-4 mb-6">
                      <div className="w-12 h-12 rounded-full bg-slate-100 shrink-0 border-2 border-white shadow-sm" />
                      <div className="flex-1 space-y-2 py-2"><div className="h-3 w-1/3 bg-slate-200 rounded-full" /><div className="h-2 w-1/4 bg-slate-100 rounded-full" /></div>
                   </div>
-                  <div className="w-full h-32 bg-indigo-50 rounded-2xl mb-4 border border-indigo-100/50" />
+                  <div className="w-full h-32 bg-orange-50 rounded-2xl mb-4 border border-orange-100/50" />
                   <div className="w-2/3 h-4 bg-slate-100 rounded-full" />
                </div>
             </motion.div>
@@ -432,15 +432,15 @@ const Index = () => {
             {/* Feature 2: Booking */}
             <motion.div 
                initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, delay: 0.1 }}
-               className="bg-emerald-50 rounded-[2.5rem] p-8 md:p-10 border border-emerald-100 shadow-sm relative overflow-hidden group flex flex-col justify-between"
+               className="bg-slate-50 rounded-[2.5rem] p-8 md:p-10 border border-slate-100 shadow-sm relative overflow-hidden group flex flex-col justify-between"
             >
                <div className="relative z-10">
-                 <div className="h-12 w-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-6 text-emerald-600 group-hover:scale-110 transition-transform duration-500 shadow-inner">
+                 <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-500 shadow-inner">
                    <CalendarCheck className="h-6 w-6" />
                  </div>
                  <h3 className="text-2xl font-[900] text-slate-950 tracking-tight mb-3">Agendamentos</h3>
                  <p className="text-slate-500 font-medium text-base leading-relaxed">
-                   Acabou a espera. Marque horários em salões, barbearias e clínicas de forma 100% online e automática.
+                   Acabou a espera. Marque horários de forma 100% online e automática.
                  </p>
                </div>
             </motion.div>
@@ -448,15 +448,15 @@ const Index = () => {
             {/* Feature 3: Digital Catalog */}
             <motion.div 
                initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, delay: 0.2 }}
-               className="bg-rose-50 rounded-[2.5rem] p-8 md:p-10 border border-rose-100 shadow-sm relative overflow-hidden group flex flex-col justify-between"
+               className="bg-slate-50 rounded-[2.5rem] p-8 md:p-10 border border-slate-100 shadow-sm relative overflow-hidden group flex flex-col justify-between"
             >
                <div className="relative z-10">
-                 <div className="h-12 w-12 rounded-xl bg-rose-100 flex items-center justify-center mb-6 text-rose-600 group-hover:scale-110 transition-transform duration-500 shadow-inner">
+                 <div className="h-12 w-12 rounded-xl bg-orange-100 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform duration-500 shadow-inner">
                    <ShoppingBag className="h-6 w-6" />
                  </div>
                  <h3 className="text-2xl font-[900] text-slate-950 tracking-tight mb-3">Cardápios VIP</h3>
                  <p className="text-slate-500 font-medium text-base leading-relaxed">
-                   Catálogos digitais de alta resolução. Peça comida ou garanta produtos direto do conforto de casa.
+                   Catálogos digitais de alta resolução. Peça comida ou produtos direto de casa.
                  </p>
                </div>
             </motion.div>
