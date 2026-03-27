@@ -387,7 +387,7 @@ const Index = () => {
           <div className="text-center mb-20 max-w-3xl mx-auto">
             <motion.span 
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              className="inline-block py-2 px-6 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 font-black text-[10px] uppercase tracking-[0.3em] mb-6"
+              className="inline-block py-2 px-6 rounded-full bg-orange-50 border border-orange-100 text-primary font-black text-[10px] uppercase tracking-[0.3em] mb-6"
             >
               Explore o Ecossistema
             </motion.span>
@@ -396,7 +396,7 @@ const Index = () => {
               className="text-4xl md:text-6xl font-[900] tracking-tighter text-slate-950 mb-6 leading-[1.1]"
             >
               Tudo o que você precisa em <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">um só lugar.</span>
+              <span className="text-primary">um só lugar.</span>
             </motion.h2>
             <motion.p 
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, delay: 0.2 }}
