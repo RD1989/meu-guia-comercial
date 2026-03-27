@@ -492,11 +492,11 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Deep Dive 1: Comunidade Local (Clean & Light Mode) */}
+      {/* Deep Dive 1: Comunidade Local (Cores do Sistema) */}
       <section className="py-24 bg-white border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="text-indigo-600 font-bold text-xs uppercase tracking-widest mb-4 block">Comunidade Viva</span>
+            <span className="text-primary font-bold text-xs uppercase tracking-widest mb-4 block">Comunidade Viva</span>
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
               Voz Local. <br className="hidden lg:block" /> Conexão Real.
             </h2>
@@ -505,79 +505,68 @@ const Index = () => {
             </p>
             <ul className="space-y-5">
               <li className="flex items-center gap-4 text-slate-700 font-bold">
-                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><MessageCircle className="w-5 h-5 text-indigo-600" /></div>
+                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0"><MessageCircle className="w-5 h-5 text-primary" /></div>
                 Compartilhamento Instantâneo
               </li>
               <li className="flex items-center gap-4 text-slate-700 font-bold">
-                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><Calendar className="w-5 h-5 text-indigo-600" /></div>
+                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0"><Calendar className="w-5 h-5 text-primary" /></div>
                 Eventos e Novidades Exclusivas
               </li>
               <li className="flex items-center gap-4 text-slate-700 font-bold">
-                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><Star className="w-5 h-5 text-indigo-600" /></div>
+                <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center shrink-0"><Star className="w-5 h-5 text-primary" /></div>
                 Recomendações Confiáveis
               </li>
             </ul>
           </div>
           <div className="relative w-full max-w-lg mx-auto lg:mx-0 lg:ml-auto">
-             {/* Clean Organized Feed Graphic - No Overlays */}
+             {/* Clean Organized Feed Graphic */}
              <div className="bg-slate-50 p-6 sm:p-8 rounded-[2rem] border border-slate-100 shadow-xl space-y-4">
-                {/* Post 1 */}
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 transition-shadow hover:shadow-md">
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                    <div className="flex items-center gap-3 mb-3">
-                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600">J</div>
+                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">J</div>
                      <div><p className="text-sm font-bold text-slate-900">João Silva</p><p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Há 5 min</p></div>
                    </div>
                    <p className="text-sm text-slate-600 font-medium">Achei o melhor hambúrguer da cidade! Recomendo muito o novo point no centro. Imbatível! 🍔🔥</p>
                 </div>
-                {/* Post 2 */}
-                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 transition-shadow hover:shadow-md">
+                <div className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
                    <div className="flex items-center gap-3 mb-3">
-                     <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-600">A</div>
+                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">A</div>
                      <div><p className="text-sm font-bold text-slate-900">Ana Clara</p><p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Há 20 min</p></div>
                    </div>
                    <p className="text-sm text-slate-600 font-medium">Alguém recomenda uma boa clínica veterinária aberta hoje na região sul? 🐕</p>
-                </div>
-                {/* Fake Input */}
-                <div className="bg-white p-3 rounded-xl border border-slate-200 flex items-center gap-3 mt-4 opacity-50">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 shrink-0" />
-                  <div className="h-4 w-1/2 bg-slate-100 rounded-full" />
                 </div>
              </div>
           </div>
         </div>
       </section>
 
-      {/* Deep Dive 2: Booking e Catálogo (Clean & Light Mode) */}
-      <section className="py-24 bg-slate-50 border-b border-slate-100 overflow-hidden">
+      {/* Deep Dive 2: Booking e Catálogo (Cores do Sistema) */}
+      <section className="py-24 bg-white border-b border-slate-100 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="order-2 lg:order-1 relative w-full lg:w-auto flex justify-center">
-             {/* Clean Phone Mockup - Minimalist Flat UI Representation */}
-             <div className="bg-white w-full max-w-[320px] rounded-[2.5rem] border-[8px] border-slate-200 shadow-2xl relative overflow-hidden flex flex-col">
-                <div className="h-6 w-full bg-white flex justify-center pt-2"><div className="w-16 h-4 bg-slate-100 rounded-b-xl" /></div>
+             <div className="bg-white w-full max-w-[320px] rounded-[2.5rem] border-[8px] border-slate-100 shadow-2xl relative overflow-hidden flex flex-col">
+                <div className="h-6 w-full bg-white flex justify-center pt-2"><div className="w-16 h-4 bg-slate-200 rounded-b-xl" /></div>
                 <div className="p-6 bg-white text-center pb-8">
                    <h3 className="text-2xl font-black text-slate-900 tracking-tight">Agendamento</h3>
                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Escolha o serviço</p>
                 </div>
                 <div className="flex-1 p-5 space-y-3 bg-slate-50 border-t border-slate-100">
-                   <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer hover:border-emerald-300 transition-colors">
+                   <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex justify-between items-center cursor-default">
                       <div><p className="text-sm font-bold text-slate-900">Corte Tesoura</p><p className="text-xs font-bold text-slate-400 mt-0.5">R$ 45,00</p></div>
                       <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200"><ChevronRight className="w-4 h-4 text-slate-400" /></div>
                    </div>
-                   <div className="bg-emerald-50 p-4 rounded-xl shadow-sm border border-emerald-200 flex justify-between items-center ring-2 ring-emerald-500 ring-offset-2">
-                      <div><p className="text-sm font-black text-emerald-900">Spa Completo</p><p className="text-xs font-bold text-emerald-700 mt-0.5">R$ 90,00</p></div>
-                      <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg"><CheckCircle2 className="w-5 h-5" /></div>
-                   </div>
-                   <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex justify-between items-center cursor-pointer opacity-50">
-                      <div><p className="text-sm font-bold text-slate-900">Barba Express</p><p className="text-xs font-bold text-slate-400 mt-0.5">R$ 30,00</p></div>
+                   <div className="bg-orange-50 p-4 rounded-xl shadow-sm border border-primary/20 flex justify-between items-center ring-2 ring-primary ring-offset-2">
+                      <div><p className="text-sm font-black text-primary">Spa Completo</p><p className="text-xs font-bold text-primary/70 mt-0.5">R$ 90,00</p></div>
+                      <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-lg"><CheckCircle2 className="w-5 h-5" /></div>
                    </div>
                    <div className="pt-6">
-                      <Button className="w-full rounded-xl bg-slate-900 text-white font-black uppercase tracking-widest text-xs h-12 shadow-xl shadow-slate-900/10 hover:bg-emerald-600 transition-all">Confirmar Data</Button>
+                      <Button className="w-full rounded-xl bg-slate-950 text-white font-black uppercase tracking-widest text-xs h-12 shadow-xl shadow-slate-900/10 hover:bg-primary transition-all">Confirmar Data</Button>
                    </div>
                 </div>
              </div>
           </div>
           <div className="order-1 lg:order-2">
-             <span className="text-emerald-600 font-bold text-xs uppercase tracking-widest mb-4 block">Praticidade Total</span>
+             <span className="text-primary font-bold text-xs uppercase tracking-widest mb-4 block">Praticidade Total</span>
              <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
                Seu Tempo. <br className="hidden lg:block" /> Suas Regras.
              </h2>
@@ -587,8 +576,8 @@ const Index = () => {
              
              <div className="space-y-8">
                 <div className="flex items-start gap-5">
-                   <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0 border border-emerald-100">
-                      <CalendarCheck className="w-7 h-7 text-emerald-600" />
+                   <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0 border border-orange-100">
+                      <CalendarCheck className="w-7 h-7 text-primary" />
                    </div>
                    <div>
                       <h4 className="text-xl font-bold text-slate-900 tracking-tight">Booking Inteligente</h4>
@@ -596,8 +585,8 @@ const Index = () => {
                    </div>
                 </div>
                 <div className="flex items-start gap-5">
-                   <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center shrink-0 border border-rose-100">
-                      <ShoppingBag className="w-7 h-7 text-rose-600" />
+                   <div className="w-14 h-14 rounded-2xl bg-orange-50 flex items-center justify-center shrink-0 border border-orange-100">
+                      <ShoppingBag className="w-7 h-7 text-primary" />
                    </div>
                    <div>
                       <h4 className="text-xl font-bold text-slate-900 tracking-tight">Catálogo Digital Inovador</h4>
