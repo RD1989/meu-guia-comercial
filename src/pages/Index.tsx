@@ -143,6 +143,13 @@ const Index = () => {
 
   const [currentBanner, setCurrentBanner] = useState(0);
 
+  // Função para substituir a tag {city} dinamicamente nos textos do banner
+  const formatBannerText = (text: string) => {
+    if (!text) return "";
+    const city = selectedCity || config.platform_city || "Sua Cidade";
+    return text.replace(/{city}/g, city);
+  };
+
   useEffect(() => {
     if (banners.length <= 1) return;
     
@@ -215,10 +222,10 @@ const Index = () => {
                     Elite Partner
                   </span>
                   <h2 className="text-4xl md:text-7xl font-[900] text-white tracking-tighter leading-[0.85] text-balance">
-                    {banners[currentBanner]?.title}
+                    {formatBannerText(banners[currentBanner]?.title)}
                   </h2>
                   <p className="text-lg md:text-xl text-slate-300 font-medium max-w-2xl mx-auto line-clamp-2">
-                    {banners[currentBanner]?.subtitle}
+                    {formatBannerText(banners[currentBanner]?.subtitle)}
                   </p>
                   
                   {banners[currentBanner]?.button_link && (

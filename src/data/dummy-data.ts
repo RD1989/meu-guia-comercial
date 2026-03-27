@@ -253,24 +253,30 @@ export const DUMMY_BANNERS = [
   {
     id: 'banner-1',
     image_url: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=1600',
-    title: 'As Melhores Academias da Região',
-    link_url: '/buscar?categoria=academia',
+    title: 'O Melhor de {city}',
+    subtitle: 'Conecte-se com as empresas de elite e serviços VIP na sua região.',
+    button_text: 'Explorar Agora',
+    button_link: '/buscar',
     active: true,
     sort_order: 1
   },
   {
     id: 'banner-2',
     image_url: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=1600',
-    title: 'Gastronomia de Elite em Sua Cidade',
-    link_url: '/buscar?categoria=gastronomia',
+    title: 'Gastronomia Premiada',
+    subtitle: 'Descubra os sabores que dominam {city} com reservas exclusivas.',
+    button_text: 'Ver Cardápios',
+    button_link: '/buscar?categoria=gastronomia',
     active: true,
     sort_order: 2
   },
   {
     id: 'banner-3',
     image_url: 'https://images.unsplash.com/photo-1556742044-3c52d6e88c62?q=80&w=1600',
-    title: 'Compre do Comércio Local',
-    link_url: '/buscar',
+    title: 'Anuncie sua Empresa',
+    subtitle: 'Escale sua autoridade local e alcance clientes de alto valor em {city}.',
+    button_text: 'Começar Grátis',
+    button_link: '/auth?mode=register',
     active: true,
     sort_order: 3
   }
