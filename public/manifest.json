@@ -1,0 +1,37 @@
+{
+  "name": "Meu Guia Comercial",
+  "short_name": "Guia Comercial",
+  "description": "O guia comercial mais completo da sua cidade — encontre, avalie e conecte-se com os melhores negócios locais.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f97316",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["business", "shopping", "local"],
+  "shortcuts": [
+    {
+      "name": "Buscar Empresas",
+      "url": "/buscar",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Ver Ofertas",
+      "url": "/ofertas",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

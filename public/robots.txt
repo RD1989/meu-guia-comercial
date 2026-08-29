@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+Allow: /buscar
+Allow: /categorias
+Allow: /ofertas
+Allow: /vagas
+Allow: /blog
+Allow: /noticias
+Allow: /comunidade
+Allow: /planos
+Allow: /negocio/
+
+# Bloquear rotas administrativas e privadas da indexação
+Disallow: /admin
+Disallow: /admin/
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /checkout
+Disallow: /checkout/
+Disallow: /perfil
+Disallow: /auth
+
+Sitemap: /sitemap.xml
